@@ -353,7 +353,7 @@ under a congruence $\sim$:
 
 Objects are the geometric entities of the framework. A single geometric
 ``thing'' is not a configuration but the entire class of all configurations
-that no relational test can distinguish from one another.
+that no \emph{relational test} can distinguish from one another.
 
 \begin{theorem}[Quotient Construction]
 \label{thm:quotient}
@@ -404,7 +404,7 @@ $\id \circ C = C \circ \id = C$, hence $[\id] \circ [C] = [C] = [C]
 \end{proof}
 
 \begin{remark}
-The quotient does not introduce structure. It stabilizes invariants
+The \emph{quotient} does not introduce structure. It stabilizes invariants
 already present in $(R, \circ)$ by collapsing configurations that
 are indistinguishable within the relational system.
 Geometric structure is encoded in the generators $R$ and laws $\sim$;
@@ -584,6 +584,57 @@ applying a reference step of one millimetre yields $n = 1000$. The
 relational object --- the closure pattern --- is unchanged; only the
 resolution of the external comparison differs.
 \end{remark}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+  every node/.style={draw, circle, inner sep=1pt, minimum size=5mm,
+    font=\scriptsize},
+  arr/.style={-{Stealth[length=1.5mm]}, thick}
+]
+  % n = 6
+  \begin{scope}[xshift=0cm]
+    \foreach \i in {0,...,5} {
+      \node (na\i) at ({90 - 360/6 * \i}:1.3cm) {};
+    }
+    \foreach \i [evaluate=\i as \j using {int(mod(\i+1,6))}] in {0,...,5} {
+      \draw[arr] (na\i) -- (na\j);
+    }
+    \node[draw=none, font=\small] at (0,-1.9cm) {$n = 6$};
+  \end{scope}
+  % n = 12
+  \begin{scope}[xshift=4cm]
+    \foreach \i in {0,...,11} {
+      \node[inner sep=0.5pt, minimum size=3.5mm] (nb\i)
+        at ({90 - 360/12 * \i}:1.3cm) {};
+    }
+    \foreach \i [evaluate=\i as \j using {int(mod(\i+1,12))}] in {0,...,11} {
+      \draw[arr] (nb\i) -- (nb\j);
+    }
+    \node[draw=none, font=\small] at (0,-1.9cm) {$n = 12$};
+  \end{scope}
+  % n = 24
+  \begin{scope}[xshift=8cm]
+    \foreach \i in {0,...,23} {
+      \node[inner sep=0pt, minimum size=2.5mm] (nc\i)
+        at ({90 - 360/24 * \i}:1.3cm) {};
+    }
+    \foreach \i [evaluate=\i as \j using {int(mod(\i+1,24))}] in {0,...,23} {
+      \draw[arr] (nc\i) -- (nc\j);
+    }
+    \node[draw=none, font=\small] at (0,-1.9cm) {$n = 24$};
+  \end{scope}
+\end{tikzpicture}
+\caption{The same relational circle at three resolutions: $n = 6$,
+$n = 12$, and $n = 24$. Each is the quotient $\mathbb{Z}/n\mathbb{Z}$
+arising from the single law $a^n \sim \id$. The relational
+identity---closure under a uniform process---is identical across all
+three; only the resolution parameter $n$ differs. Increasing $n$
+produces a finer discrete structure that more closely resembles a
+smooth circle at any given scale of observation, but no limit is
+taken: each is a complete, exact geometric object in its own right.}
+\label{fig:resolution}
+\end{figure}
 
 \begin{remark}[Compositional pattern determines geometric identity]
 \label{rem:identity}
@@ -1191,11 +1242,48 @@ discrete setting this identification is encoded by the congruence:
 which holds because $a^6 \sim \id$ implies $a^4 \circ a^2 \sim \id$,
 so $a^4 \sim a^{-2}$.
 
+\begin{center}
+\begin{tikzpicture}[
+  circ/.style={draw, circle, inner sep=2pt, minimum size=8mm,
+    font=\scriptsize},
+  arr/.style={-{Stealth[length=2mm]}, thick, gray, opacity=0.35},
+  fwd/.style={-{Stealth[length=2.5mm]}, very thick, blue},
+  bwd/.style={-{Stealth[length=2.5mm]}, very thick, red!70!black}
+]
+  \def\radius{2.2cm}
+  \foreach \i in {0,...,5} {
+    \node[circ] (n\i) at ({90 - 360/6 * \i}:\radius)
+      {$[a^{\i}]$};
+  }
+  % Background arrows (gray)
+  \foreach \i [evaluate=\i as \j using {int(mod(\i+1,6))}] in {0,...,5} {
+    \draw[arr] (n\i) -- (n\j);
+  }
+  % Forward path P: [a^0]->[a^1]->[a^2]->[a^3]->[a^4]
+  \draw[fwd] (n0) to[bend left=18] (n1);
+  \draw[fwd] (n1) to[bend left=18] (n2);
+  \draw[fwd] (n2) to[bend left=18] (n3);
+  \draw[fwd] (n3) to[bend left=18] (n4);
+  % Backward path Q: [a^0]->[a^5]->[a^4]
+  \draw[bwd] (n0) to[bend right=18] (n5);
+  \draw[bwd] (n5) to[bend right=18] (n4);
+  % Labels
+  \node[draw=none, blue, font=\small] at (-2.8cm, 0.5cm) {$P = a^4$};
+  \node[draw=none, red!70!black, font=\small] at (2.8cm, 0.5cm)
+    {$Q = a^{-2}$};
+  % 2-morphism alpha label at centre
+  \node[draw=none, font=\normalsize] at (0, 0)
+    {$\alpha: P \Rightarrow Q$};
+\end{tikzpicture}
+\end{center}
+
 The $2$-morphism $\alpha$ is the discrete relational analogue of a
 homotopy between two paths: it certifies that the two processes are
 equivalent without constructing a continuous deformation between them.
-The equivalence is algebraic, computable, and requires no ambient
-space.
+The forward path $P$ (blue, four steps clockwise) and the backward
+path $Q$ (red, two steps anticlockwise) are algebraically identified
+by the congruence $a^4 \sim a^{-2}$, which is the $2$-morphism. The
+equivalence is algebraic, computable, and requires no ambient space.
 \end{example}
 
 % ==================================================================
@@ -1336,6 +1424,26 @@ The examples demonstrate that familiar geometric structures---the
 circle, the torus, and curvature---have clean discrete relational
 representations requiring no continuous or infinite machinery.
 
+\subsection*{Limitations}
+
+We acknowledge several limitations of the present framework. First,
+it is not known whether all classical geometric and topological
+structures can be expressed as quotients of finite relational systems;
+this question is formalized as a future direction below. Second,
+continuous symmetry groups---Lie groups, the Poincar\'{e} group,
+$\mathrm{SO}(n)$---do not arise in the framework, as discussed in
+Remark~\ref{rem:nosymmetry}; discrete cyclic approximations are
+available at any resolution but the continuous groups themselves are
+not objects of the theory. Third, the framework handles static
+geometric structures; extending it to dynamical settings where
+generators and congruences evolve over time is open. These limitations
+are consistent with the framework's foundational commitment to finite,
+discrete, computable structure: they mark the boundary between what
+the framework expresses directly and what requires continuous or
+infinite machinery. In each case the limitation is a precise,
+identifiable gap rather than a vague incompleteness, and in each case
+it points toward a concrete research direction.
+
 Directions for further development:
 
 \begin{enumerate}
@@ -1359,13 +1467,21 @@ Directions for further development:
         geometric and topological structures --- if any --- cannot be
         expressed as quotients of finite relational systems, and
         characterize the boundary between representable and
-        non-representable structures precisely.
+        non-representable structures precisely. Understanding this
+        boundary is directly relevant to quantum gravity: if certain
+        spacetime topologies require structures that exceed what finite
+        relational systems can express, that is a substantive constraint
+        on any discrete spacetime model, not merely a mathematical
+        technicality.
   \item \textbf{Dynamical geometry.} Extend the framework to handle
-        relational systems whose generators and congruences evolve
-        --- that is, geometry as a process rather than a static
-        structure. This would provide a relational account of
-        geometric dynamics, relevant to both discrete physics and
-        time-varying computational models.
+        relational systems whose generators and congruences evolve ---
+        that is, geometry as a process rather than a static structure.
+        This would provide a relational account of geometric dynamics,
+        relevant to both discrete physics and time-varying computational
+        models. In particular, it would allow the framework to address
+        questions of curvature change, topological transitions, and the
+        evolution of relational structure over time --- currently
+        expressible only in continuous settings.
 \end{enumerate}
 
 % ==================================================================
