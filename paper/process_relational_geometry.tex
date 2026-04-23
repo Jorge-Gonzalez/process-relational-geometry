@@ -175,6 +175,29 @@ primitives, is not rejecting classical geometry. It is identifying which
 of its features are necessary and which are contingent on the conditions
 of its historical development.
 
+In summary, the relational approach offers three principal advantages.
+First, \emph{conceptual clarity}: by separating what is intrinsic to a
+geometric object from what is supplied by the external context of
+observation, the framework eliminates a class of conflations that have
+persisted in classical foundations. Second, \emph{computational
+tractability}: because all objects are finite and all operations are
+exact, every geometric question reduces to a finite combinatorial
+computation without approximation. Third, \emph{alignment with
+discrete physical theories}: the framework provides a rigorous
+mathematical language for spacetime models that treat discreteness and
+relationality as primitive, rather than approximating them from a
+continuous substrate.
+
+The advantages of the relational approach are concrete. Conceptually, it
+separates what belongs to a geometric object from what belongs to the
+context of observation, resolving longstanding ambiguities about the
+intrinsic versus relational character of geometric properties.
+Computationally, it provides an exact and natively finite representation
+that requires no discretization step and no approximation management.
+Physically, it offers a mathematical language aligned with discrete
+spacetime theories at the Planck scale, where the continuum is expected
+to be an emergent approximation rather than a primitive substrate.
+
 \subsection{Main Contributions and Paper Structure}
 
 The two central results are the Quotient Construction
@@ -241,7 +264,7 @@ inverse. In a system with congruence $\sim$, we say $r$ has an
 $r^{-1} \circ r \sim \id$.
 \end{definition}
 
-\begin{remark}
+\begin{remark}[Partial composition]
 Partial composition is essential: requiring all pairs to compose would
 force a uniformity inconsistent with most geometric and relational
 structures of interest. The partial setting allows the framework to
@@ -280,7 +303,7 @@ defined when $r_m$ and $s_1$ are compatible. We have
 $\id \circ C = C \circ \id = C$ for all $C \in \RC$.
 \end{definition}
 
-\begin{remark}
+\begin{remark}[Finiteness of configurations]
 No limit, no infinite sequence, and no continuity condition is involved.
 Every configuration is a finite object. Composition is concatenation,
 a purely discrete, computable operation.
@@ -403,7 +426,7 @@ $\id \circ C = C \circ \id = C$, hence $[\id] \circ [C] = [C] = [C]
 \circ [\id]$.
 \end{proof}
 
-\begin{remark}
+\begin{remark}[The quotient reveals, not creates]
 The \emph{quotient} does not introduce structure. It stabilizes invariants
 already present in $(R, \circ)$ by collapsing configurations that
 are indistinguishable within the relational system.
@@ -1404,7 +1427,10 @@ the context of observation.
 \section{Conclusion}
 \label{sec:conclusion}
 
-We have presented a process-relational foundation for geometry in which:
+The central philosophical shift of this framework is that space and
+geometric objects are not primitive entities but emergent structures
+arising from finite relational processes. We have presented a
+process-relational foundation for geometry in which:
 
 \begin{itemize}
   \item relations and compositions are the only primitives,
@@ -1429,13 +1455,17 @@ representations requiring no continuous or infinite machinery.
 We acknowledge several limitations of the present framework. First,
 it is not known whether all classical geometric and topological
 structures can be expressed as quotients of finite relational systems;
-this question is formalized as a future direction below. Second,
-continuous symmetry groups---Lie groups, the Poincar\'{e} group,
-$\mathrm{SO}(n)$---do not arise in the framework, as discussed in
-Remark~\ref{rem:nosymmetry}; discrete cyclic approximations are
-available at any resolution but the continuous groups themselves are
-not objects of the theory. Third, the framework handles static
-geometric structures; extending it to dynamical settings where
+this question is formalized as a future direction below. In particular,
+smooth manifolds, Riemannian metrics, and fiber bundles are structures
+whose representability within the framework remains open: it is unclear
+whether these can be faithfully encoded as finite relational quotients
+or whether they require structures that exceed the framework's expressive
+capacity. Second, continuous symmetry groups---Lie groups, the
+Poincar\'{e} group, $\mathrm{SO}(n)$---do not arise in the framework,
+as discussed in Remark~\ref{rem:nosymmetry}; discrete cyclic
+approximations are available at any resolution but the continuous groups
+themselves are not objects of the theory. Third, the framework handles
+static geometric structures; extending it to dynamical settings where
 generators and congruences evolve over time is open. These limitations
 are consistent with the framework's foundational commitment to finite,
 discrete, computable structure: they mark the boundary between what
