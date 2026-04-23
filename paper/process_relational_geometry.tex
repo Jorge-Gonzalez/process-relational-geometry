@@ -67,8 +67,12 @@ Our two main results are:
 Concrete discrete constructions of the circle ($\RR/n\RR$) and torus
 ($\RR/n\RR \times \RR/m\RR$) illustrate the framework, along with a
 discrete relational account of curvature via noncommutative composition.
-No continuity, limits, infinitesimals, or infinite processes are used
-at any point.
+This relational treatment of curvature encodes geometric deviation as a
+directly computable algebraic property---the commutator of two
+generators---without differential calculus, tangent spaces, or smooth
+structure, making it naturally applicable to discrete spacetime models
+and computational geometry. No continuity, limits, infinitesimals, or
+infinite processes are used at any point.
 \end{abstract}
 
 % ==================================================================
@@ -574,7 +578,11 @@ system relative to a chosen reference step. Two systems with different
 values of $n$ represent the same relational shape observed at different
 comparative granularities. The circle as a relational object is
 the \emph{pattern}---closure under a uniform process---not a fixed
-number of steps.
+number of steps. For example, applying a reference step of one
+centimetre to a circle of circumference one metre yields $n = 100$;
+applying a reference step of one millimetre yields $n = 1000$. The
+relational object --- the closure pattern --- is unchanged; only the
+resolution of the external comparison differs.
 \end{remark}
 
 \begin{remark}[Compositional pattern determines geometric identity]
@@ -602,6 +610,32 @@ Intensional identity is a property of the description. The gap between
 the two is precisely where the classification of geometric structures
 becomes non-trivial.
 \end{remark}
+
+\begin{example}[Distance on the discrete circle]
+\label{ex:circle-distance}
+We apply Theorem~\ref{thm:metric} to the discrete circle
+$\mathbb{Z}/n\mathbb{Z}$. Assign unit weight to the generator:
+$w(a) = 1$, so $w(a^k) = k$.
+
+The distance between objects $[a^j]$ and $[a^k]$ is the minimum-weight
+path between them. Two directed paths connect any two objects on the
+cycle: the \emph{forward path} of length $|k - j| \bmod n$ steps, and
+the \emph{backward path} of length $n - (|k - j| \bmod n)$ steps.
+The metric selects the shorter:
+\[
+  d\bigl([a^j],[a^k]\bigr)
+  \;=\; \min\!\bigl(\,|k-j| \bmod n,\;\; n - (|k-j| \bmod n)\,\bigr).
+\]
+
+For $n = 6$: the distance from $[a^0]$ to $[a^2]$ is $\min(2, 4) = 2$;
+the distance from $[a^0]$ to $[a^5]$ is $\min(5, 1) = 1$, since the
+backward step is shorter. The metric reflects the circular topology:
+the maximum distance between any two objects is $\lfloor n/2 \rfloor$.
+
+No coordinates, no arc length, and no embedding in a plane are used.
+The metric is derived entirely from the relational weight function and
+finite path optimization, as guaranteed by Theorem~\ref{thm:metric}.
+\end{example}
 
 \begin{proposition}[Conditions for a well-formed closed object]
 \label{prop:closed}
@@ -1134,6 +1168,36 @@ directed graph, with configurations as $1$-morphisms and identifications
 between configurations (homotopies in the discrete sense) as
 $2$-morphisms.
 
+\begin{example}[A 2-morphism on the discrete circle]
+\label{ex:2morphism}
+Consider the discrete circle $\mathbb{Z}/6\mathbb{Z}$ with generator
+$a$. Two distinct configurations connect $[a^0]$ to $[a^4]$:
+\[
+  P \;=\; a^4 \quad (\text{four forward steps}),
+  \qquad
+  Q \;=\; a^{-2} \quad (\text{two backward steps}).
+\]
+Both $P$ and $Q$ are $1$-morphisms from $[a^0]$ to $[a^4]$ in the
+groupoid. They are different processes but produce the same relational
+outcome.
+
+A \emph{$2$-morphism} $\alpha : P \Rightarrow Q$ is a relational
+identification between these two processes: a witness that $P$ and $Q$
+are indistinguishable as paths from $[a^0]$ to $[a^4]$. In the
+discrete setting this identification is encoded by the congruence:
+\[
+  a^4 \;\sim\; a^{-2},
+\]
+which holds because $a^6 \sim \id$ implies $a^4 \circ a^2 \sim \id$,
+so $a^4 \sim a^{-2}$.
+
+The $2$-morphism $\alpha$ is the discrete relational analogue of a
+homotopy between two paths: it certifies that the two processes are
+equivalent without constructing a continuous deformation between them.
+The equivalence is algebraic, computable, and requires no ambient
+space.
+\end{example}
+
 % ==================================================================
 \section{Connections to Existing Frameworks}
 \label{sec:related}
@@ -1155,6 +1219,21 @@ system, and the quotient is the monoid it presents~\cite{bookotto}.
 The framework extends this by interpreting the presented structure
 geometrically rather than computationally, and by allowing partial
 rather than total composition.
+
+\paragraph{Computational implementation.}
+The framework is directly amenable to computational implementation.
+Relational systems are finite graphs; configurations are directed paths;
+congruences are equivalence relations on those paths, representable as
+rewriting rules. Standard algorithms apply without modification:
+shortest-path algorithms (Dijkstra, Bellman-Ford) compute the discrete
+metric of Theorem~\ref{thm:metric} exactly; string rewriting normal
+form algorithms (Knuth-Bendix completion) decide congruence membership
+and classify quotient structures; graph isomorphism algorithms determine
+extensional equivalence between relational systems. The finiteness and
+discreteness of the framework are not restrictions on expressiveness ---
+they are precisely the properties that make the geometry directly
+computable. Every geometric question in the framework reduces to a
+finite combinatorial computation with no approximation required.
 
 \paragraph{Algebraic topology.}
 The constructions of discrete circles, tori, and commutator-based
@@ -1216,6 +1295,18 @@ geometries. The apparent multiplicity of classical geometries is a
 consequence of the multiplicity of contextual parameterizations, not
 a multiplicity of underlying structures.
 
+A finer relational structure --- larger $n$ --- does produce a discrete
+object that more closely resembles a classical smooth object at any
+given scale of comparison. This is a practical observation about
+approximation quality, not a mathematical limit: the discrete circle
+$\mathbb{Z}/n\mathbb{Z}$ with $n = 10{,}000$ is observationally
+indistinguishable from a smooth circle at most scales of physical
+measurement, but it is not the limit of a sequence converging to the
+smooth circle. The difference matters foundationally: approximation
+quality is an external, contextual statement about resolution; the
+smooth circle as a mathematical object requires actual infinity and
+does not appear in the framework.
+
 This means the framework is not weaker than classical geometry for
 lacking limits; it is more general, in the sense that it separates
 what is intrinsic to a geometric structure from what is supplied by
@@ -1264,6 +1355,17 @@ Directions for further development:
   \item \textbf{Applications to discrete physics.} Formalize discrete
         spacetime models (causal sets, spin foams) within the framework
         and characterize their curvature and holonomy relationally.
+  \item \textbf{Representability limits.} Identify which classical
+        geometric and topological structures --- if any --- cannot be
+        expressed as quotients of finite relational systems, and
+        characterize the boundary between representable and
+        non-representable structures precisely.
+  \item \textbf{Dynamical geometry.} Extend the framework to handle
+        relational systems whose generators and congruences evolve
+        --- that is, geometry as a process rather than a static
+        structure. This would provide a relational account of
+        geometric dynamics, relevant to both discrete physics and
+        time-varying computational models.
 \end{enumerate}
 
 % ==================================================================
