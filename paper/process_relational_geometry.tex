@@ -555,6 +555,74 @@ the two is precisely where the classification of geometric structures
 becomes non-trivial.
 \end{remark}
 
+\begin{proposition}[Conditions for a well-formed closed object]
+\label{prop:closed}
+Let $(R, \circ)$ be an associative relational system with a single
+generator $a$ and congruence $\sim$. The quotient $\RC/{\sim}$ is a
+well-formed closed object if and only if the following two conditions
+hold simultaneously:
+
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Closure.} There exists $n \geq 1$ such that
+        $a^n \sim \id$. Some finite composition of the generator
+        returns to the identity.
+  \item \textbf{Uniqueness.} All intermediate steps are distinct:
+        $a^j \not\sim a^k$ for all $0 \leq j < k < n$.
+\end{enumerate}
+
+When both hold, the quotient is $\mathbb{Z}/n\mathbb{Z}$ --- a genuine
+cycle of $n$ distinct objects. When closure holds but uniqueness fails,
+the shape collapses: some intermediate step is identified with an
+earlier one, and the object is a degenerate cycle of fewer than $n$
+distinct positions. When closure fails entirely, the shape is open.
+\end{proposition}
+
+\begin{proof}
+\textbf{Closure and uniqueness imply a well-formed cycle.}
+If $a^n \sim \id$ and all $a^0, a^1, \dots, a^{n-1}$ are pairwise
+inequivalent, then the equivalence classes $[a^0], [a^1], \dots,
+[a^{n-1}]$ are $n$ distinct objects. By the congruence property,
+$[a^k] \circ [a^\ell] = [a^{k+\ell \bmod n}]$, giving
+$\RC/{\sim} \cong \mathbb{Z}/n\mathbb{Z}$.
+
+\textbf{Failure of uniqueness implies collapse.}
+If $a^j \sim a^k$ for some $j < k < n$, then $[a^j] = [a^k]$ and the
+quotient has fewer than $n$ distinct objects. The object is a cycle of
+period $k - j < n$, identified earlier than the closure law requires.
+
+\textbf{Failure of closure implies openness.}
+If no $n$ satisfies $a^n \sim \id$, then all powers $a^0, a^1, a^2,
+\dots$ produce distinct equivalence classes. The quotient is an
+infinite sequence with no return condition. No finite composition
+closes the shape.
+\end{proof}
+
+\begin{remark}[Open shapes and the absence of infinity]
+\label{rem:open}
+Proposition~\ref{prop:closed} makes precise what it means for a shape
+to be open: it is not that the shape contains an infinite object, but
+that its relational laws contain no periodicity condition. Openness is
+the \emph{absence} of a closure law, not the \emph{presence} of
+infinity.
+
+A line in this framework is an open relational system: one generator,
+no periodicity law. Composition can proceed indefinitely, but at any
+finite stage the object is a finite sequence of distinct steps. The
+line does not contain actual infinity --- it is a system for which no
+finite composition triggers a return. Infinity is not a property of
+the line; it is the name for the absence of a termination condition.
+
+This distinguishes two senses of openness that classical geometry
+conflates: a shape is open either because it has not yet closed
+(a partial traversal of a circle) or because it has no law that
+could ever close it (a line). In the relational framework these are
+structurally distinct. The first is a configuration that has not
+yet reached the periodicity threshold. The second is a relational
+system with no periodicity law at all. The difference is visible
+directly in the congruence, without constructing or inspecting the
+shape.
+\end{remark}
+
 \subsection{The Discrete Torus}
 \label{sec:torus}
 
