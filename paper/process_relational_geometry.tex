@@ -6,7 +6,11 @@
 \usetikzlibrary{arrows.meta, positioning, decorations.pathreplacing, calc}
 \usepackage{hyperref}
 \usepackage{cleveref}
+\usepackage{url}
 \geometry{margin=1in}
+
+% doi command
+\newcommand{\doi}[1]{\href{https://doi.org/#1}{\texttt{doi:#1}}}
 
 % ------------------------------------------------------------------
 % Theorem environments
@@ -103,6 +107,12 @@ The only primitives are \emph{finite relations} and their
 continuous structures, and no infinite processes are assumed. All
 geometric structure is derived from finite relational data.
 
+The central move is this: \emph{objects are not primitive entities but
+equivalence classes of finite relational processes}. A geometric object
+is not a point or a set of points placed in space; it is the entire
+class of processes that no relational test can distinguish. Space is not
+assumed; it emerges as the structured set of such classes.
+
 The framework rests on four explicit commitments:
 \begin{enumerate}
   \item \textbf{Relations and compositions are primitive.} There is no
@@ -122,6 +132,44 @@ structure should be expressible in terms of finite relational data, or
 not claimed to exist within this framework at all. The framework thereby
 enforces a discipline: every geometric claim must be grounded in explicit,
 finite, computable relational structure.
+
+\subsection{Motivation}
+
+Several independent developments across mathematics, physics, and
+computation suggest that a discrete relational foundation for geometry
+is not merely an intellectual exercise but a practical and physical
+necessity.
+
+In \emph{quantum gravity}, approaches including causal set
+theory~\cite{causalset}, loop quantum gravity, and spin foam models
+proceed from the premise that spacetime at the Planck scale is
+fundamentally discrete and relational. The continuum is expected to be
+an emergent approximation, not a primitive substrate. These frameworks
+require a rigorous mathematical language for discrete relational
+geometry that does not presuppose the smooth manifolds it is trying to
+replace. The present framework provides exactly that.
+
+In \emph{computational geometry and digital topology}, geometric
+structures are always represented as finite discrete data. Classical
+geometry must be discretized for computational use, introducing
+approximation errors that must be managed. A framework that is
+natively discrete requires no approximation: its objects are already
+finite, its operations are already exact, and its equivalences are
+already computable. The framework offers a foundational account of why
+discrete computational geometry is not a degraded approximation of
+the real thing but a fully legitimate geometric system in its own right.
+
+In \emph{mathematical foundations}, the specific primitives of classical
+geometry --- the point, the infinite line, the continuous circle --- are
+not logically inevitable. They reflect the cognitive and historical
+conditions under which geometry was first formalized: the experience of
+space as pre-existing, of measurement as always available, of the
+continuum as the natural habitat of number. A framework that derives
+geometric objects from finite relational data, treating metric, position,
+and scale as external contextual parameters rather than intrinsic
+primitives, is not rejecting classical geometry. It is identifying which
+of its features are necessary and which are contingent on the conditions
+of its historical development.
 
 \subsection{Main Contributions and Paper Structure}
 
@@ -906,6 +954,33 @@ pseudo-periodicity, without requiring the ambient space in which they
 are classically defined.
 \end{remark}
 
+\begin{remark}[Continuous symmetries are absent by design]
+\label{rem:nosymmetry}
+The symmetry structures arising in this framework are discrete: cyclic
+groups, finite semidirect products, and their combinations. Continuous
+symmetry groups --- Lie groups, the rotation group $\mathrm{SO}(n)$,
+the Poincar\'{e} group --- do not appear, because continuous structures
+are absent from the framework by design.
+
+This is a deliberate foundational choice, not an omission. Continuous
+symmetries require the real number substrate and the associated
+machinery of Lie theory. In the present framework, what classical
+geometry describes as a continuous rotation is represented as a
+discrete cyclic action at a specified resolution. The group
+$\mathrm{SO}(2)$, for instance, is not an object in the framework;
+the cyclic group $\mathbb{Z}/n\mathbb{Z}$ at resolution $n$ is. As $n$
+increases, the discrete group approximates the continuous one more
+finely, but the limit is never taken.
+
+Whether this restriction is physically appropriate depends on the
+domain of application. For quantum gravity and discrete spacetime
+models, discrete symmetry groups are natural. For classical mechanics
+and field theory, where continuous symmetries are central, the framework
+provides a discrete approximation that may be refined to any required
+precision but does not reproduce the continuum exactly. This is a known
+and accepted limitation of any strictly finite framework.
+\end{remark}
+
 \begin{proposition}[Symmetry pattern from the generating function]
 \label{prop:symmetry}
 Let $(R, \circ)$ be a pseudo-periodic relational system with generator
@@ -1102,9 +1177,49 @@ models---proceed from the premise that spacetime at the Planck scale
 is discrete and relational rather than continuous and manifold-like.
 The present framework is conceptually aligned with this premise and
 provides a clean algebraic setting in which to formalize relational
-spacetime structures. Digital topology and computational geometry
-similarly operate with finite, discrete data as primitive; the
-framework offers a compositional foundation for these fields.
+spacetime structures.
+
+As a concrete illustration, a causal set is a locally finite partially
+ordered set $(X, \preceq)$ in which $x \preceq y$ means event $x$
+causally precedes event $y$. In the present framework this maps
+directly: the elements of $X$ are relational configurations, the
+causal order $\preceq$ is the composition rule, and two causal
+histories are equivalent if no causal test distinguishes them. The
+quotient $\RC/{\sim}$ recovers the causal structure as a discrete
+relational object, with curvature encoded in the commutator structure
+of causal relations exactly as in \Cref{sec:curvature}. The framework
+provides the algebraic machinery to reason about causal set geometry
+--- symmetry, holonomy, equivalence --- without embedding the causal
+set in a continuum.
+
+Digital topology and computational geometry similarly operate with
+finite, discrete data as primitive; the framework offers a
+compositional foundation for these fields.
+
+\paragraph{Relationship to classical geometry.}
+The present framework does not approximate classical geometry as a
+limit of finer relational structures. This distinction is important.
+Taking a limit of discrete relational systems to recover, say, the
+Euclidean plane would reintroduce the continuum through the back door
+and would require the same limiting machinery the framework is designed
+to avoid.
+
+The correct relationship is different. Classical geometries --- Euclidean,
+hyperbolic, spherical --- are not limiting cases of relational structures.
+They are relational structures equipped with specific \emph{external
+contextual parameters}: a choice of metric, a choice of reference frame,
+a choice of scale. Remove those choices and the relational substrate
+remains. Add them back and the classical geometry is recovered, not as
+a limit but as a parameterization. Different choices of external
+parameters over the same relational substrate produce different classical
+geometries. The apparent multiplicity of classical geometries is a
+consequence of the multiplicity of contextual parameterizations, not
+a multiplicity of underlying structures.
+
+This means the framework is not weaker than classical geometry for
+lacking limits; it is more general, in the sense that it separates
+what is intrinsic to a geometric structure from what is supplied by
+the context of observation.
 
 % ==================================================================
 \section{Conclusion}
@@ -1158,36 +1273,43 @@ Directions for further development:
 S.~Mac Lane,
 \textit{Categories for the Working Mathematician},
 2nd ed., Springer, 1998.
+\newblock ISBN 978-0-387-98403-2.
 
 \bibitem{awodey}
 S.~Awodey,
 \textit{Category Theory},
 2nd ed., Oxford University Press, 2010.
+\newblock \doi{10.1093/acprof:oso/9780198568612.001.0001}.
 
 \bibitem{may}
 J.~P.~May,
 \textit{A Concise Course in Algebraic Topology},
 University of Chicago Press, 1999.
+\newblock ISBN 978-0-226-51183-2.
 
 \bibitem{hatcher}
 A.~Hatcher,
 \textit{Algebraic Topology},
 Cambridge University Press, 2002.
+\newblock Freely available at \url{https://pi.math.cornell.edu/~hatcher/AT/ATpage.html}.
 
 \bibitem{bookotto}
 R.~V.~Book and F.~Otto,
 \textit{String-Rewriting Systems},
 Springer, 1993.
+\newblock \doi{10.1007/978-1-4613-9771-7}.
 
 \bibitem{graphgeom}
 R.~Diestel,
 \textit{Graph Theory},
 5th ed., Springer, 2017.
+\newblock \doi{10.1007/978-3-662-53622-3}.
 
 \bibitem{causalset}
 L.~Bombelli, J.~Lee, D.~Meyer, and R.~D.~Sorkin,
 ``Space-time as a causal set,''
 \textit{Physical Review Letters} \textbf{59}(5):521--524, 1987.
+\newblock \doi{10.1103/PhysRevLett.59.521}.
 
 \end{thebibliography}
 
