@@ -1,0 +1,534 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Process-Relational Foundation for Geometry}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We develop a foundational framework for geometry in which primitive relations
+and their compositions, rather than a pre-existing spatial substrate, are the
+basic data. Finite composable sequences of relations, called configurations,
+represent processes. Objects arise as equivalence classes of configurations
+under a congruence relation expressing observational indistinguishability.
+A quotient construction theorem establishes that these objects inherit a
+well-defined associative composition. We further introduce discrete weight
+functions and prove a metric emergence result, showing how distance arises
+as an optimization over finite relational processes. Concrete discrete
+constructions of the circle and torus are provided, along with a relational
+account of curvature via noncommutativity. The framework is deliberately
+finite and discrete throughout; no appeal to continuity, limits, or infinite
+processes is made.
+\end{abstract}
+
+% -----------------------------------------------------------------------
+\section{Introduction}
+
+Classical geometry assumes the prior existence of space as a primitive
+entity populated by points. Relations such as distance, adjacency, and
+order are then defined on this underlying set. A consequence of this
+approach is that metric and positional properties appear to be intrinsic
+to geometric objects, when they are in fact dependent on an ambient
+reference structure.
+
+We adopt a different starting point. A \emph{process-relational} framework
+takes relations and their compositions as the only primitives. No background
+space, no points, no coordinates, and no continuous structures are assumed.
+Objects emerge as stable invariants under relational indistinguishability,
+and any metric or positional property is the result of an explicit
+comparison with a chosen reference, not an intrinsic feature of the object
+itself.
+
+The framework rests on four commitments:
+\begin{enumerate}
+  \item Relations and their compositions are primitive.
+  \item Configurations of relations represent finite processes.
+  \item Objects arise as equivalence classes under congruence.
+  \item All constructions are finite and discrete.
+\end{enumerate}
+
+The last commitment deserves emphasis. Continuity, infinitesimals, and
+infinite processes are not part of the framework. This is not a limitation
+to be overcome but a foundational choice: geometric structure should be
+expressible in terms of finite relational data, or not claimed to exist
+within this framework at all.
+
+% -----------------------------------------------------------------------
+\section{Relational Systems}
+
+\begin{definition}[Relational System]
+A \emph{relational system} is a pair $(R, \circ)$ where:
+\begin{itemize}
+  \item $R$ is a finite or countable set of \emph{primitive relations},
+  \item $\circ : R \times R \rightharpoonup R$ is a \emph{partially defined}
+        composition operation.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Compatibility]
+Two relations $r_1, r_2 \in R$ are \emph{compatible} if $r_1 \circ r_2$
+is defined.
+\end{definition}
+
+\begin{definition}[Associativity]
+A relational system is \emph{associative} if, whenever both sides are
+defined,
+\[
+  (r_1 \circ r_2) \circ r_3 = r_1 \circ (r_2 \circ r_3).
+\]
+\end{definition}
+
+\begin{remark}
+Partial composition is essential. Requiring total composition would force
+all relations to be composable with all others, which is not the case in
+general relational structures. Associativity is assumed throughout.
+\end{remark}
+
+% -----------------------------------------------------------------------
+\section{Configurations as Finite Processes}
+
+\begin{definition}[Configuration]
+A \emph{configuration} is a finite composable sequence of relations:
+\[
+  C = (r_1, r_2, \dots, r_n), \quad r_i \in R,
+\]
+such that each consecutive pair $r_i, r_{i+1}$ is compatible. The
+\emph{empty configuration} $\mathrm{id}$ is included by convention.
+\end{definition}
+
+Configurations represent finite processes or paths in the relational
+system. Composition of configurations is given by concatenation when the
+endpoint of one is compatible with the start of the next. We denote the
+set of all configurations by $\mathcal{C}$.
+
+\begin{definition}[Configuration Composition]
+For configurations $C = (r_1, \dots, r_m)$ and $D = (s_1, \dots, s_n)$,
+their composition is:
+\[
+  C \circ D = (r_1, \dots, r_m, s_1, \dots, s_n),
+\]
+defined when $r_m$ and $s_1$ are compatible. The empty configuration acts
+as a two-sided identity.
+\end{definition}
+
+\begin{remark}
+No limit, no infinite sequence, and no continuity condition appears in
+this definition. All configurations are strictly finite objects.
+\end{remark}
+
+% -----------------------------------------------------------------------
+\section{Congruence and Observational Indistinguishability}
+
+\begin{definition}[Congruence]
+An equivalence relation $\sim$ on $\mathcal{C}$ is a \emph{congruence}
+with respect to composition if, for all configurations
+$C_1, C_1', C_2, C_2'$,
+\[
+  C_1 \sim C_1' \;\text{ and }\; C_2 \sim C_2'
+  \;\Rightarrow\;
+  C_1 \circ C_2 \sim C_1' \circ C_2',
+\]
+whenever the compositions are defined.
+\end{definition}
+
+\begin{definition}[Observational Indistinguishability]
+\label{def:obs-indist}
+Configurations $C_1$ and $C_2$ are \emph{observationally indistinguishable}
+with respect to a congruence $\sim$ if, for every compatible configuration
+$D$,
+\[
+  C_1 \circ D \sim C_2 \circ D
+  \quad\text{and}\quad
+  D \circ C_1 \sim D \circ C_2,
+\]
+whenever the respective compositions are defined.
+\end{definition}
+
+\begin{remark}
+Definition~\ref{def:obs-indist} specifies what it means for two
+configurations to be \emph{equivalent within} a given congruence $\sim$:
+no compositional test with any other configuration can distinguish them.
+This is a property of a pair $(C_1, C_2)$ relative to an already-given
+congruence. It is not a definition of $\sim$ itself, which avoids any
+circularity. In practice, one first specifies $\sim$ by the relational
+laws of the system, then verifies that it satisfies the congruence property
+and that equivalent configurations are observationally indistinguishable.
+\end{remark}
+
+% -----------------------------------------------------------------------
+\section{Objects and the Quotient Construction}
+
+\begin{definition}[Object]
+An \emph{object} is an equivalence class $[C]$ of a configuration $C$
+under a congruence $\sim$:
+\[
+  [C] = \{ C' \in \mathcal{C} \mid C' \sim C \}.
+\]
+\end{definition}
+
+Objects represent stable relational behaviors: configurations that no
+compositional test can distinguish are identified as the same object.
+
+\begin{theorem}[Quotient Construction]
+\label{thm:quotient}
+Let $(R, \circ)$ be an associative relational system with configuration
+set $\mathcal{C}$. If $\sim$ is a congruence on $\mathcal{C}$, then:
+\begin{enumerate}[label=(\roman*)]
+  \item The quotient $\mathcal{C}/{\sim}$ is well-defined as a set of
+        equivalence classes.
+  \item Composition descends to a well-defined operation on
+        $\mathcal{C}/{\sim}$:
+        \[
+          [C_1] \circ [C_2] := [C_1 \circ C_2].
+        \]
+  \item The induced composition on $\mathcal{C}/{\sim}$ is associative.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(i)} By definition, $\sim$ partitions $\mathcal{C}$ into disjoint
+nonempty equivalence classes. The quotient is the set of these classes.
+
+\textbf{(ii)} We must show independence of representatives. Suppose
+$[C_1] = [C_1']$ and $[C_2] = [C_2']$, so $C_1 \sim C_1'$ and
+$C_2 \sim C_2'$. Since $\sim$ is a congruence,
+\[
+  C_1 \circ C_2 \sim C_1' \circ C_2',
+\]
+hence $[C_1 \circ C_2] = [C_1' \circ C_2']$. The operation is therefore
+independent of the choice of representatives.
+
+\textbf{(iii)} For any $C_1, C_2, C_3 \in \mathcal{C}$, associativity
+at the configuration level gives
+$(C_1 \circ C_2) \circ C_3 = C_1 \circ (C_2 \circ C_3)$.
+Passing to equivalence classes and applying (ii):
+\[
+  ([C_1] \circ [C_2]) \circ [C_3]
+  = [(C_1 \circ C_2) \circ C_3]
+  = [C_1 \circ (C_2 \circ C_3)]
+  = [C_1] \circ ([C_2] \circ [C_3]). \qedhere
+\]
+\end{proof}
+
+\begin{remark}
+The quotient construction does not introduce new structure. It stabilizes
+invariants already present in the relational system by identifying
+configurations that behave identically under all compositions.
+Geometric structure emerges from the relational data, not from the act
+of quotienting.
+\end{remark}
+
+% -----------------------------------------------------------------------
+\section{Discrete Metric Emergence}
+
+We now show how a notion of distance can arise from the relational system
+without being imposed as a primitive. The construction is entirely
+discrete and finite.
+
+\begin{definition}[Discrete Weight Function]
+A \emph{discrete weight function} is a map $w : R \to \mathbb{N}$
+extended to configurations by:
+\[
+  w(C) = w(r_1) + w(r_2) + \cdots + w(r_n)
+  \quad\text{for } C = (r_1, \dots, r_n),
+  \quad w(\mathrm{id}) = 0.
+\]
+\end{definition}
+
+\begin{definition}[Relational Path]
+A \emph{relational path from $[A]$ to $[B]$} is a configuration $P$
+such that $P$ composed from a representative of $[A]$ reaches a
+representative of $[B]$.
+\end{definition}
+
+\begin{theorem}[Discrete Metric Emergence]
+\label{thm:metric}
+Let $w$ be a discrete weight function on a relational system $(R, \circ)$
+with congruence $\sim$. Assume:
+\begin{enumerate}[label=(A\arabic*)]
+  \item $w(r) \geq 0$ for all $r \in R$,
+  \item $w(C_1) = w(C_2)$ whenever $C_1 \sim C_2$,
+  \item $w(\mathrm{id}) = 0$.
+\end{enumerate}
+Define:
+\[
+  d([A],[B]) = \min\bigl\{ w(P) \mid P \text{ is a relational path from }
+  [A] \text{ to } [B] \bigr\}.
+\]
+Then $d$ is a pseudometric on $\mathcal{C}/{\sim}$. If additionally
+$d([A],[B]) = 0 \Rightarrow [A] = [B]$, then $d$ is a metric.
+\end{theorem}
+
+\begin{proof}
+\textbf{Non-negativity.} $d([A],[B]) \geq 0$ follows from (A1) and
+the definition as a minimum over non-negative values.
+
+\textbf{Symmetry.} If the relational system contains inverse relations
+(i.e., for every $r$ there exists $r^{-1}$ with $w(r^{-1}) = w(r)$),
+then reversing a path from $[A]$ to $[B]$ yields a path of equal weight
+from $[B]$ to $[A]$, giving $d([A],[B]) = d([B],[A])$.
+
+\textbf{Triangle inequality.} Given paths $P$ from $[A]$ to $[B]$ and
+$Q$ from $[B]$ to $[C]$, the concatenation $P \circ Q$ is a path from
+$[A]$ to $[C]$ with $w(P \circ Q) = w(P) + w(Q)$. Taking minima:
+\[
+  d([A],[C]) \leq w(P \circ Q) = w(P) + w(Q).
+\]
+Minimizing over all such $P$ and $Q$ gives
+$d([A],[C]) \leq d([A],[B]) + d([B],[C])$.
+
+The separation condition $d([A],[B]) = 0 \Rightarrow [A] = [B]$ upgrades
+the pseudometric to a metric by (A2) and (A3).
+\end{proof}
+
+\begin{remark}
+The use of $\min$ rather than $\inf$ is deliberate and reflects the
+discrete, finite character of the framework. In a finite relational
+system, the minimum over all paths of bounded weight is always attained.
+No limiting process is required.
+\end{remark}
+
+% -----------------------------------------------------------------------
+\section{Examples}
+
+\subsection{Discrete Circle}
+
+Let $R = \{a\}$ with total composition $a \circ a = a^2$, and so on.
+Configurations are:
+\[
+  \mathrm{id},\; a,\; a^2,\; \dots,\; a^k,\; \dots
+\]
+with composition $a^k \circ a^\ell = a^{k+\ell}$.
+
+Fix $n \geq 1$. Define a congruence by:
+\[
+  a^k \sim a^m \;\iff\; k \equiv m \pmod{n}.
+\]
+This is a congruence because $k \equiv k' \pmod{n}$ and $\ell \equiv \ell'
+\pmod{n}$ imply $k + \ell \equiv k' + \ell' \pmod{n}$.
+
+By Theorem~\ref{thm:quotient}, the quotient is:
+\[
+  \mathcal{C}/{\sim} \;=\; \{[a^0],[a^1],\dots,[a^{n-1}]\}
+  \;\cong\; \mathbb{Z}/n\mathbb{Z},
+\]
+with composition $[a^k] \circ [a^\ell] = [a^{k+\ell \bmod n}]$.
+
+This cyclic structure is the \emph{discrete circle of resolution $n$}.
+The geometric content of the circle --- closure, periodicity, uniform
+step structure --- is encoded entirely in the single relational law
+$a^n \sim \mathrm{id}$. No embedding space, no coordinates, and no
+continuous arc are used or needed.
+
+\begin{remark}
+The parameter $n$ is not an intrinsic property of the circle. It
+represents the resolution at which the circle is observed relative to
+the step size of the relational system. Different values of $n$ are
+the same relational structure seen from different comparative contexts,
+not different geometric objects.
+\end{remark}
+
+\subsection{Discrete Torus}
+
+Let $R = \{a, b\}$. Impose the congruence generated by:
+\[
+  a \circ b \sim b \circ a, \quad a^n \sim \mathrm{id}, \quad b^m \sim \mathrm{id}.
+\]
+The first law encodes commutativity of the two generators. The second and
+third encode independent periodicities.
+
+By Theorem~\ref{thm:quotient}:
+\[
+  \mathcal{C}/{\sim} \;\cong\; \mathbb{Z}/n\mathbb{Z} \;\times\; \mathbb{Z}/m\mathbb{Z}.
+\]
+This is the \emph{discrete torus of resolution $(n,m)$}, constructed
+from two independent periodic relational directions without any reference
+to a background plane or embedding.
+
+\subsection{Relational Curvature via Noncommutativity}
+
+Let $R = \{a, b, a^{-1}, b^{-1}\}$ with the usual cancellation laws
+$a \circ a^{-1} \sim \mathrm{id}$ and $b \circ b^{-1} \sim \mathrm{id}$.
+If $a \circ b \not\sim b \circ a$, define the \emph{commutator}:
+\[
+  [a,b] = a \circ b \circ a^{-1} \circ b^{-1}.
+\]
+A nontrivial commutator --- one where $[a,b] \not\sim \mathrm{id}$ ---
+encodes the failure of the two relational directions to close back to
+their starting point. This is the discrete relational analogue of
+holonomy: the observable record of traveling around a closed path and
+returning to a different relational state.
+
+Curvature in this framework is the degree to which relational composition
+fails to commute. It is a discrete, computable property of the relational
+system, not a differential invariant.
+
+% -----------------------------------------------------------------------
+\section{Categorical Interpretation}
+
+The construction of Theorem~\ref{thm:quotient} has a natural categorical
+reading.
+
+\begin{itemize}
+  \item Primitive relations in $R$ are \emph{generating morphisms}.
+  \item Configurations in $\mathcal{C}$ are \emph{composable chains} of
+        morphisms, forming a free category on $R$.
+  \item The congruence $\sim$ \emph{imposes identifications}, quotienting
+        the free category by the relational laws.
+  \item The quotient $\mathcal{C}/{\sim}$ is the \emph{category presented
+        by generators $R$ and relations ${\sim}$}.
+\end{itemize}
+
+When the relational laws force every generator to have a compositional
+inverse up to $\sim$, the quotient is a \emph{groupoid}. The discrete
+circle construction yields the cyclic group $\mathbb{Z}/n\mathbb{Z}$
+viewed as a one-object groupoid.
+
+\begin{remark}
+The framework builds structures analogous to those arising in
+\emph{string rewriting systems} and \emph{presentations of monoids and
+categories}. The geometric content is carried by the choice of generators
+and relations, not by any ambient space.
+\end{remark}
+
+% -----------------------------------------------------------------------
+\section{Higher Relational Structure}
+
+The framework extends to higher levels by allowing equivalences between
+configurations to themselves carry relational structure.
+
+\begin{itemize}
+  \item Primitive relations in $R$ are \emph{$0$-cells}.
+  \item Configurations (composable chains) are \emph{$1$-cells} or
+        \emph{$1$-morphisms}.
+  \item Congruences between configurations are \emph{$2$-morphisms}.
+  \item Congruences between congruences are \emph{$3$-morphisms}, and
+        so on.
+\end{itemize}
+
+This hierarchy corresponds to the structure of a \emph{strict
+$\omega$-category} or, when all morphisms at each level are invertible,
+a \emph{strict $\omega$-groupoid}. The discrete circle at this level of
+generality is the fundamental groupoid on a finite graph, with paths
+as $1$-morphisms and homotopies between paths as $2$-morphisms.
+
+All levels of this hierarchy remain finite and discrete if the generating
+data at each level is finite.
+
+% -----------------------------------------------------------------------
+\section{Connections to Existing Frameworks}
+
+\begin{itemize}
+  \item \textbf{Category theory.} The quotient construction is an
+        instance of forming a category by generators and relations.
+        The work of Mac Lane~\cite{maclane} and Awodey~\cite{awodey}
+        provides the general categorical background.
+
+  \item \textbf{String rewriting and monoid presentations.} The
+        relational system $(R, \sim)$ is a string rewriting system;
+        the quotient is the monoid or category it presents. See
+        Book and Otto~\cite{bookotto} for the general theory.
+
+  \item \textbf{Algebraic topology.} The discrete analogues of paths,
+        homotopies, and fundamental groupoids connect to combinatorial
+        algebraic topology. Hatcher~\cite{hatcher} provides classical
+        background; the discrete perspective is developed
+        in~\cite{may}.
+
+  \item \textbf{Discrete geometry.} The framework is consistent with
+        approaches that treat geometric structure as fundamentally
+        discrete and finite, as in graph-based models of
+        space~\cite{graphgeom}.
+\end{itemize}
+
+Unlike classical approaches in all of these areas, the present framework
+does not assume a background space, does not invoke continuity or limits,
+and treats all constructions as intrinsically finite.
+
+% -----------------------------------------------------------------------
+\section{Conclusion}
+
+We have shown that discrete geometric and algebraic structures can be
+derived from primitive finite relations and their composition through
+congruence and quotient constructions. The central results are:
+
+\begin{itemize}
+  \item \textbf{Theorem~\ref{thm:quotient}}: A congruence on a
+        relational system yields a well-defined quotient with associative
+        composition.
+  \item \textbf{Theorem~\ref{thm:metric}}: A discrete weight function
+        yields a pseudometric (or metric) on the quotient, derived from
+        path optimization over finite relational data.
+\end{itemize}
+
+Concrete constructions of the discrete circle, discrete torus, and
+relational curvature demonstrate the framework's expressive range within
+a strictly finite setting.
+
+Directions for further development include:
+
+\begin{enumerate}
+  \item Classification of congruences on a given relational system and
+        the geometric structures they produce.
+  \item Reconstruction of classical discrete spaces (graphs, simplicial
+        complexes, finite topological spaces) within the framework.
+  \item Formalization in the language of higher category theory,
+        keeping all structures finite.
+  \item Characterization of which discrete relational structures
+        are observationally equivalent, i.e., produce isomorphic
+        quotients.
+\end{enumerate}
+
+% -----------------------------------------------------------------------
+\begin{thebibliography}{9}
+
+\bibitem{maclane}
+S.~Mac Lane,
+\textit{Categories for the Working Mathematician},
+2nd ed., Springer, 1998.
+
+\bibitem{awodey}
+S.~Awodey,
+\textit{Category Theory},
+2nd ed., Oxford University Press, 2010.
+
+\bibitem{may}
+J.~P.~May,
+\textit{A Concise Course in Algebraic Topology},
+University of Chicago Press, 1999.
+
+\bibitem{hatcher}
+A.~Hatcher,
+\textit{Algebraic Topology},
+Cambridge University Press, 2002.
+
+\bibitem{bookotto}
+R.~V.~Book and F.~Otto,
+\textit{String-Rewriting Systems},
+Springer, 1993.
+
+\bibitem{graphgeom}
+R.~Diestel,
+\textit{Graph Theory},
+5th ed., Springer, 2017.
+
+\end{thebibliography}
+
+\end{document}
