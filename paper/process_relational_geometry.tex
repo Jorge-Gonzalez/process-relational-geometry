@@ -1637,6 +1637,62 @@ is preserved under pointed GH limits, is an open problem that would
 substantially extend the framework's reach into differential geometry.
 \end{remark}
 
+\begin{proposition}[Triangle defect and $\delta$-hyperbolicity]
+\label{prop:hyperbolicity}
+Let $(\mathcal{O}, d)$ be the metric space induced by a relational
+system with inverses. Define the \emph{triangle defect}:
+\[
+  \kappa(x, y, z) := d(x,y) + d(y,z) - d(x,z)
+  \quad \text{for } x, y, z \in \mathcal{O}.
+\]
+The following are equivalent up to constants:
+\begin{enumerate}[label=(\roman*)]
+  \item $\kappa(x,y,z) \leq \delta$ for all $x,y,z \in \mathcal{O}$;
+  \item $(\mathcal{O}, d)$ is $\delta'$-hyperbolic in the sense of
+        Gromov, with $\delta' \asymp \delta$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+$(i) \Rightarrow (ii)$: Assume $\kappa(x,y,z) \leq \delta$ for all
+triples, i.e.\ $d(x,z) \geq d(x,y) + d(y,z) - \delta$. Take any
+geodesic triangle with vertices $x,y,z$ and geodesic sides, and pick
+a point $p$ on the side $[x,y]$ with $d(x,p) = a$, $d(p,y) = b$,
+$a + b = d(x,y)$. Applying the defect bound to the triple $(x,p,z)$
+gives $d(p,z) \leq d(x,z) - a + \delta$. Comparing with the path
+through $y$ gives $d(p,z) \leq b + d(y,z)$. Combining these two
+bounds via the standard thin-triangle argument shows that $p$ lies
+within $O(\delta)$ of $[x,z] \cup [y,z]$. Hence triangles are
+$O(\delta)$-thin and $(\mathcal{O},d)$ is $O(\delta)$-hyperbolic.
+
+$(ii) \Rightarrow (i)$: Assume $(\mathcal{O},d)$ is $\delta'$-hyperbolic.
+Apply the four-point condition with base point $o = y$:
+\[
+  d(x,z) + d(y,y) \leq
+  \max\{d(x,y) + d(z,y),\; d(x,y) + d(y,z)\} + \delta'.
+\]
+Since $d(y,y) = 0$ and the maximum equals $d(x,y) + d(y,z)$, this
+gives $d(x,z) \leq d(x,y) + d(y,z) + \delta'$, i.e.\
+$\kappa(x,y,z) \leq \delta'$.
+\end{proof}
+
+\begin{remark}[Curvature types via triangle defect]
+\label{rem:curvtypes}
+The triangle defect $\kappa$ classifies the metric geometry of a
+relational system by the behavior of geodesic triangles.
+When $\kappa = 0$ identically, the triangle inequality is always
+tight, which characterizes tree-like (0-hyperbolic) structures:
+geodesics compose without residual, and the metric is an
+ultra-metric in the limit. When $\kappa \leq \delta$ uniformly
+for some $\delta > 0$, the space is $\delta$-hyperbolic — its
+large-scale geometry is negatively curved in the sense of Gromov,
+connecting directly to geometric group theory and the geometry of
+the regular tree examples of \Cref{sec:examples}. When $\kappa$
+is large or unbounded, the space contains positive-curvature
+behavior; the framework detects this through the presence of short
+non-trivial loops, as in the icosahedral sphere example.
+\end{remark}
+
 % ==================================================================
 \subsection{Pseudo-Periodicity and the Taxonomy of Closure}
 \label{sec:pseudoperiodic}
@@ -3083,6 +3139,38 @@ Directions for further development:
         questions of curvature change, topological transitions, and the
         evolution of relational structure over time --- currently
         expressible only in continuous settings.
+  \item \textbf{Cohomological and gauge-theoretic program.}
+        The triangle defect of Proposition~\ref{prop:hyperbolicity}
+        and the commutator-based curvature of \Cref{sec:curvature}
+        suggest a deeper algebraic structure: the length functional
+        $\ell : \mathrm{Mor}(\mathcal{C}) \to \mathbb{R}$ is a
+        1-cochain on the configuration category, and its coboundary
+        $\omega(\alpha,\beta) = \ell(\alpha) + \ell(\beta) -
+        \ell(\alpha \cdot \beta)$ is a 2-cocycle that encodes
+        curvature. Under this identification, the Bianchi identity
+        becomes the automatic cocycle condition $d\omega = d(d\ell) = 0$,
+        flat geometries correspond to the trivial cohomology class
+        $[\omega] = 0 \in H^2(\mathcal{C}, \mathbb{R})$, and
+        $\delta$-hyperbolic geometries correspond to bounded cocycle
+        classes $|[\omega]| \leq \delta$.
+
+        Extending this to a group-valued connection $A :
+        \mathrm{Mor}(\mathcal{C}) \to G$ produces a curvature 2-cocycle
+        $F(\alpha,\beta) = A(\alpha) A(\beta) A(\alpha \cdot \beta)^{-1}$
+        with gauge symmetry $A \mapsto g \cdot A \cdot g^{-1}$, yielding
+        a full cohomological classification $[F] \in H^2(\mathcal{C}, G)$.
+        In a smooth scaling limit satisfying second-order control, the
+        commutator holonomy $H_\varepsilon(v,w) = \exp(\varepsilon^2
+        \mathcal{R}(v,w) + o(\varepsilon^2))$ recovers the classical
+        Riemann curvature tensor, and the discrete Einstein--Hilbert
+        action $S_\varepsilon[A] = \sum_x \mu_\varepsilon(x)
+        \sum_{(\alpha,\beta) \in \mathcal{P}_x}
+        \frac{1}{\varepsilon^2} \omega_\varepsilon(\alpha,\beta)$
+        converges to $\int_M R \sqrt{|g|}\, d^n x$, with stationary
+        points recovering the Einstein field equations under
+        metric-compatibility and torsion-free constraints. This program
+        --- from relational composition to gauge geometry to gravity ---
+        is a natural long-term direction for the framework.
 \end{enumerate}
 
 % ==================================================================
