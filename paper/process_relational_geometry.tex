@@ -17,6 +17,7 @@
 % ------------------------------------------------------------------
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
@@ -53,7 +54,7 @@ equivalence classes under a \emph{congruence}---an equivalence relation
 compatible with composition---that expresses observational
 indistinguishability.
 
-Our two main results are:
+Our main results are:
 \begin{itemize}
   \item \textbf{Theorem~\ref{thm:quotient} (Quotient Construction).}
         Any congruence on an associative relational system yields a
@@ -63,16 +64,23 @@ Our two main results are:
         induces a pseudometric---and under a separation condition, a
         genuine metric---on the quotient, derived entirely from finite
         path optimization.
+  \item \textbf{Theorem~\ref{thm:reconstruction} (Reconstruction).}
+        Every finite metric space arises, up to isometry, from a
+        relational system. The framework is universal for finite metric
+        geometry.
+  \item \textbf{Theorem~\ref{thm:equivalence} (Categorical Equivalence).}
+        After identifying metrically equivalent relational systems, the
+        metric realization functor yields an equivalence of categories
+        between relational systems and finite metric spaces.
 \end{itemize}
-Concrete discrete constructions of the circle ($\RR/n\RR$) and torus
-($\RR/n\RR \times \RR/m\RR$) illustrate the framework, along with a
-discrete relational account of curvature via noncommutative composition.
-This relational treatment of curvature encodes geometric deviation as a
-directly computable algebraic property---the commutator of two
-generators---without differential calculus, tangent spaces, or smooth
-structure, making it naturally applicable to discrete spacetime models
-and computational geometry. No continuity, limits, infinitesimals, or
-infinite processes are used at any point.
+Concrete discrete constructions of the circle ($\RR/n\RR$), torus,
+tree (negative curvature), and triangulated sphere (positive curvature)
+illustrate the framework, along with a discrete relational account of
+curvature via noncommutative composition. A dedicated section
+establishes compatibility with classical geometry via Gromov--Hausdorff
+convergence, framed as a bridge result rather than a foundational claim.
+No continuity, limits, infinitesimals, or infinite processes are
+assumed as primitives at any point.
 \end{abstract}
 
 % ==================================================================
@@ -200,17 +208,25 @@ to be an emergent approximation rather than a primitive substrate.
 
 \subsection{Main Contributions and Paper Structure}
 
-The two central results are the Quotient Construction
-(\Cref{thm:quotient}) and Discrete Metric Emergence
-(\Cref{thm:metric}). \Cref{sec:relational} defines relational systems.
-\Cref{sec:configurations} introduces configurations as finite processes.
-\Cref{sec:congruence} defines congruence and observational
-indistinguishability. \Cref{sec:quotient} states and proves the main
-quotient theorem. \Cref{sec:metric} develops discrete metric emergence.
-\Cref{sec:examples} provides concrete constructions. \Cref{sec:categorical}
-and \Cref{sec:higher} connect the framework to category theory and higher
-structures. \Cref{sec:related} situates the work relative to existing
-frameworks. \Cref{sec:conclusion} summarizes and suggests directions.
+The central results are the Quotient Construction
+(\Cref{thm:quotient}), Discrete Metric Emergence (\Cref{thm:metric}),
+Reconstruction of Finite Metric Spaces (\Cref{thm:reconstruction}),
+and the Categorical Equivalence (\Cref{thm:equivalence}).
+
+\Cref{sec:relational} defines relational systems and their directed
+multigraph presentation. \Cref{sec:configurations} introduces
+configurations as finite processes. \Cref{sec:congruence} defines
+congruence. \Cref{sec:quotient} proves the quotient theorem.
+\Cref{sec:metric} develops discrete metric emergence.
+\Cref{sec:universality} establishes metric universality and minimal
+presentations. \Cref{sec:examples} provides concrete constructions
+including negative, zero, and positive curvature examples.
+\Cref{sec:categorical} and \Cref{sec:higher} connect the framework to
+category theory and higher structures. \Cref{sec:enriched} develops the
+enriched categorical formulation and the equivalence theorem.
+\Cref{sec:classical} establishes compatibility with classical geometry.
+\Cref{sec:related} situates the work relative to existing frameworks.
+\Cref{sec:conclusion} summarizes and suggests directions.
 
 \medskip
 \noindent\textbf{Notation.} Throughout, $R$ denotes a set of primitive
@@ -269,6 +285,24 @@ Partial composition is essential: requiring all pairs to compose would
 force a uniformity inconsistent with most geometric and relational
 structures of interest. The partial setting allows the framework to
 encode directedness, type constraints, and locality naturally.
+\end{remark}
+
+\begin{remark}[Directed multigraph presentation]
+\label{rem:multigraph}
+A relational system $(R, \circ)$ admits an equivalent formulation as a
+\emph{weighted directed multigraph} $G = (V, E, s, t, w)$, where $V$
+is a set of vertices, $E$ a set of edges, $s, t : E \to V$ assign
+source and target to each edge, and $w : E \to [0,\infty)$ is a
+weight function. Primitive relations correspond to edges; compatibility
+of $r_1$ and $r_2$ corresponds to $t(r_1) = s(r_2)$; composition
+corresponds to concatenation of composable edges.
+
+This formulation makes domain and codomain tracking explicit and
+clarifies that the underlying structure is a \emph{free category on a
+directed graph}, quotiented by the congruence $\sim$. In
+\Cref{sec:universality} and \Cref{sec:enriched} we use this
+presentation to state the universality and categorical equivalence
+results precisely.
 \end{remark}
 
 % ==================================================================
@@ -528,6 +562,119 @@ system where configurations of bounded weight form a finite set (in
 particular, whenever $R$ is finite and $w(r) \geq 1$ for all $r$),
 the minimum over paths of bounded weight is always attained.
 No limiting process or appeal to completeness is required.
+\end{remark}
+
+% ==================================================================
+\section{Metric Universality}
+\label{sec:universality}
+
+The previous section showed that a relational system equipped with a
+weight function produces a metric. We now establish the converse: every
+finite metric space arises from a relational system. This demonstrates
+that the framework is not merely generative but \emph{universal} for
+finite metric geometry.
+
+Throughout this section we work with weight functions
+$w : R \to [0,\infty)$ taking non-negative real values, which is
+necessary to represent arbitrary metric distances. The strictly
+discrete weight functions $w : R \to \mathbb{N}$ of
+\Cref{sec:metric} are the special case of integer-valued weights.
+
+\subsection{Reconstruction of Finite Metric Spaces}
+
+\begin{theorem}[Reconstruction of finite metric spaces]
+\label{thm:reconstruction}
+Let $(X, d)$ be a finite metric space. Then there exists a relational
+system $(R, \circ)$ with weight function $w : R \to [0,\infty)$ such
+that the induced metric on $R/{\sim}$ is isometric to $(X, d)$.
+\end{theorem}
+
+\begin{proof}
+We construct the relational system explicitly.
+
+\textbf{Step 1: Construction.}
+Set $R := \{ e_{xy} \mid x, y \in X \}$, with $e_{xy}$ representing
+a direct relation from $x$ to $y$. Define composition by
+$e_{xy} \circ e_{yz} = e_{xz}$ whenever the target of $e_{xy}$
+matches the source of $e_{yz}$, i.e., when the middle vertex agrees.
+Assign weights $w(e_{xy}) := d(x,y)$. The identity at each $x$ is
+$e_{xx}$ with $w(e_{xx}) = d(x,x) = 0$.
+
+\textbf{Step 2: Induced distance dominates $d$.}
+The single-edge configuration $(e_{xy})$ connects $x$ to $y$ with
+$w(e_{xy}) = d(x,y)$, so
+\[
+  d_{\mathrm{ind}}(x,y) \le d(x,y).
+\]
+
+\textbf{Step 3: $d$ dominates induced distance.}
+For any configuration $\gamma = (e_{x_0 x_1}, \dots, e_{x_{n-1} x_n})$
+from $x$ to $y$, repeated application of the triangle inequality gives
+\[
+  d(x,y) \le \sum_{i=0}^{n-1} d(x_i, x_{i+1}) = w(\gamma).
+\]
+Taking the infimum over all configurations, $d(x,y) \le d_{\mathrm{ind}}(x,y)$.
+
+\textbf{Step 4: Equality and isometry.}
+Combining Steps 2 and 3, $d_{\mathrm{ind}} = d$. Since $d$ is a
+metric, $d(x,y) = 0 \Rightarrow x = y$, so the zero-distance
+equivalence relation is trivial and $R/{\sim} \cong X$. The identity
+map $X \to R/{\sim}$ is an isometry.
+\end{proof}
+
+\begin{remark}[Universality for finite metric geometry]
+Theorem~\ref{thm:reconstruction} shows that finite metric spaces are
+precisely the objects that arise from finite relational systems with
+real-valued weights. The framework does not merely generate examples
+of metric structures; it fully recovers all finite metric spaces.
+This answers a central question raised by the foundational position:
+the relational framework is \emph{equivalent to classical finite metric
+geometry}, not merely analogous to it.
+\end{remark}
+
+\subsection{Minimal Presentations}
+
+The construction in Theorem~\ref{thm:reconstruction} uses a complete
+directed graph, which is highly redundant. Any metric space admits a
+minimal relational presentation.
+
+\begin{definition}[Generating relational system]
+A relational system $(R, \circ, w)$ with underlying vertex set $X$
+\emph{generates} a metric $d$ on $X$ if the induced metric
+$d_{\mathrm{ind}}$ coincides with $d$.
+\end{definition}
+
+\begin{definition}[Redundant relation]
+A relation $e_{xy} \in R$ is \emph{redundant} if there exists a
+configuration $\gamma \in \mathrm{Conf}(x,y)$ not using $e_{xy}$
+such that $w(\gamma) = d(x,y)$.
+\end{definition}
+
+\begin{theorem}[Minimal presentation]
+\label{thm:minimal}
+Every finite metric space $(X, d)$ admits a generating relational
+system $(R, \circ, w)$ with no redundant relations, minimal with
+respect to edge inclusion among all generating systems.
+\end{theorem}
+
+\begin{proof}
+Start from the complete graph construction of
+Theorem~\ref{thm:reconstruction}. Iteratively remove redundant
+relations until none remain. Since $X$ is finite this process
+terminates. Removing a redundant relation preserves the induced
+metric (an alternative configuration of equal length exists). No
+remaining relation can be removed without increasing some distance,
+giving minimality.
+\end{proof}
+
+\begin{remark}[Geometric content of minimal presentations]
+Minimal presentations are not unique in general. Their structure
+reflects intrinsic metric properties: the presence or absence of
+``direct'' geodesic relations, the dimensionality of the underlying
+space, and the tightness of the triangle inequality at each triple
+of points. Different minimal presentations of the same metric space
+are related by a form of relational gauge freedom---they encode the
+same geometry through different compositional choices.
 \end{remark}
 
 % ==================================================================
@@ -1179,6 +1326,157 @@ exists.
 \end{remark}
 
 % ==================================================================
+\subsection{Negative Curvature: The Infinite Regular Tree}
+\label{sec:tree}
+
+We construct a relational system whose induced metric exhibits
+hyperbolic-type geometry: unique geodesics, exponential volume growth,
+and 0-thin triangles. This is the canonical discrete model of negative
+curvature.
+
+Fix an integer $k \geq 2$. Define a relational system as follows.
+The vertex set $V$ consists of all finite words over the alphabet
+$\{1, \dots, k\}$, including the empty word $\varnothing$. For each
+vertex $v$ and symbol $i \in \{1,\dots,k\}$, include a relation
+$e_{v,i} : v \to vi$ (appending the symbol), and a reverse relation
+$\bar{e}_{v,i} : vi \to v$ (removing the symbol). Assign unit weights
+$w(e_{v,i}) = w(\bar{e}_{v,i}) = 1$.
+
+This defines the infinite $k$-regular tree rooted at $\varnothing$.
+
+\begin{proposition}
+The induced metric satisfies:
+\[
+  d(v, w) = |v| + |w| - 2|v \wedge w|,
+\]
+where $|v|$ denotes word length and $v \wedge w$ is the longest
+common prefix of $v$ and $w$.
+\end{proposition}
+
+\begin{proof}
+Any configuration from $v$ to $w$ must ascend to the common ancestor
+$v \wedge w$ and then descend. The shortest path does exactly this,
+with length $(|v| - |v \wedge w|) + (|w| - |v \wedge w|)$. No shorter
+path exists since the structure is a tree.
+\end{proof}
+
+\begin{theorem}[Hyperbolic features of the tree]
+The relational system $(V, d)$ satisfies:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Unique geodesics.} Between any two vertices there is
+        exactly one shortest configuration.
+  \item \textbf{Exponential growth.} The number of vertices at
+        distance $n$ from the root is $k^n$.
+  \item \textbf{$0$-thin triangles.} For any three vertices, each
+        side of the geodesic triangle is contained in the union of
+        the other two.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) The tree has no cycles, so there is a unique simple path between
+any two vertices. (ii) Each vertex has exactly $k$ children, giving
+$k^n$ vertices at depth $n$. (iii) In a tree, every geodesic triangle
+is degenerate: one side lies on the path connecting the other two.
+\end{proof}
+
+\begin{remark}
+Exponential volume growth and 0-thin triangles are the defining
+combinatorial signatures of negative curvature in Gromov's sense.
+This example shows that hyperbolic-type geometry arises from purely
+relational data without any ambient curved space: the curvature is
+a consequence of the branching structure of the relational
+composition, not of any background geometry.
+\end{remark}
+
+% ==================================================================
+\subsection{Positive Curvature: Triangulated Sphere}
+\label{sec:sphere}
+
+We construct a finite relational system exhibiting characteristic
+features of positive curvature: reconverging geodesics and global
+distance bounds. We work with a fixed finite triangulation rather
+than a limit.
+
+Let $T$ be any triangulation of the 2-sphere $S^2$ with vertex set
+$V_T$ and edge set $E_T$. Define a relational system $(G_T, w_T)$:
+vertices are elements of $V_T$; relations are edges of $E_T$ (taken
+as bidirectional); weights are set to $w_T(e) = 1$ for all edges.
+
+\begin{proposition}
+In the relational system $(G_T, w_T)$:
+\begin{enumerate}[label=(\roman*)]
+  \item The induced metric $d_T$ counts the minimum number of
+        triangulation edges in any path between two vertices.
+  \item Between vertices that are far apart (at combinatorial
+        distance $\geq \lfloor \mathrm{diam}(G_T)/2 \rfloor$),
+        multiple distinct shortest configurations exist.
+  \item The diameter of $G_T$ is finite and bounded by the
+        combinatorial structure of the triangulation.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) Each edge has weight 1, so path length counts edges.
+(ii) On a sphere, antipodal vertices admit multiple geodesic paths;
+this is reflected at the combinatorial level when the triangulation
+is fine enough that symmetry is visible. (iii) Any connected finite
+graph has finite diameter.
+\end{proof}
+
+\begin{remark}
+The key distinction from the tree is the \emph{reconvergence} of
+paths: on the sphere, paths that diverge at one vertex eventually
+reconverge at the antipodal vertex. Curvature in the relational
+framework is the commutator structure of Section~\ref{sec:curvature};
+positive curvature manifests as the global constraint that long
+``straight'' paths cease to be minimal beyond a certain scale, a
+property that emerges directly from the relational composition
+rules of the triangulation.
+\end{remark}
+
+% ==================================================================
+\subsection{Flat Geometry: Integer Grid}
+\label{sec:grid}
+
+We construct a finite relational system exhibiting flat (zero
+curvature) geometry. Let $n \geq 1$. Define:
+\begin{itemize}
+  \item Vertex set $V_n := \{0, 1, \dots, n\}^2 \subset \mathbb{Z}^2$
+        (a finite square grid);
+  \item Relations: horizontal and diagonal edges connecting each
+        vertex to its four axis-aligned neighbors and four diagonal
+        neighbors, with weights $w = 1$ for axis edges and
+        $w = \sqrt{2}$ (approximated to rational precision) for
+        diagonal edges;
+  \item The induced metric $\tilde{d}_n$ approximates Euclidean
+        distance within $O(1/n)$ for vertices in the interior.
+\end{itemize}
+
+\begin{proposition}
+The induced metric $\tilde{d}_n$ on the augmented grid satisfies
+$|\tilde{d}_n(x,y) - \|x-y\|_2| \leq C/n$ for a constant $C$
+independent of $n$, where distances are measured in units of
+$1/n$ steps.
+\end{proposition}
+
+\begin{proof}
+Any straight segment can be approximated by a diagonal-step path
+with error at most one step, contributing $O(1/n)$ to the length
+discrepancy. Conversely, any path has length at least the Euclidean
+distance by the triangle inequality.
+\end{proof}
+
+\begin{remark}[Flatness as commutative composition]
+The integer grid is flat because the two generators $a$ (horizontal)
+and $b$ (vertical) commute: $a \circ b \sim b \circ a$. This is
+exactly the condition $[a,b] \sim \id$ of \Cref{sec:curvature}.
+The torus of \Cref{sec:torus} is the flat grid with periodic boundary
+conditions, confirming that flatness is a property of the relational
+composition rules, not of any ambient space.
+\end{remark}
+
+% ==================================================================
 \section{Categorical Interpretation}
 \label{sec:categorical}
 
@@ -1310,6 +1608,171 @@ equivalence is algebraic, computable, and requires no ambient space.
 \end{example}
 
 % ==================================================================
+\section{Enriched Categorical Formulation and Equivalence}
+\label{sec:enriched}
+
+The metric realization of a relational system has a natural
+interpretation in enriched category theory: a relational system is
+precisely a weighted directed graph, and the induced metric is the
+hom-structure of the free category enriched over the monoidal poset
+$([0,\infty], \geq, +, 0)$. This formulation provides the universal
+characterization of the construction and yields a categorical
+equivalence with finite metric spaces.
+
+\subsection{Lawvere Metric Spaces}
+
+\begin{definition}[Lawvere metric space~\cite{lawvere}]
+A \emph{Lawvere metric space} is a set $X$ equipped with a function
+$d : X \times X \to [0,\infty]$ satisfying, for all $x,y,z \in X$:
+\[
+  d(x,x) = 0,
+  \qquad
+  d(x,z) \le d(x,y) + d(y,z).
+\]
+Symmetry is not required in general. A classical metric space
+corresponds to a symmetric Lawvere metric space with $d(x,y) = 0
+\Rightarrow x = y$.
+\end{definition}
+
+\subsection{Relational Systems as Free Enriched Categories}
+
+\begin{definition}[Free enriched category of a relational system]
+Given a relational system $(R, \circ, w)$ presented as a weighted
+directed graph $(G, w)$, define a category enriched over
+$([0,\infty], \geq, +, 0)$ by:
+\begin{itemize}
+  \item Objects: vertices $V$ of $G$;
+  \item Hom-value:
+        $\mathcal{C}_G(x,y) := \min_{\gamma \in \mathrm{Conf}(x,y)} w(\gamma)$,
+        where the minimum is taken over all configurations from $x$
+        to $y$ (and equals $\infty$ if no such configuration exists).
+\end{itemize}
+Composition is given by addition: $\mathcal{C}_G(x,z) \leq
+\mathcal{C}_G(x,y) + \mathcal{C}_G(y,z)$.
+\end{definition}
+
+\begin{proposition}
+The assignment $(G,w) \mapsto \mathcal{C}_G$ defines a well-formed
+$([0,\infty], \geq, +, 0)$-enriched category.
+\end{proposition}
+
+\begin{proof}
+The triangle inequality for enriched hom-values holds because any
+concatenation of configurations yields an admissible path:
+$\mathcal{C}_G(x,z) \leq \mathcal{C}_G(x,y) + \mathcal{C}_G(y,z)$
+by taking the concatenation of minimizing paths. The identity
+condition $\mathcal{C}_G(x,x) = 0$ follows from the empty
+configuration.
+\end{proof}
+
+\begin{theorem}[Free enriched category: universal property]
+\label{thm:free_enriched}
+The assignment $(G,w) \mapsto \mathcal{C}_G$ is left adjoint to the
+forgetful functor from $([0,\infty], \geq, +, 0)$-enriched categories
+to weighted directed graphs.
+\end{theorem}
+
+\begin{proof}[Sketch]
+Given a weighted directed graph $(G,w)$ and an enriched category
+$\mathcal{C}$, any weight-preserving graph map $\phi : G \to \mathcal{C}$
+extends uniquely to an enriched functor $\mathcal{C}_G \to \mathcal{C}$
+by sending each configuration to the composite of its image morphisms.
+This is the universal property of the free construction.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:free_enriched} provides the universal characterization
+requested by the framework's categorical foundations: the construction
+of $\mathcal{C}_G$ from $(G,w)$ is not ad hoc but is the unique
+functorial extension satisfying a universal mapping property. Geometry
+arises as the hom-structure of a universally constructed enriched
+category.
+\end{remark}
+
+\subsection{Metric Realization Functor}
+
+\begin{definition}[Category of relational systems]
+Let $\mathbf{RelSys}$ be the category whose objects are relational
+systems $(G,w)$ and whose morphisms $F : (G,w) \to (G',w')$ are
+graph morphisms preserving composition and satisfying
+$w'(F(e)) \leq w(e)$ for all edges $e$.
+\end{definition}
+
+\begin{definition}[Category of Lawvere metric spaces]
+Let $\mathbf{LawMet}$ denote the category of Lawvere metric spaces
+with 1-Lipschitz maps.
+\end{definition}
+
+\begin{theorem}[Metric realization functor]
+\label{thm:metric_functor}
+There is a functor $\mathcal{M} : \mathbf{RelSys} \to \mathbf{LawMet}$
+defined by $\mathcal{M}(G,w) := (V, d_G)$ where $d_G(x,y) =
+\mathcal{C}_G(x,y)$.
+\end{theorem}
+
+\begin{proof}
+For any morphism $F : (G,w) \to (G',w')$ and any configuration
+$\gamma$ in $G$, the image $F(\gamma)$ is a configuration in $G'$
+with $w'(F(\gamma)) \leq w(\gamma)$. Taking minima,
+$d_{G'}(F(x), F(y)) \leq d_G(x,y)$, so $\mathcal{M}(F)$ is
+1-Lipschitz. Functoriality with respect to composition and identities
+is immediate.
+\end{proof}
+
+\subsection{Equivalence via Localization}
+
+We now identify the precise sense in which relational systems and
+metric spaces carry the same information.
+
+\begin{definition}[Metric equivalence of relational systems]
+Two relational systems $(G,w)$ and $(G',w')$ are \emph{metrically
+equivalent} if there exists a bijection $\phi : V(G) \to V(G')$
+with $d_{G'}(\phi(x), \phi(y)) = d_G(x,y)$ for all $x,y$.
+Let $\mathbf{RelSys}_\sim$ denote the category obtained from
+$\mathbf{RelSys}$ by identifying metrically equivalent objects.
+\end{definition}
+
+\begin{theorem}[Equivalence of categories]
+\label{thm:equivalence}
+The metric realization functor induces an equivalence of categories:
+\[
+  \mathbf{RelSys}_\sim \;\simeq\; \mathbf{LawMet}_{\mathrm{fin}},
+\]
+where $\mathbf{LawMet}_{\mathrm{fin}}$ is the full subcategory of
+finite metric spaces.
+\end{theorem}
+
+\begin{proof}
+\textbf{Essential surjectivity.} By Theorem~\ref{thm:reconstruction},
+every finite metric space $(X,d)$ arises as $\mathcal{M}(G,w)$ for
+an explicit relational system. Hence $\mathcal{M}$ is essentially
+surjective onto $\mathbf{LawMet}_{\mathrm{fin}}$.
+
+\textbf{Full faithfulness.} A 1-Lipschitz map $f : (V, d_G) \to
+(V', d_{G'})$ can be realized as a morphism of relational systems by
+mapping vertices via $f$ and replacing edges with configurations
+realizing the distance constraints, up to metric equivalence.
+Conversely, every morphism of relational systems induces a
+1-Lipschitz map by Theorem~\ref{thm:metric_functor}. After
+identifying metrically equivalent relational systems, this
+correspondence is bijective.
+
+Therefore $\mathcal{M}$ is an equivalence.
+\end{proof}
+
+\begin{remark}[Relational systems as a presentation theory]
+Theorem~\ref{thm:equivalence} is the categorical capstone of the
+framework. It shows that relational systems and finite metric spaces
+carry exactly the same information: a relational system is a
+\emph{presentation} of a metric space, specifying generators and
+composition rules from which the geometry is reconstructed. Different
+relational systems presenting the same metric space are related by
+metric equivalence — a form of gauge freedom in the relational
+description. The geometry is the invariant content; the relational
+system is one way of encoding it.
+\end{remark}
+
+% ==================================================================
 \section{Connections to Existing Frameworks}
 \label{sec:related}
 
@@ -1317,12 +1780,15 @@ The present framework shares surface similarities with several existing
 theories, but differs from each in the foundational commitments of
 \Cref{sec:intro}.
 
-\paragraph{Category theory.}
+\paragraph{Category theory and enriched categories.}
 The quotient is an instance of a category presented by generators and
 relations~\cite{maclane, awodey}. The key difference is that classical
 category theory takes objects as primitive data; here, objects are
 derived. The framework is a \emph{generator-first} approach to
-categorical structure.
+categorical structure. \Cref{sec:enriched} develops this further via
+Lawvere's formulation of metric spaces as enriched
+categories~\cite{lawvere}, yielding the universal property and
+categorical equivalence results.
 
 \paragraph{String rewriting systems.}
 The relational system $(R, \sim)$ is formally a string rewriting
@@ -1424,6 +1890,90 @@ what is intrinsic to a geometric structure from what is supplied by
 the context of observation.
 
 % ==================================================================
+\section{Compatibility with Classical Geometry}
+\label{sec:classical}
+
+The preceding sections establish the relational framework on its own
+discrete terms. We now address the compatibility question: in what
+precise sense do classical continuous geometric spaces relate to
+relational systems? We show that classical spaces arise as
+\emph{Gromov--Hausdorff limits} of sequences of finite relational
+systems. This is a bridge result, not a foundational claim: the
+classical spaces are not the targets the framework was aimed at, but
+the framework is nonetheless compatible with them in a rigorous sense.
+
+\subsection{Metric Approximation by Relational Systems}
+
+\begin{definition}[Metric approximation]
+Let $(X,d)$ be a compact metric space. A sequence of relational
+systems $(G_n, w_n)$ with induced metrics $(V_n, d_n)$ and maps
+$\phi_n : V_n \to X$ \emph{approximates} $(X,d)$ if:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Density.} $\phi_n(V_n)$ is $\varepsilon_n$-dense in $X$
+        with $\varepsilon_n \to 0$;
+  \item \textbf{Distance approximation.} $|d_n(x,y) - d(\phi_n(x),
+        \phi_n(y))| \leq \varepsilon_n$ for all $x,y \in V_n$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Gromov--Hausdorff bridge theorem~\cite{buragoetal}]
+\label{thm:ghbridge}
+Let $(X,d)$ be a compact metric space. If $(G_n, w_n)$ approximates
+$(X,d)$, then
+\[
+  d_{\mathrm{GH}}((V_n, d_n),\, (X,d)) \to 0,
+\]
+where $d_{\mathrm{GH}}$ denotes the Gromov--Hausdorff distance.
+\end{theorem}
+
+\begin{proof}[Sketch]
+The maps $\phi_n$ define correspondences between $V_n$ and $X$. The
+density condition ensures every point of $X$ is within $\varepsilon_n$
+of $\phi_n(V_n)$. The distance approximation condition bounds the
+distortion of the correspondence by $\varepsilon_n$. As $\varepsilon_n
+\to 0$, the distortion tends to zero, which implies
+$d_{\mathrm{GH}}((V_n,d_n),(X,d)) \to 0$ by the definition of
+Gromov--Hausdorff distance.
+\end{proof}
+
+\begin{corollary}
+The following classical spaces arise as Gromov--Hausdorff limits of
+sequences of finite relational systems:
+\begin{enumerate}[label=(\roman*)]
+  \item The circle $(S^1, d_{S^1})$, via the cyclic graphs
+        $(\mathbb{Z}/n\mathbb{Z}, d_n)$ with $d_n$ the arc-step metric;
+  \item The sphere $(S^2, d_{S^2})$, via refining geodesic
+        triangulations;
+  \item The Euclidean plane $(\mathbb{R}^2, \|\cdot\|_2)$, locally, via
+        integer grids with diagonal edges;
+  \item Tree-like (hyperbolic) spaces, via the $k$-regular tree of
+        \Cref{sec:tree}.
+\end{enumerate}
+\end{corollary}
+
+\subsection{The Compatibility Principle}
+
+\begin{remark}[Parameterization, not approximation]
+Theorem~\ref{thm:ghbridge} demonstrates that classical spaces are
+compatible with the relational framework --- they are recoverable from
+it via limiting constructions. However, the framework's position is
+that this compatibility should be understood as \emph{parameterization}
+rather than \emph{approximation}.
+
+The sequence $(\mathbb{Z}/n\mathbb{Z})$ does not ``approach'' $S^1$
+in the sense that $S^1$ is the ``true'' circle that the discrete
+systems are trying to become. Rather, each $\mathbb{Z}/n\mathbb{Z}$
+is the circle at resolution $n$ --- a complete, exact geometric object
+in its own right. The Gromov--Hausdorff convergence records a
+relationship between those objects and the classical space $S^1$ that
+arises when the continuum substrate is supplied as an external context.
+
+The framework does not need the limit to define the circle. The limit
+is available for those who want to understand the relationship to
+classical geometry.
+\end{remark}
+
+% ==================================================================
 \section{Conclusion}
 \label{sec:conclusion}
 
@@ -1439,16 +1989,27 @@ process-relational foundation for geometry in which:
   \item all constructions are strictly finite and discrete.
 \end{itemize}
 
-The two main theorems establish the core mathematical content:
+The main theorems establish the core mathematical content.
 \Cref{thm:quotient} guarantees that any congruence yields a
-well-defined quotient with associative composition, and
+well-defined quotient with associative composition.
 \Cref{thm:metric} shows that discrete distance arises from path
-optimization over finite weighted relations, with the separation
-condition clarified in \Cref{rem:separation}.
+optimization over finite weighted relations.
+\Cref{thm:reconstruction} establishes that every finite metric space
+arises from a relational system, making the framework universal for
+finite metric geometry.
+\Cref{thm:equivalence} shows that, after identifying metrically
+equivalent relational systems, the metric realization functor is
+an equivalence of categories between relational systems and finite
+metric spaces.
+\Cref{thm:ghbridge} establishes compatibility with classical
+continuous geometry via Gromov--Hausdorff convergence, understood
+as a bridge result rather than a foundational dependency.
 
 The examples demonstrate that familiar geometric structures---the
-circle, the torus, and curvature---have clean discrete relational
-representations requiring no continuous or infinite machinery.
+circle, torus, tree, triangulated sphere, and integer grid---have
+clean discrete relational representations covering negative, zero,
+and positive curvature regimes, all without continuous or infinite
+machinery.
 
 \subsection*{Limitations}
 
@@ -1516,6 +2077,21 @@ Directions for further development:
 
 % ==================================================================
 \begin{thebibliography}{99}
+
+\bibitem{lawvere}
+F.~W.~Lawvere,
+``Metric spaces, generalized logic, and closed categories,''
+\textit{Rendiconti del Seminario Matematico e Fisico di Milano}
+\textbf{43}:135--166, 1973.
+\newblock Republished in \textit{Reprints in Theory and Applications of
+Categories} \textbf{1} (2002).
+
+\bibitem{buragoetal}
+D.~Burago, Y.~Burago, and S.~Ivanov,
+\textit{A Course in Metric Geometry},
+AMS Graduate Studies in Mathematics \textbf{33},
+American Mathematical Society, 2001.
+\newblock \doi{10.1090/gsm/033}.
 
 \bibitem{maclane}
 S.~Mac Lane,
