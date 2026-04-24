@@ -221,14 +221,17 @@ establishes a complete classification of single-generator quotients,
 including a partial classification of congruences.
 \Cref{sec:metric} develops metric emergence in full generality,
 with a corollary for the discrete case.
-\Cref{sec:universality} establishes metric universality and minimal
-presentations. \Cref{sec:examples} provides concrete constructions
-including negative, zero, and positive curvature examples.
+\Cref{sec:universality} establishes metric universality, minimal
+presentations, failure modes, and the domain of validity.
+\Cref{sec:examples} provides concrete constructions including a
+full end-to-end worked example and negative, zero, and positive
+curvature examples.
 \Cref{sec:categorical} and \Cref{sec:higher} connect the framework to
 category theory and higher structures. \Cref{sec:enriched} develops the
 enriched categorical formulation and the equivalence theorem.
 \Cref{sec:classical} establishes compatibility with classical geometry.
-\Cref{sec:related} situates the work relative to existing frameworks.
+\Cref{sec:related} situates the work relative to existing frameworks,
+including an explicit statement of what is new versus reformulated.
 \Cref{sec:conclusion} summarizes and suggests directions.
 
 \medskip
@@ -950,6 +953,38 @@ remaining relation can be removed without increasing some distance,
 giving minimality.
 \end{proof}
 
+\begin{remark}[Failure modes and edge cases]
+\label{rem:failuremodes}
+We document the cases where the framework's machinery requires care.
+
+\textit{Pseudometric rather than metric.} If the weight function
+assigns zero weight to a non-identity relation $r \not\sim \id$,
+the metric emergence theorem produces a pseudometric rather than a
+metric (Remark~\ref{rem:separation}). This is not a failure — it is
+the correct output for a non-separated relational system. The
+separation condition (A5) is an explicit hypothesis, not a hidden
+assumption.
+
+\textit{Non-unique minimal presentations.} Minimal presentations are
+not unique whenever the triangle inequality is slack at some triple.
+If $d(x,z) < d(x,y) + d(y,z)$ for all intermediate points $y$,
+then $e_{xz}$ is non-redundant and must appear in every minimal
+presentation. If $d(x,z) = d(x,y) + d(y,z)$ for some $y$, then
+$e_{xz}$ is redundant and may be omitted. Both choices are valid,
+yielding different minimal presentations of the same metric. The
+worked example of \Cref{sec:worked} illustrates the case where all
+triangle inequalities are tight, producing a unique minimal path
+presentation.
+
+\textit{Pathological finite metric spaces.} Finite metric spaces
+with no tight triangle inequalities (strictly ultra-metric spaces
+where $d(x,z) \leq \max\{d(x,y), d(y,z)\}$ strictly) have a
+unique minimal presentation consisting of all $|X|(|X|-1)$ directed
+edges, since no multi-step path is ever as short as the direct edge.
+These are the maximally complex cases: their minimal presentations
+are complete directed graphs, and no compression is possible.
+\end{remark}
+
 \begin{remark}[Non-uniqueness of minimal presentations]
 Minimal presentations are not unique in general. A simple example
 illustrates this: the metric space on three points $\{a,b,c\}$ with
@@ -967,6 +1002,78 @@ particular, characterizing when two minimal presentations are
 related by a natural transformation in $\mathbf{RelSys}_\sim$ ---
 is an open problem. It is closely connected to the congruence
 classification problem of the future directions.
+\end{remark}
+
+\subsection{Scope and Domain of Validity}
+\label{sec:scope}
+
+The theorems of this section establish the framework's reach for finite
+metric spaces precisely. We state explicitly what is captured, what is
+approximated, and what lies outside the framework.
+
+\begin{theorem}[Domain of validity]
+\label{thm:scope}
+The process-relational framework captures the following classes of
+metric spaces:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Finite metric spaces (exact).} By
+        Theorem~\ref{thm:reconstruction} and the categorical
+        equivalence of Theorem~\ref{thm:equivalence}, every finite
+        metric space arises from a relational system, and the
+        correspondence is an equivalence of categories. No
+        approximation is involved.
+  \item \textbf{Compact metric spaces (GH-approximate).} By
+        Theorem~\ref{thm:ghbridge}, any compact metric space is the
+        Gromov--Hausdorff limit of a sequence of finite relational
+        systems. The classical space is recoverable as a limit but
+        does not appear as a finite relational object.
+  \item \textbf{Locally finite non-compact spaces (pointed
+        GH-approximate).} By Theorem~\ref{thm:pointed_gh}, locally
+        finite spaces such as the $k$-regular tree arise as pointed
+        Gromov--Hausdorff limits of finite relational systems satisfying
+        uniform local finiteness and rooted local convergence.
+\end{enumerate}
+
+The following lie outside the framework's current scope:
+\begin{enumerate}[label=(\roman*)]
+  \setcounter{enumi}{3}
+  \item \textbf{Non-locally-finite infinite spaces.} Spaces without a
+        uniform bound on the number of neighbours within any fixed
+        radius do not satisfy the hypotheses of
+        Theorem~\ref{thm:pointed_gh} and are not captured by the
+        pointed construction.
+  \item \textbf{Smooth Riemannian manifolds.} While compact Riemannian
+        manifolds are GH-approximable by finite relational systems,
+        their smooth structure — tangent spaces, differential forms,
+        smooth maps — does not arise within the framework. Whether
+        smooth structure can be encoded relationally is an open
+        question.
+  \item \textbf{Continuous symmetry groups.} Lie groups, $\mathrm{SO}(n)$,
+        and the Poincar\'{e} group do not appear as objects of the
+        theory; discrete cyclic approximations are available at any
+        resolution but the continuous groups themselves require the
+        real number substrate.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Items (i)--(iii) are proved by the theorems cited. Items (iv)--(vi)
+follow from the framework's foundational commitment to finite discrete
+structure: they are classes that require either infinite vertex sets
+without local finiteness bounds, or the real-number substrate, neither
+of which is primitive in the framework.
+\end{proof}
+
+\begin{remark}[Boundary cases]
+The boundary between cases (i)--(iii) and cases (iv)--(vi) is precise:
+a metric space is exactly capturable if and only if it is finite; it is
+GH-approximable if and only if it is compact or locally finite. The
+remaining cases require structure that exceeds what finite relational
+systems can provide. These are not vague incompleteness but identifiable
+limits. In each case the limitation points to a concrete research
+direction: extending the framework to length spaces, formalizing smooth
+structure relationally, or characterizing which Lie group actions admit
+discrete relational approximations.
 \end{remark}
 
 % ==================================================================
@@ -1159,6 +1266,88 @@ $[a^0], \dots, [a^{n-1}]$ are pairwise inequivalent (uniqueness).
 Open shapes such as the line arise when no periodicity law is
 imposed; see Proposition~\ref{prop:taxonomy}.
 \end{corollary}
+
+\subsection{End-to-End Worked Example: A Four-Point Metric Space}
+\label{sec:worked}
+
+We demonstrate the full pipeline of the framework on a concrete
+finite metric space: presentation, reduction to minimal form, metric
+reconstruction, and comparison with the classical description. This
+example is chosen to be non-trivial — the minimal presentation is
+not the complete graph — while remaining fully explicit.
+
+\textbf{The metric space.} Let $X = \{p, q, r, s\}$ be four points
+with distances:
+\[
+  d(p,q) = 1,\quad d(q,r) = 1,\quad d(r,s) = 1,\quad d(p,s) = 3,
+\]
+\[
+  d(p,r) = 2,\quad d(q,s) = 2.
+\]
+This is the metric on four equally-spaced collinear points — a metric
+line segment of length 3 with three unit steps.
+
+\textbf{Step 1: Complete graph presentation.}
+By Theorem~\ref{thm:reconstruction}, the canonical presentation uses
+a directed complete graph on $\{p,q,r,s\}$ with twelve edges
+$e_{xy}$ for every ordered pair $(x,y)$, weighted by $d(x,y)$.
+This generates the correct metric but is maximally redundant.
+
+\textbf{Step 2: Identifying redundant relations.}
+A relation $e_{xy}$ is redundant if there exists an alternative
+configuration of the same weight connecting $x$ to $y$.
+
+Check $e_{pr}$: the path $e_{pq} \circ e_{qr}$ has weight
+$1 + 1 = 2 = d(p,r)$. So $e_{pr}$ is redundant.
+
+Check $e_{qs}$: the path $e_{qr} \circ e_{rs}$ has weight
+$1 + 1 = 2 = d(q,s)$. So $e_{qs}$ is redundant.
+
+Check $e_{ps}$: the path $e_{pq} \circ e_{qr} \circ e_{rs}$ has weight
+$1 + 1 + 1 = 3 = d(p,s)$. So $e_{ps}$ is redundant.
+
+By symmetry ($w(e_{xy}) = w(e_{yx})$), the reverse edges $e_{rp}$,
+$e_{sq}$, $e_{sp}$ are redundant by the same argument. After removing
+all six redundant edges, the minimal presentation contains exactly six
+edges: $e_{pq}, e_{qp}, e_{qr}, e_{rq}, e_{rs}, e_{sr}$.
+
+\textbf{Step 3: Verifying the minimal presentation.}
+No edge in $\{e_{pq}, e_{qp}, e_{qr}, e_{rq}, e_{rs}, e_{sr}\}$ is
+redundant. Each connects adjacent points with no shorter alternative
+path between them (removing $e_{pq}$, for instance, would make $p$
+unreachable from $q$ by a path of weight 1, since the only remaining
+path from $p$ to $q$ uses $e_{qp}^{-1}$ — the same edge). The minimal
+presentation is a path graph with unit-weight edges in both directions.
+
+\textbf{Step 4: Metric reconstruction.}
+The induced metric from the minimal presentation is:
+\[
+  d_{\mathrm{ind}}(x,y)
+  = \min_{\gamma \in \mathrm{Conf}(x,y)} w(\gamma),
+\]
+computed by shortest-path over the six-edge graph. This gives the
+same values as the original metric: $d_{\mathrm{ind}}(p,r) = 2$,
+$d_{\mathrm{ind}}(p,s) = 3$, etc. Reconstruction is exact.
+
+\textbf{Step 5: Classical comparison.}
+Classically, four collinear points are described by specifying
+coordinates — say $p = 0$, $q = 1$, $r = 2$, $s = 3$ on the real line
+— and deriving distances as absolute differences. The relational
+description is coordinate-free: no ambient line, no embedding, no
+reference origin. The metric emerges entirely from the composition
+structure of six primitive relations. The classical description
+requires an ambient $\mathbb{R}$; the relational description requires
+four objects and six rules.
+
+\textbf{Observation on tightness.}
+The triangle inequality is tight at every triple in this example:
+$d(p,r) = d(p,q) + d(q,r)$, $d(q,s) = d(q,r) + d(r,s)$, and
+$d(p,s) = d(p,q) + d(q,r) + d(r,s)$. Tightness at every triple
+is exactly the condition under which all multi-step edges are
+redundant — so tight triangle inequalities correspond precisely to
+sparse minimal presentations. This illustrates the geometric meaning
+of minimality: the presentation is minimal when the metric is fully
+explained by the direct relations, with no shortcut distances needed.
 
 \subsection{The Discrete Torus}
 \label{sec:torus}
@@ -2090,6 +2279,46 @@ The present framework shares surface similarities with several existing
 theories, but differs from each in the foundational commitments of
 \Cref{sec:intro}.
 
+\paragraph{What is reformulated and what is genuinely new.}
+A skeptical reader will ask whether the framework discovers new
+phenomena or repackages known ones. Both occur, and the distinction
+is worth making explicit.
+
+\textit{Reformulated from known theory.} The quotient construction
+(Theorem~\ref{thm:quotient}) is an instance of the universal
+property of a category presented by generators and relations ---
+this is standard categorical algebra~\cite{maclane}. The metric
+emergence theorem (Theorem~\ref{thm:metric}) is, in the
+single-object case, the construction of a word metric on a group
+presentation; in the multi-object case it is the Cayley graph metric
+of the quotient groupoid. Both are well-known objects. The categorical
+equivalence (Theorem~\ref{thm:equivalence}) is a consequence of
+Lawvere's identification of metric spaces with enriched
+categories~\cite{lawvere} together with the reconstruction theorem.
+
+\textit{Genuinely new.} The $(n,k)$ classification
+(Proposition~\ref{prop:congclass}) --- a complete isomorphism
+invariant for single-generator congruences defined purely in
+relational language, with intrinsic period and shift order as the
+invariants --- does not appear in the existing literature on
+presentations of monoids or groups in this form. The pointed GH
+emergence theorem (Theorem~\ref{thm:pointed_gh}) with its three
+explicit conditions (uniform local finiteness, uniform edge bounds,
+rooted local convergence) is a concrete relational formulation not
+present in the metric geometry literature. The domain of validity
+theorem (Theorem~\ref{thm:scope}), which draws the boundary between
+exactly-capturable, GH-approximable, and out-of-scope spaces, is
+new as an organized statement. And the philosophical framework ---
+the explicit separation of intrinsic relational structure from
+external contextual parameters (position, size, metric), the
+expressibility/canonicity distinction, and the identification of
+infinity as absence of closure rather than primitive object --- is an
+original foundational position, not a restatement of existing work.
+
+\textit{The honest summary.} The machinery is classical. The
+organizational framework, the classification results, and the
+philosophical position are new.
+
 \paragraph{Category theory and enriched categories.}
 The quotient is an instance of a category presented by generators and
 relations~\cite{maclane, awodey}. The key difference is that classical
@@ -2117,7 +2346,12 @@ the metric of Theorem~\ref{thm:metric} exactly; string rewriting normal
 form algorithms (Knuth-Bendix completion~\cite{knuthbendix}) decide
 congruence membership and classify quotient structures; graph isomorphism
 algorithms~\cite{graphiso} determine extensional equivalence between
-relational systems. The finiteness and
+relational systems. A concrete computational advantage: geometric
+equivalence checking --- determining whether two relational systems
+describe the same shape --- reduces for single-generator systems to
+comparing the pair $(n,k)$ by Proposition~\ref{prop:congclass}, a
+computation requiring $O(n)$ time rather than the isometry testing
+required in classical metric geometry. The finiteness and
 discreteness of the framework are not restrictions on expressiveness ---
 they are precisely the properties that make the geometry directly
 computable. Every geometric question in the framework reduces to a
