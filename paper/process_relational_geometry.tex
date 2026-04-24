@@ -234,6 +234,8 @@ curvature examples.
 category theory and higher structures. \Cref{sec:enriched} develops the
 enriched categorical formulation and the equivalence theorem.
 \Cref{sec:classical} establishes compatibility with classical geometry.
+\Cref{sec:multiobject} develops multi-object configurations and
+the emergence of space from inter-system relations.
 \Cref{sec:related} situates the work relative to existing frameworks,
 including an explicit statement of what is new versus reformulated.
 \Cref{sec:conclusion} summarizes and suggests directions.
@@ -2468,11 +2470,18 @@ equivalence checking --- determining whether two relational systems
 describe the same shape --- reduces for single-generator systems to
 comparing the pair $(n,k)$ by Proposition~\ref{prop:congclass}, a
 computation requiring $O(n)$ time rather than the isometry testing
-required in classical metric geometry. The finiteness and
-discreteness of the framework are not restrictions on expressiveness ---
-they are precisely the properties that make the geometry directly
-computable. Every geometric question in the framework reduces to a
-finite combinatorial computation with no approximation required.
+required in classical metric geometry. For multi-generator systems,
+however, determining whether two relational systems are congruence-equivalent
+is significantly harder: it is related to the graph isomorphism
+problem~\cite{graphiso} and, in the infinite setting, may be
+undecidable. The classification gap identified in
+Remark~\ref{rem:multigap} thus has a direct computational counterpart
+--- the single-generator case is efficiently decidable, while the
+general case remains a computationally intensive open problem. The
+finiteness and discreteness of the framework are not restrictions on
+expressiveness --- they are precisely the properties that make the
+geometry directly computable in the cases where the classification is
+understood.
 
 \paragraph{Algebraic topology.}
 The constructions of discrete circles, tori, and commutator-based
@@ -2753,6 +2762,168 @@ classical geometry.
 \end{remark}
 
 % ==================================================================
+\section{Multi-Object Configurations and the Emergence of Space}
+\label{sec:multiobject}
+
+The preceding sections treat each relational system as producing a
+single geometric object. This section addresses what happens when two
+or more relational systems are placed in relation to each other. The
+central result is that no ambient space is needed: space itself emerges
+from the inter-system relations, and its geometry is determined
+entirely by those relations.
+
+\subsection{Connecting Two Relational Systems}
+
+\begin{definition}[Inter-system relations]
+Let $(G_A, w_A)$ and $(G_B, w_B)$ be two relational systems with
+disjoint vertex sets $V_A$ and $V_B$. An \emph{inter-system relational
+structure} is a weighted directed graph $G_{AB}$ with:
+\begin{itemize}
+  \item edge set $E_{AB} \subseteq V_A \times V_B \cup V_B \times V_A$,
+  \item weight function $w_{AB} : E_{AB} \to [0,\infty)$.
+\end{itemize}
+The \emph{combined relational system} is
+$(G_A \sqcup G_{AB} \sqcup G_B,\; w_A \sqcup w_{AB} \sqcup w_B)$,
+where $\sqcup$ denotes disjoint union of graphs and weight functions.
+\end{definition}
+
+\begin{definition}[Combined metric]
+Let $d_A$, $d_B$, and $d_{AB}$ denote the induced metrics within
+$G_A$, within $G_B$, and the crossing distances via $G_{AB}$
+respectively. The \emph{combined metric} on $V_A \cup V_B$ is the
+induced metric of the combined relational system:
+\[
+  d(x, y) = \inf_{\gamma} w(\gamma),
+\]
+where the infimum is over all configurations $\gamma$ in the combined
+system connecting $x$ to $y$.
+\end{definition}
+
+The combined metric recovers $d_A$ within $V_A$ and $d_B$ within
+$V_B$, and introduces new finite distances between $V_A$ and $V_B$
+whenever $E_{AB}$ is non-empty. When $E_{AB}$ is empty, all
+inter-system distances are infinite and the combined space is the
+disjoint union of two metrically disconnected objects.
+
+\subsection{Space as Emergent Relational Structure}
+
+The combined metric space $(V_A \cup V_B, d)$ is itself a finite
+metric space, and by Theorem~\ref{thm:reconstruction} it arises from
+a relational system. It is not placed in a pre-existing ambient space
+--- it \emph{is} the space, produced entirely by the combined
+relational structure.
+
+\begin{theorem}[Space emergence]
+\label{thm:space_emergence}
+Let $(G_A, w_A)$ and $(G_B, w_B)$ be finite relational systems and
+let $G_{AB}$ be an inter-system relational structure connecting them.
+Then:
+\begin{enumerate}[label=(\roman*)]
+  \item The combined system induces a finite metric space
+        $(V_A \cup V_B, d)$ in which the geometry of the combined
+        space is fully determined by $G_A$, $G_B$, and $G_{AB}$.
+  \item No ambient space, background metric, or pre-existing
+        coordinate system is required or assumed.
+  \item Different choices of $G_{AB}$ over the same $G_A$ and $G_B$
+        produce genuinely different combined geometries.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) The combined system is a finite relational system; by
+Theorem~\ref{thm:metric} it induces a metric on $V_A \cup V_B$.
+(ii) No structure beyond $G_A$, $G_B$, and $G_{AB}$ is invoked.
+(iii) Different choices of $E_{AB}$ and $w_{AB}$ produce different
+path sets between $V_A$ and $V_B$, hence different infima and
+different combined metrics.
+\end{proof}
+
+\begin{remark}[Position as inter-system relation]
+The position of one object relative to another is not a property of
+either object. It is encoded in $G_{AB}$: the weights of the
+connecting relations determine how far apart the two objects are,
+and the structure of the connections determines the geometric
+relationship between them. Moving one object relative to another
+means changing $G_{AB}$, not changing either $G_A$ or $G_B$.
+
+This is the formal realization of the framework's claim that position
+is an external contextual parameter. In the single-object case that
+claim was stated but could not be demonstrated structurally. In the
+multi-object case it is a theorem: position lives in the relations
+between objects, not in the objects themselves.
+\end{remark}
+
+\subsection{Geometry of the Combined Space}
+
+The geometry of $(V_A \cup V_B, d)$ depends on the structure of
+$G_{AB}$. The following cases illustrate the range of possibilities.
+
+\textbf{Disconnected union.} If $E_{AB} = \emptyset$, all distances
+between $V_A$ and $V_B$ are infinite. The combined space is the
+disjoint union of two metric spaces with no spatial relationship.
+
+\textbf{Single bridge.} If $E_{AB}$ consists of a single edge
+$e : v_A \to v_B$ with weight $w$, all paths from $V_A$ to $V_B$
+pass through $v_A$ and $v_B$. The combined space has a dumbbell
+geometry: two internal structures connected by a single corridor of
+length $w$.
+
+\textbf{Gluing along a subspace.} If $G_{AB}$ identifies a
+substructure of $G_A$ with a substructure of $G_B$ --- assigns
+zero weight to connections between corresponding elements --- the
+combined space is the metric gluing of the two systems along that
+common substructure. This is the relational analogue of the
+topological pushout: two spaces joined along a shared subspace.
+
+\textbf{Product-like structure.} If $G_{AB}$ is a complete bipartite
+graph with uniform weights, and the crossing cost decouples from the
+internal metrics, the combined space approximates a product metric.
+Two discrete circles connected in this way produce a structure that,
+under refinement, approximates the flat torus $S^1 \times S^1$.
+This recovers the torus of \Cref{sec:torus} as a special case of
+two-object configuration.
+
+\textbf{Warped product.} If the weights in $G_{AB}$ vary depending
+on position within $G_A$ --- some vertices of $A$ are closer to $B$
+than others --- the combined metric is a discrete warped product.
+This is the relational analogue of the warped product metrics that
+appear in cosmological spacetime models.
+
+\begin{remark}[Resolution independence]
+The two systems $G_A$ and $G_B$ need not have the same resolution.
+A circle at resolution $n_A = 6$ and a circle at resolution
+$n_B = 600$ are the same relational object. When they are connected
+by $G_{AB}$, the combined metric is computed over the full combined
+graph. The crossing weights in $G_{AB}$ operate at whatever scale
+is specified, independently of the internal scales of either system.
+The combined metric is sensitive to both the internal structure of
+each system and the scale of the connecting relations, but the two
+resolutions do not need to be commensurate. No synchronization of
+internal parameters is required for two objects to be placed in
+spatial relation to each other.
+\end{remark}
+
+\subsection{Space as the Invariant of a Configuration}
+
+The key observation of this section is that the combined metric space
+--- the ``space'' containing both objects --- is not a background
+structure into which the objects are placed. It is the invariant
+content of the combined relational configuration. Different
+configurations of the same two objects produce different spaces.
+There is no space prior to the configuration that determines where
+the objects sit. The space and the configuration are the same thing
+described from two perspectives: the relational perspective gives
+generators and laws; the geometric perspective gives the induced
+metric on the combined quotient.
+
+This completes the framework's treatment of position. Position is not
+a property of an object, nor an external parameter imposed by a
+separate coordinate system. It is encoded in the inter-system
+relations, and the geometry of the resulting space is determined
+entirely by those relations together with the internal structure of
+each object.
+
+% ==================================================================
 \section{Conclusion}
 \label{sec:conclusion}
 
@@ -2787,6 +2958,11 @@ continuous geometry via Gromov--Hausdorff convergence, understood
 as a bridge result rather than a foundational dependency.
 \Cref{thm:pointed_gh} extends this to non-compact spaces including
 the $k$-regular tree, using the pointed Gromov--Hausdorff framework.
+\Cref{sec:multiobject} establishes that space itself is not a
+primitive container but emerges from inter-system relations: placing
+two relational systems in relation to each other produces a combined
+metric space whose geometry is fully determined by the internal
+structure of each system and the connecting relations between them.
 
 The examples demonstrate that familiar geometric structures---the
 circle, torus, tree, triangulated sphere, and integer grid---have
@@ -2821,6 +2997,16 @@ it points toward a concrete research direction.
 Directions for further development:
 
 \begin{enumerate}
+  \item \textbf{Multi-object space theory.} The multi-object
+        framework of \Cref{sec:multiobject} opens several immediate
+        questions: classify the possible combined geometries that
+        arise from two given relational systems under all possible
+        inter-system structures; characterize the conditions under
+        which the combined space is a product, a gluing, or a warped
+        product; and determine when two multi-object configurations
+        produce isomorphic combined spaces. The connection to
+        topological pushouts and amalgamated products suggests that
+        algebraic topology provides the natural tools.
   \item \textbf{Classification of congruences.}
         For single-generator systems, the pair $(n, k)$ of
         Proposition~\ref{prop:congclass} is a complete isomorphism
