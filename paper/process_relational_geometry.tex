@@ -59,11 +59,12 @@ Our main results are:
   \item \textbf{Theorem~\ref{thm:quotient} (Quotient Construction).}
         Any congruence on an associative relational system yields a
         well-defined quotient with associative composition.
-  \item \textbf{Theorem~\ref{thm:metric} (Discrete Metric Emergence).}
-        A discrete weight function on a relational system with inverses
+  \item \textbf{Theorem~\ref{thm:metric} (Metric Emergence).}
+        A weight function on a relational system with inverses
         induces a pseudometric---and under a separation condition, a
-        genuine metric---on the quotient, derived entirely from finite
-        path optimization.
+        genuine metric---on the quotient, derived from path
+        optimization. When weights are integer-valued and $R$ is
+        finite, the infimum is a minimum (Corollary~\ref{cor:discrete_metric}).
   \item \textbf{Theorem~\ref{thm:reconstruction} (Reconstruction).}
         Every finite metric space arises, up to isometry, from a
         relational system. The framework is universal for finite metric
@@ -80,7 +81,9 @@ curvature via noncommutative composition. A dedicated section
 establishes compatibility with classical geometry via Gromov--Hausdorff
 convergence, framed as a bridge result rather than a foundational claim.
 No continuity, limits, infinitesimals, or infinite processes are
-assumed as primitives at any point.
+assumed as foundational primitives; infinite discrete structures
+such as the regular tree arise as derived objects from the framework's
+finite rules, not as inputs.
 \end{abstract}
 
 % ==================================================================
@@ -159,7 +162,10 @@ fundamentally discrete and relational. The continuum is expected to be
 an emergent approximation, not a primitive substrate. These frameworks
 require a rigorous mathematical language for discrete relational
 geometry that does not presuppose the smooth manifolds it is trying to
-replace. The present framework provides exactly that.
+replace. The present framework offers one such language: whether it is
+the right language for any specific quantum gravity model is an open
+question, but it demonstrates that rigorous discrete relational geometry
+is mathematically feasible without a continuous substrate.
 
 In \emph{computational geometry and digital topology}, geometric
 structures are always represented as finite discrete data. Classical
@@ -196,16 +202,6 @@ mathematical language for spacetime models that treat discreteness and
 relationality as primitive, rather than approximating them from a
 continuous substrate.
 
-The advantages of the relational approach are concrete. Conceptually, it
-separates what belongs to a geometric object from what belongs to the
-context of observation, resolving longstanding ambiguities about the
-intrinsic versus relational character of geometric properties.
-Computationally, it provides an exact and natively finite representation
-that requires no discretization step and no approximation management.
-Physically, it offers a mathematical language aligned with discrete
-spacetime theories at the Planck scale, where the continuum is expected
-to be an emergent approximation rather than a primitive substrate.
-
 \subsection{Main Contributions and Paper Structure}
 
 The central results are the Quotient Construction
@@ -216,8 +212,11 @@ and the Categorical Equivalence (\Cref{thm:equivalence}).
 \Cref{sec:relational} defines relational systems and their directed
 multigraph presentation. \Cref{sec:configurations} introduces
 configurations as finite processes. \Cref{sec:congruence} defines
-congruence. \Cref{sec:quotient} proves the quotient theorem.
-\Cref{sec:metric} develops discrete metric emergence.
+congruence. \Cref{sec:quotient} proves the quotient theorem and
+establishes a complete classification of single-generator quotients,
+including a partial classification of congruences.
+\Cref{sec:metric} develops metric emergence in full generality,
+with a corollary for the discrete case.
 \Cref{sec:universality} establishes metric universality and minimal
 presentations. \Cref{sec:examples} provides concrete constructions
 including negative, zero, and positive curvature examples.
@@ -468,22 +467,140 @@ Geometric structure is encoded in the generators $R$ and laws $\sim$;
 the quotient merely makes that structure manifest.
 \end{remark}
 
+\subsection{Taxonomy of Single-Generator Quotients}
+\label{sec:taxonomy}
+
+The quotient construction produces different geometric objects
+depending on the congruence. For single-generator systems, the
+possibilities are completely classified. This classification is
+foundational: it characterizes the expressive range of the simplest
+relational systems and provides the algebraic criterion used
+throughout the examples of \Cref{sec:examples}.
+
+\begin{proposition}[Conditions for a well-formed closed object]
+\label{prop:closed}
+Let $(R, \circ)$ be an associative relational system with a single
+generator $a$ and congruence $\sim$. The quotient $\RC/{\sim}$ is a
+well-formed closed object if and only if the following two conditions
+hold simultaneously:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Closure.} There exists $n \geq 1$ such that
+        $a^n \sim \id$.
+  \item \textbf{Uniqueness.} All intermediate steps are distinct:
+        $a^j \not\sim a^k$ for all $0 \leq j < k < n$.
+\end{enumerate}
+When both hold, the quotient is $\mathbb{Z}/n\mathbb{Z}$.
+When closure holds but uniqueness fails, the shape collapses to a
+degenerate cycle. When closure fails entirely, the shape is open.
+\end{proposition}
+
+\begin{proof}
+If $a^n \sim \id$ and all $a^0, \dots, a^{n-1}$ are pairwise
+inequivalent, the $n$ classes $[a^0], \dots, [a^{n-1}]$ are distinct
+and $\RC/{\sim} \cong \mathbb{Z}/n\mathbb{Z}$ by the congruence property.
+If $a^j \sim a^k$ for some $j < k < n$, the quotient has period
+$k-j < n$. If no $n$ satisfies $a^n \sim \id$, all powers are
+distinct and the shape is open.
+\end{proof}
+
+\begin{proposition}[Taxonomy of closure]
+\label{prop:taxonomy}
+Let $(R, \circ)$ be an associative relational system with a single
+generator $a$ and congruence $\sim$. Exactly one of the following holds:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Closed.} $a^n \sim \id$ for some $n \geq 1$ with
+        all intermediate steps distinct. Quotient: $\mathbb{Z}/n\mathbb{Z}$.
+  \item \textbf{Pseudo-periodic.} $a^n \sim \phi$ for some $n \geq 1$
+        and $\phi \not\sim \id$, with all intermediate steps distinct.
+  \item \textbf{Open.} No periodicity law holds. Quotient:
+        $\mathbb{Z}$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Cases (i) and (ii) are distinguished by whether the return target
+is $\id$ or some other $\phi$. If no finite composition returns to
+any previously visited class, the system is open and all powers
+$a^0, a^1, \dots$ are distinct. The three cases are mutually
+exclusive and exhaustive.
+\end{proof}
+
+\subsection{A Partial Classification of Congruences}
+\label{sec:congruence_classification}
+
+The paper's central claim is that geometry is determined by the
+choice of congruence laws. It is therefore natural to ask: when do
+two different congruences on the same relational system produce the
+same geometric object? We give a complete answer for the simplest
+case and identify the general question as an open problem.
+
+\begin{proposition}[Congruence classification for single-generator systems]
+\label{prop:congclass}
+Let $R = \{a, a^{-1}\}$ be the single-generator invertible system.
+Two congruences $\sim_1$ and $\sim_2$ on $\RC$ produce isomorphic
+quotients if and only if they belong to the same case of the
+taxonomy of Proposition~\ref{prop:taxonomy} with the same period:
+
+\begin{enumerate}[label=(\roman*)]
+  \item Two closed congruences with periods $n$ and $n'$ produce
+        isomorphic quotients if and only if $n = n'$.
+  \item A closed congruence and an open congruence never produce
+        isomorphic quotients.
+  \item Two open congruences always produce isomorphic quotients
+        (both yield $\mathbb{Z}$).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\textbf{(i).} A closed congruence with period $n$ yields
+$\mathbb{Z}/n\mathbb{Z}$. Two cyclic groups $\mathbb{Z}/n\mathbb{Z}$
+and $\mathbb{Z}/n'\mathbb{Z}$ are isomorphic (as monoids with
+composition) if and only if $n = n'$.
+
+\textbf{(ii).} $\mathbb{Z}/n\mathbb{Z}$ is finite; $\mathbb{Z}$ is
+infinite. No isomorphism between a finite and an infinite monoid
+exists.
+
+\textbf{(iii).} Both open congruences yield $\mathbb{Z}$, which is
+unique up to isomorphism.
+\end{proof}
+
+\begin{remark}[Congruences as geometric invariants]
+Proposition~\ref{prop:congclass} shows that for single-generator
+systems, the period $n$ is a complete invariant of the congruence
+class: it determines the isomorphism type of the quotient and is
+determined by it. The period is therefore a \emph{relational
+geometric invariant} --- a property of the laws that is preserved
+under all relational isomorphisms.
+
+For multi-generator systems the classification is richer. The
+commutator $[a,b]$ of \Cref{sec:curvature} provides a second
+invariant distinguishing flat (commutator $\sim \id$) from curved
+(commutator $\not\sim \id$) structures. A complete invariant theory
+for multi-generator congruences is the central open problem of this
+framework, formalized in the future directions.
+\end{remark}
+
 % ==================================================================
-\section{Discrete Metric Emergence}
+\section{Metric Emergence}
 \label{sec:metric}
 
 We show how a notion of distance arises from the relational system
-without being imposed as a primitive.
+without being imposed as a primitive. We state the general theorem
+for real-valued weights first, then specialize to the integer-valued
+case used throughout the finite discrete framework.
 
-\begin{definition}[Discrete Weight Function]
+\begin{definition}[Weight Function]
 \label{def:weight}
-A \emph{discrete weight function} is a map $w : R \to \mathbb{N}$,
+A \emph{weight function} is a map $w : R \to [0,\infty)$,
 extended to configurations by:
 \[
   w(C) = w(r_1) + \cdots + w(r_n)
   \quad \text{for } C = (r_1, \dots, r_n),
   \qquad w(\id) = 0.
 \]
+When $w$ takes values in $\mathbb{N}$, we call it a
+\emph{discrete weight function}.
 \end{definition}
 
 \begin{definition}[Relational Path Between Objects]
@@ -494,10 +611,10 @@ the configuration $a \circ P$ belongs to $[B]$.
 The set of all such paths is denoted $\mathrm{Path}([A],[B])$.
 \end{definition}
 
-\begin{theorem}[Discrete Metric Emergence]
+\begin{theorem}[Metric Emergence]
 \label{thm:metric}
 Let $(R, \circ)$ be an invertible, associative relational system with
-congruence $\sim$ and discrete weight function $w$.
+congruence $\sim$ and weight function $w : R \to [0,\infty)$.
 Assume:
 \begin{enumerate}[label=(A\arabic*)]
   \item\label{A1} $w(r) \geq 0$ for all $r \in R$,
@@ -509,7 +626,7 @@ Assume:
 \end{enumerate}
 Define:
 \[
-  d([A],[B]) = \min\bigl\{ w(P) \;\bigm|\; P \in \mathrm{Path}([A],[B])
+  d([A],[B]) = \inf\bigl\{ w(P) \;\bigm|\; P \in \mathrm{Path}([A],[B])
   \bigr\}.
 \]
 Then $d$ is a \emph{pseudometric} on $\RC/{\sim}$. If additionally:
@@ -522,7 +639,7 @@ then $d$ is a \emph{metric}.
 
 \begin{proof}
 \textbf{Non-negativity.} Immediate from~\ref{A1} and the definition
-as a minimum over non-negative integers.
+as an infimum over non-negative values.
 
 \textbf{Self-distance.} $d([A],[A]) = 0$ because $\id \in
 \mathrm{Path}([A],[A])$ and $w(\id) = 0$ by~\ref{A3}.
@@ -535,13 +652,33 @@ with $w(P^{-1}) = w(P)$. Hence $d([A],[B]) = d([B],[A])$.
 \textbf{Triangle inequality.} Given $P \in \mathrm{Path}([A],[B])$
 and $Q \in \mathrm{Path}([B],[C])$, the concatenation
 $P \circ Q \in \mathrm{Path}([A],[C])$ satisfies
-$w(P \circ Q) = w(P) + w(Q)$ by additivity of $w$. Taking minima:
+$w(P \circ Q) = w(P) + w(Q)$ by additivity of $w$. Taking infima:
 \[
   d([A],[C]) \leq d([A],[B]) + d([B],[C]).
 \]
 
 \textbf{Metric.} Assumption~\ref{A5} upgrades the pseudometric to a
 metric by providing separation.
+\end{proof}
+
+\begin{corollary}[Discrete metric emergence]
+\label{cor:discrete_metric}
+If additionally $w : R \to \mathbb{N}$ is a discrete weight function
+and $R$ is finite with $w(r) \geq 1$ for all $r \in R$, then the
+infimum in Theorem~\ref{thm:metric} is attained:
+\[
+  d([A],[B]) = \min\bigl\{ w(P) \;\bigm|\; P \in \mathrm{Path}([A],[B])
+  \bigr\}.
+\]
+No limiting process or appeal to completeness is required.
+\end{corollary}
+
+\begin{proof}
+When $w(r) \geq 1$ for all $r$, any path of $k$ steps has weight at
+least $k$. For a fixed target weight $M$, the set of paths with
+$w(P) \leq M$ is a finite set (bounded length, finite $R$). The
+infimum over a finite non-empty set of non-negative integers is a
+minimum.
 \end{proof}
 
 \begin{remark}[Scope of assumption \ref{A5}]
@@ -556,29 +693,17 @@ any non-empty path has positive weight and separation holds
 automatically.
 \end{remark}
 
-\begin{remark}[Discreteness and finiteness]
-The use of $\min$ rather than $\inf$ is deliberate. In a relational
-system where configurations of bounded weight form a finite set (in
-particular, whenever $R$ is finite and $w(r) \geq 1$ for all $r$),
-the minimum over paths of bounded weight is always attained.
-No limiting process or appeal to completeness is required.
-\end{remark}
-
 % ==================================================================
 \section{Metric Universality}
 \label{sec:universality}
 
-The previous section showed that a relational system equipped with a
-weight function produces a metric. We now establish the converse: every
-finite metric space arises from a relational system. This demonstrates
-that the framework is not merely generative but \emph{universal} for
-finite metric geometry.
-
-Throughout this section we work with weight functions
-$w : R \to [0,\infty)$ taking non-negative real values, which is
-necessary to represent arbitrary metric distances. The strictly
-discrete weight functions $w : R \to \mathbb{N}$ of
-\Cref{sec:metric} are the special case of integer-valued weights.
+Theorem~\ref{thm:metric} shows that a relational system equipped with
+a weight function produces a metric. We now establish the converse:
+every finite metric space arises from a relational system. This
+demonstrates that the framework is not merely generative but
+\emph{universal} for finite metric geometry. The reconstruction
+uses real-valued weights $w : R \to [0,\infty)$, the general case
+of Definition~\ref{def:weight}.
 
 \subsection{Reconstruction of Finite Metric Spaces}
 
@@ -622,14 +747,41 @@ equivalence relation is trivial and $R/{\sim} \cong X$. The identity
 map $X \to R/{\sim}$ is an isometry.
 \end{proof}
 
-\begin{remark}[Universality for finite metric geometry]
-Theorem~\ref{thm:reconstruction} shows that finite metric spaces are
-precisely the objects that arise from finite relational systems with
-real-valued weights. The framework does not merely generate examples
-of metric structures; it fully recovers all finite metric spaces.
-This answers a central question raised by the foundational position:
-the relational framework is \emph{equivalent to classical finite metric
-geometry}, not merely analogous to it.
+\begin{remark}[Expressibility, not canonicity]
+\label{rem:expressibility}
+Theorem~\ref{thm:reconstruction} establishes \emph{expressibility}:
+every finite metric space can be encoded as a relational system.
+It does not establish \emph{canonicity}: there is no unique or
+preferred encoding, and the choice of encoding is itself a contextual
+decision.
+
+This distinction is important for the paper's central philosophical
+position. The introduction argues that metrics are external contextual
+parameters, not intrinsic to geometric objects. The reconstruction
+theorem is consistent with this position, but the consistency requires
+care. In the proof, the metric $d(x,y)$ is assigned as an edge weight
+$w(e_{xy})$ --- the metric appears as a primitive input to the
+relational system. This does not mean the metric is intrinsic to the
+geometric object; it means that a specific \emph{choice} of external
+metric has been encoded into a specific relational presentation.
+A different choice of metric would yield a different relational
+presentation of the same underlying point set.
+
+The correct interpretation is therefore: any metric can be expressed
+relationally, but the relational expression always reflects a
+contextual choice. The framework does not make the metric intrinsic
+--- it makes explicit the choice that classical geometry leaves
+implicit. Different relational presentations of the same point set,
+with different weight functions, correspond to different observers
+imposing different metrics from the external context.
+
+This is also why Theorem~\ref{thm:minimal} matters: among all
+relational presentations of a given metric, the minimal ones are
+those in which no relation is redundant given the others. The minimal
+presentation is the one that makes the contextual choice as lean
+as possible --- retaining only the relations that the chosen metric
+genuinely requires and cannot derive from composition of shorter
+paths.
 \end{remark}
 
 \subsection{Minimal Presentations}
@@ -667,14 +819,23 @@ remaining relation can be removed without increasing some distance,
 giving minimality.
 \end{proof}
 
-\begin{remark}[Geometric content of minimal presentations]
-Minimal presentations are not unique in general. Their structure
-reflects intrinsic metric properties: the presence or absence of
-``direct'' geodesic relations, the dimensionality of the underlying
-space, and the tightness of the triangle inequality at each triple
-of points. Different minimal presentations of the same metric space
-are related by a form of relational gauge freedom---they encode the
-same geometry through different compositional choices.
+\begin{remark}[Non-uniqueness of minimal presentations]
+Minimal presentations are not unique in general. A simple example
+illustrates this: the metric space on three points $\{a,b,c\}$ with
+$d(a,b)=1$, $d(b,c)=1$, $d(a,c)=2$ (a metric line) has two minimal
+presentations: one with edges $e_{ab}$ and $e_{bc}$ (the metric
+line traversed left to right), and one where the roles of $b$-to-$a$
+and $b$-to-$c$ are reversed. Both produce the same induced metric.
+
+In general, the structure of minimal presentations reflects intrinsic
+metric properties: the presence or absence of direct geodesic
+relations, and the tightness of the triangle inequality at each
+triple of points. Understanding the full relationship between
+distinct minimal presentations of the same metric space --- in
+particular, characterizing when two minimal presentations are
+related by a natural transformation in $\mathbf{RelSys}_\sim$ ---
+is an open problem. It is closely connected to the congruence
+classification problem of the future directions.
 \end{remark}
 
 % ==================================================================
@@ -858,73 +1019,15 @@ The metric is derived entirely from the relational weight function and
 finite path optimization, as guaranteed by Theorem~\ref{thm:metric}.
 \end{example}
 
-\begin{proposition}[Conditions for a well-formed closed object]
-\label{prop:closed}
-Let $(R, \circ)$ be an associative relational system with a single
-generator $a$ and congruence $\sim$. The quotient $\RC/{\sim}$ is a
-well-formed closed object if and only if the following two conditions
-hold simultaneously:
-
-\begin{enumerate}[label=(\roman*)]
-  \item \textbf{Closure.} There exists $n \geq 1$ such that
-        $a^n \sim \id$. Some finite composition of the generator
-        returns to the identity.
-  \item \textbf{Uniqueness.} All intermediate steps are distinct:
-        $a^j \not\sim a^k$ for all $0 \leq j < k < n$.
-\end{enumerate}
-
-When both hold, the quotient is $\mathbb{Z}/n\mathbb{Z}$ --- a genuine
-cycle of $n$ distinct objects. When closure holds but uniqueness fails,
-the shape collapses: some intermediate step is identified with an
-earlier one, and the object is a degenerate cycle of fewer than $n$
-distinct positions. When closure fails entirely, the shape is open.
-\end{proposition}
-
-\begin{proof}
-\textbf{Closure and uniqueness imply a well-formed cycle.}
-If $a^n \sim \id$ and all $a^0, a^1, \dots, a^{n-1}$ are pairwise
-inequivalent, then the equivalence classes $[a^0], [a^1], \dots,
-[a^{n-1}]$ are $n$ distinct objects. By the congruence property,
-$[a^k] \circ [a^\ell] = [a^{k+\ell \bmod n}]$, giving
-$\RC/{\sim} \cong \mathbb{Z}/n\mathbb{Z}$.
-
-\textbf{Failure of uniqueness implies collapse.}
-If $a^j \sim a^k$ for some $j < k < n$, then $[a^j] = [a^k]$ and the
-quotient has fewer than $n$ distinct objects. The object is a cycle of
-period $k - j < n$, identified earlier than the closure law requires.
-
-\textbf{Failure of closure implies openness.}
-If no $n$ satisfies $a^n \sim \id$, then all powers $a^0, a^1, a^2,
-\dots$ produce distinct equivalence classes. The quotient is an
-infinite sequence with no return condition. No finite composition
-closes the shape.
-\end{proof}
-
-\begin{remark}[Open shapes and the absence of infinity]
-\label{rem:open}
-Proposition~\ref{prop:closed} makes precise what it means for a shape
-to be open: it is not that the shape contains an infinite object, but
-that its relational laws contain no periodicity condition. Openness is
-the \emph{absence} of a closure law, not the \emph{presence} of
-infinity.
-
-A line in this framework is an open relational system: one generator,
-no periodicity law. Composition can proceed indefinitely, but at any
-finite stage the object is a finite sequence of distinct steps. The
-line does not contain actual infinity --- it is a system for which no
-finite composition triggers a return. Infinity is not a property of
-the line; it is the name for the absence of a termination condition.
-
-This distinguishes two senses of openness that classical geometry
-conflates: a shape is open either because it has not yet closed
-(a partial traversal of a circle) or because it has no law that
-could ever close it (a line). In the relational framework these are
-structurally distinct. The first is a configuration that has not
-yet reached the periodicity threshold. The second is a relational
-system with no periodicity law at all. The difference is visible
-directly in the congruence, without constructing or inspecting the
-shape.
-\end{remark}
+\begin{corollary}[Circle as well-formed closed object]
+\label{cor:circle-closed}
+The discrete circle $\mathbb{Z}/n\mathbb{Z}$ is a well-formed closed
+object in the sense of Proposition~\ref{prop:closed}: the congruence
+$a^n \sim \id$ satisfies closure, and the $n$ classes
+$[a^0], \dots, [a^{n-1}]$ are pairwise inequivalent (uniqueness).
+Open shapes such as the line arise when no periodicity law is
+imposed; see Proposition~\ref{prop:taxonomy}.
+\end{corollary}
 
 \subsection{The Discrete Torus}
 \label{sec:torus}
@@ -1083,6 +1186,18 @@ a function algebra. The framework thus makes the noncommutative
 geometry intuition fully discrete and finite.
 \end{remark}
 
+\begin{remark}[Curvature as a special case of pseudo-periodicity]
+\label{rem:curvature-pseudo}
+The commutator $[a,b]$ is an instance of the pseudo-periodicity of
+Proposition~\ref{prop:taxonomy}: traversing the loop
+$a \circ b \circ a^{-1} \circ b^{-1}$ does not return to $\id$ but
+to the shifted state $[a,b]$. This is case~(ii) of the taxonomy,
+with $n = 4$ (the loop has four steps) and $\phi = [a,b]$.
+Curvature is thus a two-generator instance of the same algebraic
+structure that produces helices and spirals in the one-generator
+case: a composition that shifts rather than closes.
+\end{remark}
+
 % ==================================================================
 \subsection{Pseudo-Periodicity and the Taxonomy of Closure}
 \label{sec:pseudoperiodic}
@@ -1158,42 +1273,12 @@ such traversals, the $b$-direction closes. The quotient encodes a
 discrete helix: $n$ steps per turn, $k$ turns before closure.
 \end{example}
 
-\begin{proposition}[Taxonomy of closure]
-\label{prop:taxonomy}
-Let $(R, \circ)$ be an associative relational system with a single
-generator $a$ and congruence $\sim$. Exactly one of the following holds:
-
-\begin{enumerate}[label=(\roman*)]
-  \item \textbf{Closed.} $a^n \sim \id$ for some $n \geq 1$, and all
-        $a^0, \dots, a^{n-1}$ are pairwise inequivalent. The quotient
-        is $\mathbb{Z}/n\mathbb{Z}$.
-  \item \textbf{Pseudo-periodic.} $a^n \sim \phi$ for some $n \geq 1$
-        and some $\phi \not\sim \id$, with all intermediate steps
-        distinct. Each traversal consistently shifts the relational
-        state by $\phi$.
-  \item \textbf{Open.} No $n$ satisfies any periodicity law. All
-        powers $a^0, a^1, a^2, \dots$ produce distinct equivalence
-        classes. The quotient is $\mathbb{Z}$.
-\end{enumerate}
-\end{proposition}
-
-\begin{remark}[Curvature as pseudo-periodicity]
-\label{rem:curvature-pseudo}
-The relational commutator $[a,b] = a \circ b \circ a^{-1} \circ
-b^{-1}$ of \Cref{sec:curvature} is an instance of pseudo-periodicity.
-When $[a,b] \not\sim \id$, traversing the loop $a \circ b \circ
-a^{-1} \circ b^{-1}$ does not return to the identity — it returns to
-the shifted state $[a,b]$. The commutator is precisely the shift $\phi$
-of Definition~\ref{def:pseudoperiodic}, applied to the closed loop
-rather than to a linear traversal.
-
-Curvature and pseudo-periodicity are therefore the same structure
-viewed at different scales: pseudo-periodicity describes the
-accumulated shift over a full traversal, curvature describes the
-shift accumulated by an infinitesimal loop. In the discrete relational
-framework, where no infinitesimals exist, both reduce to the same
-algebraic condition: does a specific composition return to the identity
-or to a shifted state?
+\begin{remark}[Pseudo-periodicity in the taxonomy]
+Pseudo-periodic systems constitute the intermediate case of
+Proposition~\ref{prop:taxonomy}: neither fully closed ($a^n \sim \id$)
+nor fully open (no periodicity law), but shifting ($a^n \sim \phi$,
+$\phi \not\sim \id$). The three cases of the taxonomy are mutually
+exclusive and exhaustive for single-generator systems.
 \end{remark}
 
 \begin{remark}[Connection to semidirect products]
@@ -1325,6 +1410,27 @@ is one such property. It is encoded in the laws before the object
 exists.
 \end{remark}
 
+\begin{remark}[Connection to universality and categorical equivalence]
+The compact encoding of Corollary~\ref{cor:encoding} situates
+pseudo-periodic objects within the broader framework of
+\Cref{sec:universality,sec:enriched}. The encoding triple
+$(n, k, \sigma_\phi)$ determines a finite relational system whose
+induced metric is a specific finite metric space; by
+Theorem~\ref{thm:reconstruction}, this metric space is uniquely
+recoverable from the relational data. Under the categorical
+equivalence of Theorem~\ref{thm:equivalence}, the symmetry group
+$G \cong \mathbb{Z}/n\mathbb{Z} \rtimes_{\sigma_\phi} \langle \phi
+\rangle$ derived from the relational laws corresponds precisely to
+the automorphism group of the induced metric space in
+$\mathbf{LawMet}_{\mathrm{fin}}$.
+
+Thus the pseudo-periodicity analysis is not an isolated result but
+an instance of the general principle that intrinsic geometric
+properties --- including symmetry --- are fully determined by the
+relational presentation and can be read off without constructing
+the geometric object explicitly.
+\end{remark}
+
 % ==================================================================
 \subsection{Negative Curvature: The Infinite Regular Tree}
 \label{sec:tree}
@@ -1408,9 +1514,6 @@ In the relational system $(G_T, w_T)$:
 \begin{enumerate}[label=(\roman*)]
   \item The induced metric $d_T$ counts the minimum number of
         triangulation edges in any path between two vertices.
-  \item Between vertices that are far apart (at combinatorial
-        distance $\geq \lfloor \mathrm{diam}(G_T)/2 \rfloor$),
-        multiple distinct shortest configurations exist.
   \item The diameter of $G_T$ is finite and bounded by the
         combinatorial structure of the triangulation.
 \end{enumerate}
@@ -1418,21 +1521,36 @@ In the relational system $(G_T, w_T)$:
 
 \begin{proof}
 (i) Each edge has weight 1, so path length counts edges.
-(ii) On a sphere, antipodal vertices admit multiple geodesic paths;
-this is reflected at the combinatorial level when the triangulation
-is fine enough that symmetry is visible. (iii) Any connected finite
-graph has finite diameter.
+(iii) Any connected finite graph has finite diameter.
 \end{proof}
 
+\begin{example}[Geodesic non-uniqueness: the icosahedral graph]
+\label{ex:icosahedron}
+The icosahedral triangulation has 12 vertices, 30 edges, and 20
+triangular faces. Each vertex is connected to 5 neighbours; the
+icosahedral graph has diameter 3. By the icosahedral symmetry group
+$A_5 \times \mathbb{Z}/2\mathbb{Z}$, every vertex has a unique
+antipodal vertex at distance 3.
+
+Let $v$ be any vertex and $\bar{v}$ its antipodal. There are exactly
+6 distinct shortest configurations (paths of length 3) from $v$ to
+$\bar{v}$, corresponding to the 6 pairs of opposite faces adjacent to
+$v$. No shorter path exists since the diameter is 3.
+
+This gives 6 distinct minimal configurations connecting the same pair
+of objects — the relational analogue of multiple geodesics between
+antipodal points on a positively curved surface.
+\end{example}
+
 \begin{remark}
-The key distinction from the tree is the \emph{reconvergence} of
-paths: on the sphere, paths that diverge at one vertex eventually
-reconverge at the antipodal vertex. Curvature in the relational
-framework is the commutator structure of Section~\ref{sec:curvature};
-positive curvature manifests as the global constraint that long
-``straight'' paths cease to be minimal beyond a certain scale, a
-property that emerges directly from the relational composition
-rules of the triangulation.
+The key distinction from the tree (negative curvature) is the
+\emph{reconvergence} of paths: on the icosahedral graph, paths that
+diverge from $v$ eventually reconverge at $\bar{v}$. Curvature in
+the relational framework is the commutator structure of
+Section~\ref{sec:curvature}; positive curvature manifests as the
+global constraint that long ``straight'' paths cease to be minimal
+beyond a certain scale, a property that emerges directly from the
+relational composition rules of the triangulation.
 \end{remark}
 
 % ==================================================================
@@ -1440,79 +1558,86 @@ rules of the triangulation.
 \label{sec:grid}
 
 We construct a finite relational system exhibiting flat (zero
-curvature) geometry. Let $n \geq 1$. Define:
+curvature) geometry. Let $n \geq 1$. Define a relational system
+$(G_n, w_n)$ as follows:
 \begin{itemize}
   \item Vertex set $V_n := \{0, 1, \dots, n\}^2 \subset \mathbb{Z}^2$
         (a finite square grid);
-  \item Relations: horizontal and diagonal edges connecting each
-        vertex to its four axis-aligned neighbors and four diagonal
-        neighbors, with weights $w = 1$ for axis edges and
-        $w = \sqrt{2}$ (approximated to rational precision) for
-        diagonal edges;
-  \item The induced metric $\tilde{d}_n$ approximates Euclidean
-        distance within $O(1/n)$ for vertices in the interior.
+  \item Edge set: connect each vertex $(i,j)$ to its eight
+        neighbours --- four axis-aligned and four diagonal;
+  \item Weight function: $w_n(e) := 1$ for all edges (axis and
+        diagonal alike).
 \end{itemize}
 
 \begin{proposition}
-The induced metric $\tilde{d}_n$ on the augmented grid satisfies
-$|\tilde{d}_n(x,y) - \|x-y\|_2| \leq C/n$ for a constant $C$
-independent of $n$, where distances are measured in units of
-$1/n$ steps.
+The induced metric $d_n$ on $(G_n, w_n)$ is the Chebyshev
+($\ell^\infty$) distance:
+\[
+  d_n\bigl((i_1,j_1),(i_2,j_2)\bigr)
+  = \max\bigl\{|i_1 - i_2|,\; |j_1 - j_2|\bigr\}.
+\]
 \end{proposition}
 
 \begin{proof}
-Any straight segment can be approximated by a diagonal-step path
-with error at most one step, contributing $O(1/n)$ to the length
-discrepancy. Conversely, any path has length at least the Euclidean
-distance by the triangle inequality.
+Any path from $(i_1,j_1)$ to $(i_2,j_2)$ must cover a horizontal
+displacement of $|i_1-i_2|$ and a vertical displacement of
+$|j_1-j_2|$. Each step reduces at least one coordinate discrepancy
+by 1. The minimum number of steps needed is therefore
+$\max\{|i_1-i_2|, |j_1-j_2|\}$, achieved by using diagonal steps
+to reduce both coordinates simultaneously. No shorter path exists.
 \end{proof}
 
 \begin{remark}[Flatness as commutative composition]
-The integer grid is flat because the two generators $a$ (horizontal)
-and $b$ (vertical) commute: $a \circ b \sim b \circ a$. This is
-exactly the condition $[a,b] \sim \id$ of \Cref{sec:curvature}.
-The torus of \Cref{sec:torus} is the flat grid with periodic boundary
+The Chebyshev metric on the integer grid is a flat discrete metric:
+the two generators $a$ (horizontal) and $b$ (vertical) commute,
+$a \circ b \sim b \circ a$, which is precisely the condition
+$[a,b] \sim \id$ of \Cref{sec:curvature}. The torus of
+\Cref{sec:torus} is this flat grid with periodic boundary
 conditions, confirming that flatness is a property of the relational
 composition rules, not of any ambient space.
+
+The Chebyshev metric is one of several discrete flat metrics
+constructible within the framework. Integer grids with axis-only
+edges yield the $\ell^1$ (Manhattan) metric; the Chebyshev metric
+arises from the full 8-connected grid. Both are exact, rational,
+and require no approximation of irrational quantities.
 \end{remark}
 
 % ==================================================================
 \section{Categorical Interpretation}
 \label{sec:categorical}
 
-The quotient construction of Theorem~\ref{thm:quotient} has a precise
-categorical reading that situates the framework within known algebraic
-structures.
+The quotient construction has a natural categorical reading that
+provides conceptual orientation before the formal development of
+\Cref{sec:enriched}.
 
+At an informal level:
 \begin{itemize}
   \item Primitive relations in $R$ are \emph{generating morphisms}.
-  \item The free category on $R$ has configurations as morphisms
-        and compatibility constraints determining when composition
-        is defined.
-  \item The congruence $\sim$ \emph{imposes relations} on this
-        free category.
+  \item The set of all configurations forms the \emph{free category}
+        on $R$: objects are sources and targets of relations, and
+        morphisms are composable chains.
+  \item The congruence $\sim$ \emph{imposes relations} on this free
+        category, quotienting it.
   \item The quotient $\RC/{\sim}$ is the \emph{category presented
-        by generators $R$ and relations $\sim$}.
+        by generators $R$ and relations $\sim$} --- the categorical
+        analogue of a monoid or group presentation.
 \end{itemize}
 
-This is the categorical analogue of a group or monoid presentation:
-generators $R$ play the role of letters, configurations play the role
-of words, and the congruence $\sim$ plays the role of the defining
-relations.
-
-When every generator has a compositional inverse up to $\sim$
-(\Cref{def:inverse}), the quotient $\RC/{\sim}$ is a
-\emph{groupoid}---a category in which every morphism is invertible.
-The discrete circle construction of \Cref{sec:circle} yields
-$\mathbb{Z}/n\mathbb{Z}$ viewed as a one-object groupoid, and the
-torus construction yields $\mathbb{Z}/n\mathbb{Z} \times
-\mathbb{Z}/m\mathbb{Z}$ as a product of one-object groupoids.
+When every generator has a compositional inverse up to $\sim$,
+the quotient is a \emph{groupoid}. The circle yields
+$\mathbb{Z}/n\mathbb{Z}$ as a one-object groupoid; the torus yields
+$\mathbb{Z}/n\mathbb{Z} \times \mathbb{Z}/m\mathbb{Z}$ as a product.
 
 The present framework \emph{contracts} rather than \emph{generalizes}
-classical category theory: instead of assuming objects and morphisms
-and then imposing relational structure, we start with relations alone
-and derive objects from them. Objects are not primitive; they are
-output, not input.
+classical category theory: we start with relations alone and derive
+objects, rather than assuming objects and morphisms as primitives.
+
+The formal development --- including Lawvere metric spaces, the
+metric realization functor, the universal property of the free
+enriched category, and the equivalence of categories
+$\mathbf{RelSys}_\sim \simeq \mathbf{LawMet}_{\mathrm{fin}}$ ---
+is given in \Cref{sec:enriched}.
 
 % ==================================================================
 \section{Higher Relational Structure}
@@ -1605,6 +1730,21 @@ The forward path $P$ (blue, four steps clockwise) and the backward
 path $Q$ (red, two steps anticlockwise) are algebraically identified
 by the congruence $a^4 \sim a^{-2}$, which is the $2$-morphism. The
 equivalence is algebraic, computable, and requires no ambient space.
+
+\begin{remark}[Level structure of the 2-morphism]
+In the higher categorical framework described above, a $2$-morphism
+should properly be an element of a \emph{second-level} congruence
+$\sim_2$ defined on the path category, distinct from the first-level
+congruence $\sim$ that identifies configurations as objects. In the
+present example, the first-level congruence $a^4 \sim a^{-2}$ serves
+both roles simultaneously, because the cyclic group
+$\mathbb{Z}/6\mathbb{Z}$ is simple enough that the two levels
+collapse: every identification of configurations as objects is also an
+identification of paths. A full treatment of the two-level structure
+for more complex relational systems — where $\sim$ and $\sim_2$ are
+genuinely distinct — is part of the higher categorical development
+described in the future directions.
+\end{remark}
 \end{example}
 
 % ==================================================================
@@ -1748,14 +1888,53 @@ every finite metric space $(X,d)$ arises as $\mathcal{M}(G,w)$ for
 an explicit relational system. Hence $\mathcal{M}$ is essentially
 surjective onto $\mathbf{LawMet}_{\mathrm{fin}}$.
 
-\textbf{Full faithfulness.} A 1-Lipschitz map $f : (V, d_G) \to
-(V', d_{G'})$ can be realized as a morphism of relational systems by
-mapping vertices via $f$ and replacing edges with configurations
-realizing the distance constraints, up to metric equivalence.
-Conversely, every morphism of relational systems induces a
-1-Lipschitz map by Theorem~\ref{thm:metric_functor}. After
-identifying metrically equivalent relational systems, this
-correspondence is bijective.
+\textbf{Full faithfulness.}
+We must show that for any two relational systems $(G,w)$ and $(G',w')$
+with induced metrics $d_G$ and $d_{G'}$, the map
+\[
+  \mathbf{RelSys}_\sim\bigl((G,w),\,(G',w')\bigr)
+  \;\longrightarrow\;
+  \mathbf{LawMet}_{\mathrm{fin}}\bigl((V,d_G),\,(V',d_{G'})\bigr)
+\]
+is a bijection.
+
+\textit{Injectivity.} If two morphisms $F_1, F_2 : (G,w) \to (G',w')$
+induce the same 1-Lipschitz map on vertices, then $F_1(v) = F_2(v)$
+for all $v \in V$, hence $F_1 = F_2$ as graph morphisms.
+
+\textit{Surjectivity.} Let $f : (V, d_G) \to (V', d_{G'})$ be a
+1-Lipschitz map. We construct a morphism of relational systems
+realizing $f$.
+
+By Theorem~\ref{thm:reconstruction}, both $(G,w)$ and $(G',w')$
+are metrically equivalent (in $\mathbf{RelSys}_\sim$) to their
+canonical complete-graph presentations: the relational system
+$(\hat{G}, \hat{w})$ with vertex set $V$, a direct edge
+$e_{xy} : x \to y$ for every ordered pair $(x,y) \in V \times V$,
+and $\hat{w}(e_{xy}) = d_G(x,y)$; and similarly
+$(\hat{G}', \hat{w}')$ with weights $\hat{w}'(e_{uv}') = d_{G'}(u,v)$.
+
+Define a graph morphism $\hat{F} : \hat{G} \to \hat{G}'$ by
+\[
+  \hat{F}(v) = f(v), \qquad
+  \hat{F}(e_{xy}) = e'_{f(x)f(y)}.
+\]
+This is well-defined since $\hat{G}'$ contains an edge between every
+ordered pair. We verify the weight condition:
+\[
+  \hat{w}'\bigl(\hat{F}(e_{xy})\bigr)
+  = \hat{w}'(e'_{f(x)f(y)})
+  = d_{G'}(f(x), f(y))
+  \leq d_G(x,y)
+  = \hat{w}(e_{xy}),
+\]
+where the inequality holds because $f$ is 1-Lipschitz. Hence
+$\hat{F}$ is a morphism in $\mathbf{RelSys}$.
+
+Passing to $\mathbf{RelSys}_\sim$, we identify $(G,w)$ with
+$(\hat{G},\hat{w})$ and $(G',w')$ with $(\hat{G}',\hat{w}')$, and
+$\hat{F}$ is a morphism from the first to the second that induces
+$f$ on metric spaces. This establishes surjectivity.
 
 Therefore $\mathcal{M}$ is an equivalence.
 \end{proof}
@@ -1926,14 +2105,48 @@ $(X,d)$, then
 where $d_{\mathrm{GH}}$ denotes the Gromov--Hausdorff distance.
 \end{theorem}
 
-\begin{proof}[Sketch]
-The maps $\phi_n$ define correspondences between $V_n$ and $X$. The
-density condition ensures every point of $X$ is within $\varepsilon_n$
-of $\phi_n(V_n)$. The distance approximation condition bounds the
-distortion of the correspondence by $\varepsilon_n$. As $\varepsilon_n
-\to 0$, the distortion tends to zero, which implies
-$d_{\mathrm{GH}}((V_n,d_n),(X,d)) \to 0$ by the definition of
-Gromov--Hausdorff distance.
+\begin{proof}
+We construct an explicit correspondence between $(V_n, d_n)$ and
+$(X, d)$ and bound its distortion.
+
+\textbf{Forward map.} The given map $\phi_n : V_n \to X$ satisfies
+$|d_n(x,y) - d(\phi_n(x), \phi_n(y))| \leq \varepsilon_n$ for all
+$x, y \in V_n$.
+
+\textbf{Reverse map.} Since $\phi_n(V_n)$ is $\varepsilon_n$-dense
+in $X$, for each $z \in X$ there exists a point $\psi_n(z) \in V_n$
+with $d(z, \phi_n(\psi_n(z))) \leq \varepsilon_n$. This defines a
+map $\psi_n : X \to V_n$.
+
+\textbf{Correspondence.} Define the correspondence
+$\mathcal{R}_n \subseteq V_n \times X$ by
+\[
+  \mathcal{R}_n := \bigl\{ (x, \phi_n(x)) \mid x \in V_n \bigr\}
+  \;\cup\;
+  \bigl\{ (\psi_n(z), z) \mid z \in X \bigr\}.
+\]
+This is a correspondence: every $x \in V_n$ is related to
+$\phi_n(x) \in X$, and every $z \in X$ is related to
+$\psi_n(z) \in V_n$.
+
+\textbf{Distortion bound.} For any pair $(x, z), (x', z') \in
+\mathcal{R}_n$, the triangle inequality gives:
+\begin{align*}
+  \bigl| d_n(x,x') - d(z,z') \bigr|
+  &\leq \bigl| d_n(x,x') - d(\phi_n(x),\phi_n(x')) \bigr| \\
+  &\quad + \bigl| d(\phi_n(x),\phi_n(x')) - d(z,z') \bigr| \\
+  &\leq \varepsilon_n + d(\phi_n(x), z) + d(\phi_n(x'), z') \\
+  &\leq \varepsilon_n + \varepsilon_n + \varepsilon_n
+  = 3\varepsilon_n,
+\end{align*}
+where the second inequality uses the triangle inequality for $d$
+and the definition of $\phi_n$ and $\psi_n$.
+
+\textbf{Conclusion.} The Gromov--Hausdorff distance satisfies
+$d_{\mathrm{GH}}((V_n,d_n),(X,d)) \leq \frac{3}{2}\varepsilon_n$
+(by the characterization in terms of correspondences, see
+\cite{buragoetal} Theorem~7.3.25). Since $\varepsilon_n \to 0$,
+we obtain $d_{\mathrm{GH}}((V_n,d_n),(X,d)) \to 0$.
 \end{proof}
 
 \begin{corollary}
