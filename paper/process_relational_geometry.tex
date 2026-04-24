@@ -719,6 +719,35 @@ both $n$ and $k$. A complete invariant theory for that case is the
 central open problem of this framework.
 \end{remark}
 
+\begin{remark}[The multi-generator classification gap]
+\label{rem:multigap}
+The single-generator classification of Proposition~\ref{prop:congclass}
+is complete: any two congruences on $R = \{a, a^{-1}\}$ are classified
+by the pair $(n, k)$. For multi-generator systems the situation is
+substantially more complex, and no analogous complete classification
+is currently known within the framework.
+
+What is known is the following. The framework is \emph{universal}:
+by Theorem~\ref{thm:reconstruction} and the categorical equivalence
+of Theorem~\ref{thm:equivalence}, every finite metric space arises
+from some multi-generator relational system. Universality means any
+geometry can be represented. It does not mean the space of possible
+geometries is understood or classified.
+
+The gap is therefore not a gap in expressiveness but a gap in
+understanding. Classical geometry faces the same situation: every
+Riemannian manifold can be described, but the classification of all
+Riemannian manifolds up to isometry is an open problem in differential
+geometry. The relational framework recovers this difficulty in its own
+terms: describing all possible congruences on a multi-generator free
+path groupoid, and determining when two produce isomorphic quotients,
+is the relational version of the same question. The natural invariant
+is the normal subgroupoid structure of the kernel, which generalizes
+the subgroup $S \leq \mathbb{Z}/n\mathbb{Z}$ of the single-generator
+case to the groupoid setting. Developing this into a complete
+invariant theory is the framework's central open problem.
+\end{remark}
+
 % ==================================================================
 \section{Metric Emergence}
 \label{sec:metric}
@@ -948,8 +977,23 @@ relationally, but the relational expression always reflects a
 contextual choice. The framework does not make the metric intrinsic
 --- it makes explicit the choice that classical geometry leaves
 implicit. Different relational presentations of the same point set,
-with different weight functions, correspond to different observers
-imposing different metrics from the external context.
+with different weight functions, correspond to different structural
+contexts imposing different metrics through ambient comparison
+(Remark~\ref{rem:ambient}).
+
+A skeptic may ask: if the weight values must be supplied as input,
+is the framework truly deriving the metric, or merely representing
+a metric that was already given? This question applies equally to
+classical geometry. The Euclidean metric on $\mathbb{R}^n$ is not
+derived from the structure of $\mathbb{R}^n$ --- it is selected
+because it matches the physical context being modeled. The framework
+does not make this selection problem worse; it makes it visible as a
+selection rather than concealing it as a primitive. The origin of
+weight values lies in the physical or computational context the
+system is modeling, not in the abstract relational structure itself.
+That is not a limitation of the framework --- it is the correct
+description of where measurement comes from in any foundational
+account of geometry.
 
 This is also why Theorem~\ref{thm:minimal} matters: among all
 relational presentations of a given metric, the minimal ones are
@@ -1558,6 +1602,37 @@ with $n = 4$ (the loop has four steps) and $\phi = [a,b]$.
 Curvature is thus a two-generator instance of the same algebraic
 structure that produces helices and spirals in the one-generator
 case: a composition that shifts rather than closes.
+\end{remark}
+
+\begin{remark}[The discrete-to-continuous curvature gap]
+\label{rem:curvgap}
+The commutator $[a,b]$ detects the presence and direction of
+curvature — whether a loop closes, and what the residual shift is.
+This is a correct and computable discrete analogue of holonomy.
+
+A harder question, not resolved by the present framework, is whether
+and how this discrete curvature measure converges to the classical
+curvature tensors of Riemannian geometry — Gaussian curvature,
+Ricci curvature, sectional curvature — under refinement of the
+relational system.
+
+The Gromov--Hausdorff bridge theorems of \Cref{sec:classical}
+establish metric convergence: sequences of relational systems can
+approximate compact metric spaces arbitrarily well in the GH sense.
+But curvature is a second-order quantity. Metric convergence does
+not automatically imply curvature convergence, and the conditions
+under which a sequence of commutator-based discrete curvature
+measures converges to a smooth curvature tensor are not established
+here.
+
+This gap is a concrete target for future work. The natural setting
+for the convergence question is the theory of Alexandrov spaces and
+curvature-dimension conditions, where curvature bounds are defined
+directly in terms of triangle comparison rather than differential
+operators. Whether the commutator-based curvature can be connected
+to these synthetic curvature conditions, and whether that connection
+is preserved under pointed GH limits, is an open problem that would
+substantially extend the framework's reach into differential geometry.
 \end{remark}
 
 % ==================================================================
@@ -2768,6 +2843,12 @@ Directions for further development:
   \item \textbf{Applications to discrete physics.} Formalize discrete
         spacetime models (causal sets, spin foams) within the framework
         and characterize their curvature and holonomy relationally.
+        A prerequisite is resolving the discrete-to-continuous curvature
+        convergence question identified in Remark~\ref{rem:curvgap}:
+        establishing conditions under which the commutator-based discrete
+        curvature converges to classical curvature tensors under
+        Gromov--Hausdorff refinement, potentially via connections to
+        synthetic curvature conditions in Alexandrov geometry.
   \item \textbf{Representability limits.} Identify which classical
         geometric and topological structures --- if any --- cannot be
         expressed as quotients of finite relational systems, and
