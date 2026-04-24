@@ -2874,6 +2874,13 @@ zero weight to connections between corresponding elements --- the
 combined space is the metric gluing of the two systems along that
 common substructure. This is the relational analogue of the
 topological pushout: two spaces joined along a shared subspace.
+Unlike the continuous pushout of classical topology, this
+identification is a discrete finite operation: zero-weight
+inter-system relations collapse the two substructures into
+the same equivalence class under the induced pseudometric,
+with no limiting process or ambient space required. This is
+Commitment~4 applied to topological operations: even gluing
+is just a specific configuration of weights.
 
 \textbf{Product-like structure.} If $G_{AB}$ is a complete bipartite
 graph with uniform weights, and the crossing cost decouples from the
@@ -2970,6 +2977,17 @@ clean discrete relational representations covering negative, zero,
 and positive curvature regimes, all without continuous or infinite
 machinery.
 
+Taken together, the results establish a unified relational ontology
+for geometry. Distance is an ambient comparison between a relational
+object and a weight function at their interface. Position is an
+ambient comparison between two relational objects and the
+inter-system relations connecting them. Neither distance nor position
+is intrinsic to any geometric object, and neither requires a subject
+or a pre-existing container to be well-defined. Both are structural
+properties of the contact between mathematical objects --- produced
+by that contact, belonging to neither party separately, requiring
+nothing beyond the relational data itself.
+
 \subsection*{Limitations}
 
 We acknowledge several limitations of the present framework. First,
@@ -2986,11 +3004,22 @@ as discussed in Remark~\ref{rem:nosymmetry}; discrete cyclic
 approximations are available at any resolution but the continuous groups
 themselves are not objects of the theory. Third, the framework handles
 static geometric structures; extending it to dynamical settings where
-generators and congruences evolve over time is open. These limitations
-are consistent with the framework's foundational commitment to finite,
-discrete, computable structure: they mark the boundary between what
-the framework expresses directly and what requires continuous or
-infinite machinery. In each case the limitation is a precise,
+generators and congruences evolve over time is open. Fourth, while
+individual relational systems are computationally tractable, the
+complexity of multi-object configurations grows with the number and
+density of inter-system relations: determining properties of a combined
+space --- such as its diameter, connectivity, or whether two
+configurations produce isomorphic combined spaces --- is bounded by
+the complexity of the combined graph, which can grow rapidly as more
+systems are linked. This is not a limitation of the framework's
+expressiveness but of the computational resources required to analyze
+large configurations; it is the relational counterpart of the
+well-known computational hardness of large-scale metric and graph
+problems. These limitations are consistent with the framework's
+foundational commitment to finite, discrete, computable structure:
+they mark the boundary between what the framework expresses directly
+and what requires continuous or infinite machinery or additional
+computational resources. In each case the limitation is a precise,
 identifiable gap rather than a vague incompleteness, and in each case
 it points toward a concrete research direction.
 
