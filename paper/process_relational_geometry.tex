@@ -132,11 +132,15 @@ The framework rests on four explicit commitments:
 \begin{enumerate}
   \item \textbf{Relations and compositions are primitive.} There is no
         substrate in which relations live; relations are the substrate.
-  \item \textbf{Configurations represent finite processes.} A geometric
-        object is not a set of points but an equivalence class of finite
-        relational processes.
-  \item \textbf{Objects arise via congruence.} Two processes that no
-        relational test can distinguish are the same object.
+  \item \textbf{Objects are equivalence classes of processes.} A
+        geometric object is not a point or a set of points, but an
+        equivalence class of finite composable sequences of relations
+        under a congruence. This defines what an object \emph{is}.
+  \item \textbf{Congruence encodes observational identity.} The
+        criterion by which two processes are identified is that no
+        relational test distinguishes them: composing any third
+        configuration on either side produces the same result. This
+        defines when two processes are the \emph{same} object.
   \item \textbf{All constructions are finite and discrete.} Continuity
         and infinity are not part of the framework; they are not
         approximated, they are simply absent.
@@ -205,7 +209,7 @@ continuous substrate.
 \subsection{Main Contributions and Paper Structure}
 
 The central results are the Quotient Construction
-(\Cref{thm:quotient}), Discrete Metric Emergence (\Cref{thm:metric}),
+(\Cref{thm:quotient}), Metric Emergence (\Cref{thm:metric}),
 Reconstruction of Finite Metric Spaces (\Cref{thm:reconstruction}),
 and the Categorical Equivalence (\Cref{thm:equivalence}).
 
@@ -503,10 +507,36 @@ $k-j < n$. If no $n$ satisfies $a^n \sim \id$, all powers are
 distinct and the shape is open.
 \end{proof}
 
+\begin{lemma}[Reduction to minimal period]
+\label{lem:reduction}
+Let $(R, \circ)$ be an associative relational system with a single
+generator $a$ and congruence $\sim$. If there exists $n \geq 1$ such
+that $a^n \sim \id$ but the intermediate composites
+$a^0, a^1, \dots, a^{n-1}$ are not all pairwise inequivalent, then
+there exists a strictly smaller $k < n$ such that $a^k \sim \id$.
+\end{lemma}
+
+\begin{proof}
+If intermediate composites are not all distinct, there exist indices
+$i < j \leq n$ such that $a^i \sim a^j$. By the congruence property,
+composing both sides on the right with $a^{-i}$ gives
+\[
+  \id \;\sim\; a^{i} \circ a^{-i} \;\sim\; a^j \circ a^{-i}
+  \;=\; a^{j-i}.
+\]
+So $a^{j-i} \sim \id$ with $k := j - i < n$. Repeating this
+reduction if necessary produces a minimal-period representative in
+which all intermediate composites $a^0, a^1, \dots, a^{k-1}$ are
+pairwise inequivalent.
+\end{proof}
+
 \begin{proposition}[Taxonomy of closure]
 \label{prop:taxonomy}
 Let $(R, \circ)$ be an associative relational system with a single
-generator $a$ and congruence $\sim$. Exactly one of the following holds:
+generator $a$ and congruence $\sim$. By Lemma~\ref{lem:reduction},
+it suffices to classify systems at their minimal period, i.e., under
+the assumption that all intermediate composites are distinct. Exactly
+one of the following holds for such minimal-period systems:
 \begin{enumerate}[label=(\roman*)]
   \item \textbf{Closed.} $a^n \sim \id$ for some $n \geq 1$ with
         all intermediate steps distinct. Quotient: $\mathbb{Z}/n\mathbb{Z}$.
@@ -518,11 +548,19 @@ generator $a$ and congruence $\sim$. Exactly one of the following holds:
 \end{proposition}
 
 \begin{proof}
-Cases (i) and (ii) are distinguished by whether the return target
-is $\id$ or some other $\phi$. If no finite composition returns to
-any previously visited class, the system is open and all powers
-$a^0, a^1, \dots$ are distinct. The three cases are mutually
-exclusive and exhaustive.
+By Lemma~\ref{lem:reduction}, any system with repeated intermediate
+composites reduces to one with strictly smaller period. It therefore
+suffices to classify minimal-period systems.
+
+For such systems, cases (i) and (ii) are distinguished by whether
+the return target is $\id$ or some other $\phi \not\sim \id$. A
+system cannot belong to both: if $a^n \sim \id$ then by definition
+the return target is $\id$, not a nontrivial $\phi$.
+
+Case (iii) covers all systems for which no finite composition returns
+to any previously visited class; in this case all powers
+$a^0, a^1, \dots$ are distinct. This is the negation of cases (i) and
+(ii), so the three cases are mutually exclusive and exhaustive.
 \end{proof}
 
 \subsection{A Partial Classification of Congruences}
@@ -531,54 +569,147 @@ exclusive and exhaustive.
 The paper's central claim is that geometry is determined by the
 choice of congruence laws. It is therefore natural to ask: when do
 two different congruences on the same relational system produce the
-same geometric object? We give a complete answer for the simplest
-case and identify the general question as an open problem.
+same geometric object? We give a complete answer for the
+single-generator case.
 
-\begin{proposition}[Congruence classification for single-generator systems]
-\label{prop:congclass}
-Let $R = \{a, a^{-1}\}$ be the single-generator invertible system.
-Two congruences $\sim_1$ and $\sim_2$ on $\RC$ produce isomorphic
-quotients if and only if they belong to the same case of the
-taxonomy of Proposition~\ref{prop:taxonomy} with the same period:
+We first define the key invariants intrinsically in relational
+language, with no appeal to external symmetry notions.
+
+\begin{definition}[Intrinsic period and shift order]
+\label{def:shiftorder}
+Let $R = \{a, a^{-1}\}$ and let $\sim$ be a congruence on $\RC$.
 
 \begin{enumerate}[label=(\roman*)]
-  \item Two closed congruences with periods $n$ and $n'$ produce
-        isomorphic quotients if and only if $n = n'$.
-  \item A closed congruence and an open congruence never produce
-        isomorphic quotients.
-  \item Two open congruences always produce isomorphic quotients
-        (both yield $\mathbb{Z}$).
+  \item The \emph{period} $n \in \mathbb{N} \cup \{\infty\}$ is the
+        minimal $n > 0$ such that $a^n \sim \id$, if it exists, and
+        $\infty$ otherwise.
+
+  \item When $n < \infty$, define the \emph{loop subgroup}
+        \[
+          S \;:=\; \bigl\{ [m] \in \mathbb{Z}/n\mathbb{Z} \;\bigm|\;
+          a^m \sim \id \bigr\} \;\subseteq\; \mathbb{Z}/n\mathbb{Z}.
+        \]
+        The \emph{shift order} is $k := n / |S|$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}
+\label{lem:loopsubgroup}
+The set $S$ in Definition~\ref{def:shiftorder} is a subgroup of
+$\mathbb{Z}/n\mathbb{Z}$.
+\end{lemma}
+
+\begin{proof}
+If $a^m \sim \id$ and $a^p \sim \id$, then by the congruence property
+$a^{m+p} = a^m \circ a^p \sim \id \circ \id \sim \id$, so
+$[m+p] \in S$. If $a^m \sim \id$, then composing both sides on the
+right by $a^{-m}$ gives $a^m \circ a^{-m} \sim \id \circ a^{-m}$,
+i.e., $\id \sim a^{-m}$, i.e., $a^{-m} \sim \id$, so $[-m] \in S$.
+Hence $S$ is closed under addition and negation in
+$\mathbb{Z}/n\mathbb{Z}$.
+\end{proof}
+
+\begin{remark}[Interpretation of $k$]
+When $S = \{[0]\}$, no nontrivial power of $a$ is identified with
+$\id$ within one period: the system is a pure cycle and $k = n$.
+The case $S = \mathbb{Z}/n\mathbb{Z}$ — where every power of $a$
+would be identified with $\id$ — is unreachable under the
+minimal-period assumption of Proposition~\ref{prop:taxonomy}: by
+Lemma~\ref{lem:reduction}, any such system reduces to period~1.
+The relevant range is therefore $\{[0]\} \subseteq S \subsetneq
+\mathbb{Z}/n\mathbb{Z}$, equivalently $1 < k \leq n$, with
+$k = n$ corresponding to the closed (pure cycle) case and
+$1 < k < n$ to the pseudo-periodic cases. Intermediate subgroups
+yield intermediate values of $k$, encoding the internal loop
+structure of the orbit. The shift order $k$ is the index
+$[\mathbb{Z}/n\mathbb{Z} : S]$.
+\end{remark}
+
+\begin{proposition}[Complete congruence classification for
+single-generator systems]
+\label{prop:congclass}
+Let $R = \{a, a^{-1}\}$ be the single-generator invertible system,
+and let $\sim_1$, $\sim_2$ be congruences on $\RC$ with associated
+invariants $(n_1, k_1)$ and $(n_2, k_2)$ as in
+Definition~\ref{def:shiftorder}. The quotients $\RC/{\sim_1}$ and
+$\RC/{\sim_2}$ are isomorphic if and only if one of the following
+holds:
+
+\begin{enumerate}[label=(\roman*)]
+  \item $n_1 = n_2 = \infty$ (both open; both quotients are
+        isomorphic to $\mathbb{Z}$);
+  \item $n_1, n_2 < \infty$, $k_1 = k_2 = 1$, and $n_1 = n_2$
+        (both closed with the same period);
+  \item $n_1, n_2 < \infty$, $k_1, k_2 > 1$, and $n_1 = n_2$ and
+        $k_1 = k_2$ (both pseudo-periodic with the same period and
+        shift order);
+  \item No other combination yields isomorphic quotients.
 \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-\textbf{(i).} A closed congruence with period $n$ yields
-$\mathbb{Z}/n\mathbb{Z}$. Two cyclic groups $\mathbb{Z}/n\mathbb{Z}$
-and $\mathbb{Z}/n'\mathbb{Z}$ are isomorphic (as monoids with
-composition) if and only if $n = n'$.
+\textbf{Cases (i) and (ii).} Open congruences yield $\mathbb{Z}$;
+closed congruences with period $n$ yield $\mathbb{Z}/n\mathbb{Z}$.
+These are isomorphic as monoids if and only if the periods agree
+($n_1 = n_2$). A finite monoid is never isomorphic to $\mathbb{Z}$.
 
-\textbf{(ii).} $\mathbb{Z}/n\mathbb{Z}$ is finite; $\mathbb{Z}$ is
-infinite. No isomorphism between a finite and an infinite monoid
-exists.
+\textbf{Case (iii).}
+We prove both directions.
 
-\textbf{(iii).} Both open congruences yield $\mathbb{Z}$, which is
-unique up to isomorphism.
+\textit{($\Rightarrow$) Isomorphic quotients imply equal $(n,k)$.}
+If $\Phi : \RC/{\sim_1} \to \RC/{\sim_2}$ is an isomorphism, it
+must send the generator $[a]_1$ to a generator of $\RC/{\sim_2}$.
+Since $\RC/{\sim_2}$ is generated by $[a]_2$, the isomorphism
+preserves the period: $a^{n_1} \sim_1 \id$ implies
+$\Phi([a]_1)^{n_1} = \Phi([a^{n_1}]_1) = \Phi([\id]_1) = [\id]_2$,
+so $a^{n_1} \sim_2 \id$, giving $n_2 \leq n_1$. By symmetry
+$n_1 \leq n_2$, hence $n_1 = n_2 =: n$. Similarly, an isomorphism
+maps the loop subgroup $S_1$ bijectively to $S_2$ (since it
+preserves the identity and the group operation), so $|S_1| = |S_2|$
+and thus $k_1 = n/|S_1| = n/|S_2| = k_2$.
+
+\textit{($\Leftarrow$) Equal $(n,k)$ implies isomorphic quotients.}
+Assume $n_1 = n_2 = n$ and $k_1 = k_2$. Since $k = n/|S|$ and
+$S \leq \mathbb{Z}/n\mathbb{Z}$, equal $k$ with equal $n$ implies
+$|S_1| = |S_2|$. Since $\mathbb{Z}/n\mathbb{Z}$ is cyclic, it
+has exactly one subgroup of each order dividing $n$; therefore
+$S_1 = S_2 =: S$.
+
+Define the map $\Phi : \RC/{\sim_1} \to \RC/{\sim_2}$ by
+$\Phi([a^j]_1) := [a^j]_2$.
+
+\textit{Well-definedness.} Suppose $[a^j]_1 = [a^{j'}]_1$, i.e.,
+$a^j \sim_1 a^{j'}$. By the congruence property,
+$a^{j-j'} \sim_1 \id$, so $[j - j'] \in S_1 = S_2$, hence
+$a^{j-j'} \sim_2 \id$, giving $a^j \sim_2 a^{j'}$ and
+$[a^j]_2 = [a^{j'}]_2$.
+
+\textit{Bijectivity.} The map $\Psi([a^j]_2) := [a^j]_1$ is the
+inverse by the same argument with $\sim_1$ and $\sim_2$ swapped.
+
+\textit{Composition-preservation.}
+$\Phi([a^j]_1 \circ [a^m]_1) = \Phi([a^{j+m}]_1) = [a^{j+m}]_2
+= [a^j]_2 \circ [a^m]_2 = \Phi([a^j]_1) \circ \Phi([a^m]_1)$.
+
+Hence $\Phi$ is an isomorphism and $\RC/{\sim_1} \cong \RC/{\sim_2}$.
+
+\textbf{Case (iv).} Across types, closed quotients (finite, no
+nontrivial internal loops) are never isomorphic to pseudo-periodic
+quotients (finite, with nontrivial $S$), nor to open quotients
+(infinite).
 \end{proof}
 
-\begin{remark}[Congruences as geometric invariants]
-Proposition~\ref{prop:congclass} shows that for single-generator
-systems, the period $n$ is a complete invariant of the congruence
-class: it determines the isomorphism type of the quotient and is
-determined by it. The period is therefore a \emph{relational
-geometric invariant} --- a property of the laws that is preserved
-under all relational isomorphisms.
-
-For multi-generator systems the classification is richer. The
-commutator $[a,b]$ of \Cref{sec:curvature} provides a second
-invariant distinguishing flat (commutator $\sim \id$) from curved
-(commutator $\not\sim \id$) structures. A complete invariant theory
-for multi-generator congruences is the central open problem of this
-framework, formalized in the future directions.
+\begin{remark}[The invariant pair $(n, k)$ as a geometric signature]
+The pair $(n, k)$ is a complete isomorphism invariant for
+single-generator quotients: it determines the quotient up to
+isomorphism and is determined by it. It encodes two independent
+pieces of geometric information — $n$ measures the scale of the
+orbit (how many steps before any return), and $k$ measures the
+internal symmetry (how much loop structure is present within that
+orbit). For multi-generator systems the analogous invariant is a
+normal subgroupoid of the free path groupoid, which generalizes
+both $n$ and $k$. A complete invariant theory for that case is the
+central open problem of this framework.
 \end{remark}
 
 % ==================================================================
@@ -1981,11 +2112,12 @@ The framework is directly amenable to computational implementation.
 Relational systems are finite graphs; configurations are directed paths;
 congruences are equivalence relations on those paths, representable as
 rewriting rules. Standard algorithms apply without modification:
-shortest-path algorithms (Dijkstra, Bellman-Ford) compute the discrete
-metric of Theorem~\ref{thm:metric} exactly; string rewriting normal
-form algorithms (Knuth-Bendix completion) decide congruence membership
-and classify quotient structures; graph isomorphism algorithms determine
-extensional equivalence between relational systems. The finiteness and
+shortest-path algorithms (Dijkstra, Bellman-Ford~\cite{clrs}) compute
+the metric of Theorem~\ref{thm:metric} exactly; string rewriting normal
+form algorithms (Knuth-Bendix completion~\cite{knuthbendix}) decide
+congruence membership and classify quotient structures; graph isomorphism
+algorithms~\cite{graphiso} determine extensional equivalence between
+relational systems. The finiteness and
 discreteness of the framework are not restrictions on expressiveness ---
 they are precisely the properties that make the geometry directly
 computable. Every geometric question in the framework reduces to a
@@ -2130,17 +2262,26 @@ $\phi_n(x) \in X$, and every $z \in X$ is related to
 $\psi_n(z) \in V_n$.
 
 \textbf{Distortion bound.} For any pair $(x, z), (x', z') \in
-\mathcal{R}_n$, the triangle inequality gives:
+\mathcal{R}_n$, we need to bound $d(\phi_n(x), z)$ and
+$d(\phi_n(x'), z')$. There are two cases depending on which part
+of the correspondence each pair comes from:
+\begin{itemize}
+  \item If $(x, z)$ comes from the first set, then $z = \phi_n(x)$,
+        so $d(\phi_n(x), z) = 0 \leq \varepsilon_n$.
+  \item If $(x, z)$ comes from the second set, then $x = \psi_n(z)$,
+        so $d(\phi_n(x), z) = d(\phi_n(\psi_n(z)), z) \leq \varepsilon_n$
+        by the density condition on $\psi_n$.
+\end{itemize}
+In both cases $d(\phi_n(x), z) \leq \varepsilon_n$, and likewise
+$d(\phi_n(x'), z') \leq \varepsilon_n$. The triangle inequality then gives:
 \begin{align*}
   \bigl| d_n(x,x') - d(z,z') \bigr|
   &\leq \bigl| d_n(x,x') - d(\phi_n(x),\phi_n(x')) \bigr| \\
   &\quad + \bigl| d(\phi_n(x),\phi_n(x')) - d(z,z') \bigr| \\
   &\leq \varepsilon_n + d(\phi_n(x), z) + d(\phi_n(x'), z') \\
   &\leq \varepsilon_n + \varepsilon_n + \varepsilon_n
-  = 3\varepsilon_n,
+  = 3\varepsilon_n.
 \end{align*}
-where the second inequality uses the triangle inequality for $d$
-and the definition of $\phi_n$ and $\psi_n$.
 
 \textbf{Conclusion.} The Gromov--Hausdorff distance satisfies
 $d_{\mathrm{GH}}((V_n,d_n),(X,d)) \leq \frac{3}{2}\varepsilon_n$
@@ -2151,18 +2292,92 @@ we obtain $d_{\mathrm{GH}}((V_n,d_n),(X,d)) \to 0$.
 
 \begin{corollary}
 The following classical spaces arise as Gromov--Hausdorff limits of
-sequences of finite relational systems:
+sequences of finite relational systems via Theorem~\ref{thm:ghbridge}:
 \begin{enumerate}[label=(\roman*)]
   \item The circle $(S^1, d_{S^1})$, via the cyclic graphs
         $(\mathbb{Z}/n\mathbb{Z}, d_n)$ with $d_n$ the arc-step metric;
   \item The sphere $(S^2, d_{S^2})$, via refining geodesic
         triangulations;
   \item The Euclidean plane $(\mathbb{R}^2, \|\cdot\|_2)$, locally, via
-        integer grids with diagonal edges;
-  \item Tree-like (hyperbolic) spaces, via the $k$-regular tree of
-        \Cref{sec:tree}.
+        integer grids with diagonal edges.
 \end{enumerate}
+Tree-like (hyperbolic) spaces are non-compact and require the
+pointed extension; see Theorem~\ref{thm:pointed_gh} and
+Example~\ref{ex:tree_pointed_gh} below.
 \end{corollary}
+
+\subsection{Pointed Gromov--Hausdorff Convergence}
+
+The compactness assumption in Theorem~\ref{thm:ghbridge} excludes
+non-compact limits such as the $k$-regular tree. The pointed
+Gromov--Hausdorff framework extends compatibility to this case by
+working with finite balls around a basepoint rather than the full
+space.
+
+\begin{definition}[Rooted relational system]
+A \emph{rooted relational system} is a triple $(G, w, v)$ where
+$(G, w)$ is a relational system and $v \in V(G)$ is a distinguished
+basepoint.
+\end{definition}
+
+\begin{definition}[Pointed Gromov--Hausdorff convergence]
+A sequence of rooted relational systems $(G_n, w_n, v_n)$ with
+induced metrics $(V_n, d_n, v_n)$ \emph{converges in the pointed
+Gromov--Hausdorff sense} to a pointed metric space $(V, d, v)$ if,
+for every $R > 0$, the metric balls $B_{d_n}(v_n, R)$ converge in
+the Gromov--Hausdorff sense to $B_d(v, R)$.
+\end{definition}
+
+\begin{theorem}[Pointed GH emergence]
+\label{thm:pointed_gh}
+Let $(G_n, w_n, v_n)$ be a sequence of rooted relational systems.
+Assume:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Uniform local finiteness.} There exists $D \in \mathbb{N}$
+        such that every vertex in every $G_n$ has degree at most $D$;
+  \item \textbf{Uniform edge bounds.} There exist $0 < a \leq b < \infty$
+        such that $a \leq w_n(e) \leq b$ for all $n$ and all edges $e$;
+  \item \textbf{Rooted local convergence.} For every $R > 0$, the
+        balls $B_{d_n}(v_n, R)$ stabilize up to isomorphism as
+        weighted graphs for all sufficiently large $n$.
+\end{enumerate}
+Then there exists a pointed metric space $(V, d, v)$ such that
+$(V_n, d_n, v_n)$ converges to $(V, d, v)$ in the pointed
+Gromov--Hausdorff sense.
+\end{theorem}
+
+\begin{proof}[Sketch]
+By uniform local finiteness and uniform edge bounds, the metric balls
+$B_{d_n}(v_n, R)$ are uniformly controlled in size and geometry for
+each fixed $R$. By rooted local convergence, they stabilize as
+weighted graphs for large $n$. The stabilized balls are consistent
+across radii: since $B_{d_n}(v_n, R)$ is the restriction of
+$B_{d_n}(v_n, R+1)$ to vertices at distance at most $R$ from $v_n$,
+once both balls have stabilized the restriction of the radius-$(R+1)$
+limit to radius $R$ is identical to the radius-$R$ limit, so the
+limiting family nests compatibly. Passing to the limit over
+$R = 1, 2, 3, \dots$ via a diagonal argument then yields a
+well-defined consistent family of finite metric spaces that assembles
+into a pointed metric space $(V, d, v)$. Convergence on every finite
+radius holds by construction.
+\end{proof}
+
+\begin{example}[The $k$-regular tree as a pointed GH limit]
+\label{ex:tree_pointed_gh}
+Let $T_k$ be the $k$-regular tree with root $v_0$ and unit edge
+weights. Define $G_n$ to be the finite induced subgraph of $T_k$ on
+the ball of radius $n$ about $v_0$, with $v_n := v_0$ and weights
+inherited from $T_k$. Each $G_n$ is a finite rooted relational system.
+
+The sequence $(G_n, w_n, v_n)$ satisfies all three hypotheses of
+Theorem~\ref{thm:pointed_gh}: the tree is $k$-regular (condition~(i)),
+all edges have weight~1 (condition~(ii)), and for any fixed $R$, the
+ball $B_{d_n}(v_n, R)$ stabilizes to $B_{T_k}(v_0, R)$ for all
+$n \geq R$ (condition~(iii)). The limit is therefore $(T_k, d, v_0)$,
+the full $k$-regular tree with its canonical metric. Tree-like
+(hyperbolic) geometry thus arises as a pointed Gromov--Hausdorff limit
+of finite relational systems, even though it is not compact.
+\end{example}
 
 \subsection{The Compatibility Principle}
 
@@ -2205,8 +2420,10 @@ process-relational foundation for geometry in which:
 The main theorems establish the core mathematical content.
 \Cref{thm:quotient} guarantees that any congruence yields a
 well-defined quotient with associative composition.
-\Cref{thm:metric} shows that discrete distance arises from path
-optimization over finite weighted relations.
+\Cref{thm:metric} shows that a metric arises from path
+optimization over weighted relations, with a discrete corollary
+(\Cref{cor:discrete_metric}) when $R$ is finite and weights are
+integer-valued.
 \Cref{thm:reconstruction} establishes that every finite metric space
 arises from a relational system, making the framework universal for
 finite metric geometry.
@@ -2217,6 +2434,8 @@ metric spaces.
 \Cref{thm:ghbridge} establishes compatibility with classical
 continuous geometry via Gromov--Hausdorff convergence, understood
 as a bridge result rather than a foundational dependency.
+\Cref{thm:pointed_gh} extends this to non-compact spaces including
+the $k$-regular tree, using the pointed Gromov--Hausdorff framework.
 
 The examples demonstrate that familiar geometric structures---the
 circle, torus, tree, triangulated sphere, and integer grid---have
@@ -2251,9 +2470,15 @@ it points toward a concrete research direction.
 Directions for further development:
 
 \begin{enumerate}
-  \item \textbf{Classification of congruences.} Characterize which
-        congruences on a given $(R, \circ)$ produce isomorphic quotients,
-        and give invariants that distinguish them.
+  \item \textbf{Classification of congruences.}
+        For single-generator systems, the pair $(n, k)$ of
+        Proposition~\ref{prop:congclass} is a complete isomorphism
+        invariant. For multi-generator systems, characterize which
+        congruences produce isomorphic quotients and give a complete
+        set of invariants. The natural framework is the correspondence
+        between congruences and normal subgroupoids of the free path
+        groupoid on $R$, generalizing the subgroup $S \leq
+        \mathbb{Z}/n\mathbb{Z}$ of the single-generator case.
   \item \textbf{Reconstruction of discrete classical spaces.} Embed
         known discrete structures (graphs, simplicial complexes, finite
         topological spaces) into the framework as special cases.
@@ -2305,6 +2530,25 @@ D.~Burago, Y.~Burago, and S.~Ivanov,
 AMS Graduate Studies in Mathematics \textbf{33},
 American Mathematical Society, 2001.
 \newblock \doi{10.1090/gsm/033}.
+
+\bibitem{clrs}
+T.~H.~Cormen, C.~E.~Leiserson, R.~L.~Rivest, and C.~Stein,
+\textit{Introduction to Algorithms},
+4th ed., MIT Press, 2022.
+\newblock ISBN 978-0-262-04630-5.
+
+\bibitem{knuthbendix}
+D.~E.~Knuth and P.~B.~Bendix,
+``Simple word problems in universal algebras,''
+in J.~Leech (ed.), \textit{Computational Problems in Abstract Algebra},
+Pergamon Press, 1970, pp.~263--297.
+
+\bibitem{graphiso}
+L.~Babai,
+``Graph isomorphism in quasipolynomial time,''
+\textit{Proceedings of the 48th ACM Symposium on Theory of Computing
+(STOC 2016)}, pp.~684--697, 2016.
+\newblock \doi{10.1145/2897518.2897542}.
 
 \bibitem{maclane}
 S.~Mac Lane,
