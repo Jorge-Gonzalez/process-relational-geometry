@@ -4,6 +4,11 @@
 **Affiliation:** Independent Researcher  
 **Date:** April 2026  
 
+> **Status:** This paper is currently under revision following critique from
+> mathematicians in the category theory community. The framework and results
+> are being reviewed for clarity, scope, and accurate situating within existing
+> literature. The version in this repository reflects the work in progress.
+
 ---
 
 ## Abstract
