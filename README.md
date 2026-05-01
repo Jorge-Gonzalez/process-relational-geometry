@@ -62,8 +62,6 @@ congruence classification, process-relational presentation, Lawvere metric space
   - *Geometry as Process — Direction, Distance, and a Rule*
   - *What Geometry Looks Like From Here*
   - *Framework Projections*
-- **arXiv:** link to be added upon submission
-
 ---
 
 ## Interactive Application
