@@ -11,20 +11,20 @@
 Classical geometry takes space and points as primitives, treating metric
 and positional properties as intrinsic to geometric objects. This paper
 argues that these are not intrinsic but relational: they arise from explicit
-comparisons with chosen reference structures. A foundational framework is
-developed in which only finite relations and their compositions are primitive.
-Finite composable sequences of relations, called *configurations*, represent
-processes. Objects arise as equivalence classes under a *congruence* — an
+comparisons with chosen reference structures. A presentation-level semantic
+framework is developed in which only finite relations and their compositions
+are primitive. Finite composable sequences of relations, called *configurations*,
+represent processes. Objects arise as equivalence classes under a *congruence* — an
 equivalence relation compatible with composition — that expresses observational
 indistinguishability.
 
-**Main results:**
-
-- **Quotient Construction** — Any congruence on an associative relational system yields a well-defined quotient with associative composition.
-- **Metric Emergence** — A weight function induces a pseudometric (and under a separation condition, a genuine metric) on the quotient, derived from path optimization.
-- **Reconstruction** — Every finite metric space arises, up to isometry, from a relational system. The framework is universal for finite metric geometry.
-- **Categorical Equivalence** — After identifying metrically equivalent relational systems, the metric realization functor yields an equivalence of categories between relational systems and finite metric spaces.
-- **Space Emergence** — Space itself is not a primitive container but emerges from inter-system relational structure: when two relational systems are connected by weighted relations, the combined system induces a finite metric space whose geometry is fully determined by the internal structure of each object and the connecting relations between them.
+The machinery is classical: the quotient construction is a category presented
+by generators and relations; metric emergence is the word metric; the
+reconstruction and categorical equivalence results connect to Lawvere metric
+spaces and enriched category theory. The primary contribution is organizational
+and conceptual — geometric structure defined at the level of generators and
+congruence laws, prior to quotienting, with metric properties arising as
+invariants of congruence classes of processes.
 
 ---
 
@@ -48,8 +48,7 @@ process-relational-geometry/
 **Secondary:** 54E35, 68Q45, 05C12
 
 **Keywords:** relational geometry, metric emergence, enriched categories,
-congruence classification, process-relational foundation, Gromov-Hausdorff
-convergence, space emergence
+congruence classification, process-relational presentation, Lawvere metric spaces
 
 ---
 
@@ -72,7 +71,7 @@ convergence, space emergence
 A 3D interactive application demonstrating the framework is in development.
 It will allow users to define relational systems, observe the quotient
 construction in real time, explore the induced metric, and connect two objects
-to see the emergence of a combined geometric space. Pseudocode is in `app/`.
+to see the combined geometric structure. Pseudocode is in `app/`.
 
 ---
 
