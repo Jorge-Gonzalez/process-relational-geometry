@@ -49,8 +49,8 @@ process-relational-geometry/
 
 ## MSC Classification
 
-**Primary:** 18B35, 51F99, 18D20  
-**Secondary:** 54E35, 68Q45, 05C12
+**Primary:** 18D20, 20F05, 51F99  
+**Secondary:** 54E35, 20F65, 05C12
 
 **Keywords:** relational geometry, metric emergence, enriched categories,
 congruence classification, process-relational presentation, Lawvere metric spaces
@@ -63,7 +63,7 @@ congruence classification, process-relational presentation, Lawvere metric space
   the ideas accessibly, from the problems with classical geometric primitives
   through the full framework and its projections:
   - *The Mathematics We Chose to Believe In*
-  - *Mathematics Has Been Solving a Problem It Created Itself*
+  - *Why Does Geometry Need ε?*
   - *Geometry as Process — Direction, Distance, and a Rule*
   - *What Geometry Looks Like From Here*
   - *Framework Projections*
