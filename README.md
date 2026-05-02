@@ -1,8 +1,8 @@
-# A Process-Relational Foundation for Geometry
+# A Process-Relational Presentation of Finite Metric Geometry
 
 **Author:** Jorge Leonardo González Céspedes  
 **Affiliation:** Independent Researcher  
-**Date:** April 2026  
+**Date:** April 2026
 
 > **Status:** This paper is currently under revision following critique from
 > mathematicians in the category theory community. The framework and results
