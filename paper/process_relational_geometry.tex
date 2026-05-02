@@ -72,7 +72,10 @@ invariants of congruence classes of processes. This separates
 layers --- syntax (generators), laws (congruence), objects
 (quotient), and distance (emergent metric) --- that are usually
 conflated in classical geometry and in geometric group theory
-expositions.
+expositions. The separation makes explicitly askable a question
+that classical treatments obscure: what geometric structure does
+a specific congruence law produce in the nerve of the free
+category, independently of the quotient it defines?
 \end{abstract}
 
 % ==================================================================
@@ -1335,6 +1338,32 @@ geometry, and enriched category theory as one further development,
 not as a replacement for those foundations. The induced metric
 coincides with the path metric on the Cayley graph of the
 presented groupoid.
+
+\paragraph{An open question the framework makes visible.}
+The four-layer separation raises a question that is difficult to
+pose in classical treatments, where one typically starts from the
+quotient: \emph{what homological structure does a specific
+congruence law produce in the nerve of the free category?}
+
+A concrete instance illustrates the point. Consider the free
+category on two generators $a, b$ with inverses, and impose the
+single commutativity law $b \cdot a \sim a \cdot b$. The nerve
+of the free category (before quotienting) has $H_2 = 0$: no
+enclosed surface is present. The nerve of the quotient category
+has $H_2 \cong \mathbb{Z}$: a torus surface has appeared. The
+surface is not a property of the generators $a$ and $b$; it is
+a consequence of the single law. Removing the law removes the
+surface.
+
+This observation is not new as a fact about the classifying
+space of the group $\mathbb{Z}^2$, which is well-known to be the
+torus. What is new is the framing: the presentation-level
+perspective makes it possible to isolate the \emph{contribution
+of each law} to the homology of the nerve, by comparing the free
+and quotient nerves directly. The general question --- which
+laws produce which homological changes, and why --- is open
+within this framework and appears not to have been studied
+systematically in terms of presentation-level nerve comparisons.
 
 % ==================================================================
 \begin{thebibliography}{99}
