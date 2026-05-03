@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRG Framework — Homology Calculator</title>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="8605845f-006f-42c1-a094-46a4aa601e04"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg:       #0a0a0f;
+    --surface:  #111118;
+    --border:   #1e1e2e;
+    --muted:    #2a2a3e;
+    --text:     #cdd6f4;
+    --dim:      #585b70;
+    --accent:   #89b4fa;
+    --green:    #a6e3a1;
+    --red:      #f38ba8;
+    --yellow:   #f9e2af;
+    --lavender: #b4befe;
+    --teal:     #94e2d5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 18px 32px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+  }
+
+  header h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  header p {
+    font-size: 12px;
+    color: var(--dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    height: calc(100vh - 57px);
+    overflow: hidden;
+  }
+
+  /* ---- LEFT PANEL ---- */
+  .panel-left {
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .section {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+  }
+
+  .section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 14px;
+  }
+
+  /* preset buttons */
+  .presets {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .preset-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 8px 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+    line-height: 1.5;
+  }
+
+  .preset-btn:hover { border-color: var(--accent); background: var(--muted); }
+  .preset-btn.active { border-color: var(--accent); background: var(--muted); color: var(--accent); }
+
+  .preset-btn .pname {
+    display: block;
+    font-weight: 600;
+    color: var(--lavender);
+    margin-bottom: 2px;
+  }
+
+  .preset-btn .pdesc {
+    color: var(--dim);
+    font-size: 10px;
+  }
+
+  /* inputs */
+  label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+
+  label:first-of-type { margin-top: 0; }
+
+  input, textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 8px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+    resize: vertical;
+  }
+
+  input:focus, textarea:focus { border-color: var(--accent); }
+
+  textarea { min-height: 72px; line-height: 1.6; }
+
+  .hint {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  .run-btn {
+    width: 100%;
+    margin-top: 18px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 11px;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .run-btn:hover { opacity: 0.88; }
+  .run-btn:active { transform: scale(0.98); }
+  .run-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* ---- RIGHT PANEL ---- */
+  .panel-right {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+  }
+
+  .results-header {
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .results-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--dim);
+    transition: background 0.3s;
+  }
+  .status-dot.running { background: var(--yellow); animation: pulse 1s infinite; }
+  .status-dot.ok      { background: var(--green); }
+  .status-dot.err     { background: var(--red); }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .results-body {
+    overflow-y: auto;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* homology result card */
+  .result-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    opacity: 0;
+    transform: translateY(8px);
+    animation: fadein 0.3s forwards;
+  }
+
+  @keyframes fadein {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-header {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--lavender);
+  }
+
+  .card-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid;
+    border-radius: 2px;
+  }
+
+  .card-tag.correct { color: var(--green); border-color: var(--green); }
+  .card-tag.error   { color: var(--red);   border-color: var(--red);   }
+
+  .card-body { padding: 18px; }
+
+  /* homology groups display */
+  .homology-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .hgroup {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    min-width: 100px;
+  }
+
+  .hgroup .hn {
+    font-size: 10px;
+    color: var(--dim);
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+  }
+
+  .hgroup .hval {
+    font-weight: 600;
+    color: var(--teal);
+  }
+
+  .hgroup.torsion .hval { color: var(--yellow); }
+
+  /* stats row */
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .stat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+  }
+
+  .stat span { color: var(--text); }
+
+  /* rewriting trace */
+  .trace-block {
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  .trace-toggle {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.15s;
+  }
+
+  .trace-toggle:hover { color: var(--text); }
+  .trace-toggle .arrow { transition: transform 0.2s; }
+  .trace-toggle.open .arrow { transform: rotate(90deg); }
+
+  .trace-content {
+    display: none;
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .trace-content.visible { display: block; }
+
+  .trace-line {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 2;
+    color: var(--dim);
+  }
+
+  .trace-line .step-num { color: var(--muted); margin-right: 8px; }
+  .trace-line .from { color: var(--text); }
+  .trace-line .arrow-sym { color: var(--dim); margin: 0 6px; }
+  .trace-line .to { color: var(--accent); }
+  .trace-line .law { color: var(--dim); font-size: 10px; margin-left: 8px; }
+
+  /* d²=0 badge */
+  .d2-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 1px solid;
+  }
+  .d2-badge.ok  { color: var(--green); border-color: var(--green); }
+  .d2-badge.bad { color: var(--red);   border-color: var(--red);   }
+
+  /* empty state */
+  .empty-state {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+
+  .empty-state .big {
+    font-size: 48px;
+    opacity: 0.15;
+  }
+
+  /* error display */
+  .error-msg {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    background: var(--surface);
+    border: 1px solid var(--red);
+    padding: 14px 18px;
+    white-space: pre-wrap;
+    animation: fadein 0.3s forwards;
+  }
+
+  /* ---- Comparison card ---- */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .compare-col {
+    padding: 14px 16px;
+  }
+
+  .compare-col + .compare-col {
+    border-left: 1px solid var(--border);
+  }
+
+  .compare-col-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .compare-col-title.free    { color: var(--yellow); }
+  .compare-col-title.quotient { color: var(--accent); }
+
+  .compare-row {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 2.1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .compare-row .cr-label { color: var(--dim); }
+  .compare-row .cr-val   { color: var(--text); }
+  .compare-row .cr-val.collapsed { color: var(--yellow); }
+  .compare-row .cr-val.gained    { color: var(--green); }
+  .compare-row .cr-val.same      { color: var(--dim); }
+
+  .compare-delta {
+    font-size: 10px;
+    color: var(--dim);
+    margin-left: 4px;
+  }
+  .compare-delta.neg { color: var(--yellow); }
+  .compare-delta.pos { color: var(--green); }
+
+  .compare-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 10px 0;
+  }
+
+  .compare-note {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    line-height: 1.8;
+  }
+
+  /* ---- Law builder ---- */
+  .law-input-row {
+    display: grid;
+    grid-template-columns: 1fr 36px;
+    gap: 8px;
+  }
+
+  .add-law-btn {
+    background: var(--muted);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    font-weight: 400;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s, background 0.15s;
+    height: 100%;
+  }
+
+  .add-law-btn:hover { border-color: var(--accent); background: var(--border); }
+
+  .law-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .law-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+  }
+
+  .law-num {
+    color: var(--dim);
+    font-size: 10px;
+    min-width: 14px;
+  }
+
+  .law-text { color: var(--accent); flex: 1; }
+
+  .law-remove {
+    background: none;
+    border: none;
+    color: var(--dim);
+    font-size: 15px;
+    cursor: pointer;
+    padding: 0 2px;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+
+  .law-remove:hover { color: var(--red); }
+
+  .law-empty {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    padding: 6px 0;
+  }
+
+  /* ---- Timeline ---- */
+  .timeline { display: flex; flex-direction: column; }
+
+  .step-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    opacity: 0;
+    animation: fadein 0.25s forwards;
+  }
+
+  .step-card + .step-card { border-top: none; }
+
+  .step-header {
+    border-bottom: 1px solid var(--border);
+    padding: 9px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .step-num-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .step-law-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    flex: 1;
+  }
+
+  .step-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .step-body {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 11px 16px;
+    gap: 16px;
+  }
+
+  .step-homology { display: flex; flex-direction: column; }
+
+  .step-hrow {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 2;
+  }
+
+  .step-hn { color: var(--dim); min-width: 28px; }
+  .step-hval { color: var(--teal); }
+  .step-hval.gained { color: var(--green); font-weight: 600; }
+  .step-hval.lost   { color: var(--yellow); font-weight: 600; }
+  .step-prev { color: var(--dim); text-decoration: line-through; font-size: 10px; }
+  .step-arrow { color: var(--dim); font-size: 10px; }
+
+  .step-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-end;
+    border-left: 1px solid var(--border);
+    padding-left: 14px;
+  }
+
+  .step-stat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+
+  .step-stat span { color: var(--text); }
+  .step-stat .neg { color: var(--yellow); }
+  .step-stat .pos { color: var(--green); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* spinner */
+  .spinner {
+    display: none;
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  .spinner.active { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* startup trace panel */
+  .trace-panel {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    margin-bottom: 0;
+  }
+
+  .trace-panel-header {
+    border-bottom: 1px solid var(--border);
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .trace-panel-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .trace-panel-body {
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .trace-section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .trace-row {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 2;
+    display: grid;
+    grid-template-columns: 180px auto;
+    gap: 8px;
+    align-items: baseline;
+  }
+
+  .trace-row .tlabel {
+    color: var(--dim);
+    white-space: nowrap;
+  }
+
+  .trace-row .tval {
+    color: var(--teal);
+  }
+
+  .trace-row .tval.highlight {
+    color: var(--accent);
+  }
+
+  .trace-row .tval.ok {
+    color: var(--green);
+  }
+
+  .trace-separator {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2px 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>PRG Framework</h1>
+  <p>Watch topology emerge — add one law at a time</p>
+</header>
+
+<div class="layout">
+
+  <!-- LEFT: INPUT -->
+  <div class="panel-left">
+
+    <div class="section">
+      <div class="section-title">Presets</div>
+      <div class="presets">
+        <button class="preset-btn active" onclick="loadPreset('circle', this)">
+          <span class="pname">Circle S¹</span>
+          <span class="pdesc">G = ℤ, one generator</span>
+        </button>
+        <button class="preset-btn" onclick="loadPreset('torus', this)">
+          <span class="pname">Torus T²</span>
+          <span class="pdesc">G = ℤ², ab ~ ba</span>
+        </button>
+        <button class="preset-btn" onclick="loadPreset('z3', this)">
+          <span class="pname">ℤ/3ℤ</span>
+          <span class="pdesc">a³ ~ id, torsion</span>
+        </button>
+        <button class="preset-btn" onclick="loadPreset('z5', this)">
+          <span class="pname">ℤ/5ℤ</span>
+          <span class="pdesc">a⁵ ~ id</span>
+        </button>
+        <button class="preset-btn" onclick="loadPreset('free2', this)">
+          <span class="pname">Free ℤ²</span>
+          <span class="pdesc">a,b no relations</span>
+        </button>
+        <button class="preset-btn" onclick="loadPreset('klein', this)">
+          <span class="pname">Klein Bottle</span>
+          <span class="pdesc">ba ~ ab⁻¹</span>
+        </button>
+        <button class="preset-btn" onclick="loadPreset('torusT', this)">
+          <span class="pname">Torus + Torsion</span>
+          <span class="pdesc">ab~ba, a³~id</span>
+        </button>
+        <button class="preset-btn" onclick="loadPreset('pathA', this)">
+          <span class="pname">Path A</span>
+          <span class="pdesc">commutativity first</span>
+        </button>
+        <button class="preset-btn" onclick="loadPreset('pathB', this)">
+          <span class="pname">Path B</span>
+          <span class="pdesc">torsion first</span>
+        </button>
+        <button class="preset-btn" onclick="loadPreset('custom', this)">
+          <span class="pname">Custom</span>
+          <span class="pdesc">edit below</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Relational System</div>
+
+      <label>Generators</label>
+      <input type="text" id="inp-gens" placeholder="a b" />
+      <div class="hint">Space-separated. Inverses named a_inv, b_inv, etc.</div>
+
+      <label>Add Congruence Law</label>
+      <div class="law-input-row">
+        <input type="text" id="inp-law-single" placeholder="b a = a b"
+               onkeydown="if(event.key==='Enter')addLaw()" />
+        <button class="add-law-btn" onclick="addLaw()">+</button>
+      </div>
+      <div class="hint">left = right &nbsp;·&nbsp; empty right means identity<br>
+        e.g. <code>b a = a b</code> &nbsp; or &nbsp; <code>a a a =</code>
+      </div>
+      <div id="law-list" class="law-list">
+        <div class="law-empty">No laws — free category</div>
+      </div>
+
+      <label>Max Word Length</label>
+      <input type="number" id="inp-depth" value="3" min="1" max="5" />
+      <div class="hint">Higher = more classes but slower. 3 is enough for torus.</div>
+
+      <label>Top Dimension</label>
+      <input type="number" id="inp-topdim" value="2" min="0" max="3" />
+      <div class="hint">Report homology up to this dimension.</div>
+    </div>
+
+    <div class="section">
+      <button class="run-btn" id="run-btn" onclick="runComputation()">
+        Run Incremental
+      </button>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: OUTPUT -->
+  <div class="panel-right">
+    <div class="results-header">
+      <div class="status-dot" id="status-dot"></div>
+      <div class="spinner" id="spinner"></div>
+      <div class="results-title">Results</div>
+    </div>
+    <div class="results-body" id="results-body">
+      <div class="empty-state">
+        <div class="big">∂²=0</div>
+        <div>Select a preset or enter a presentation, then compute.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ================================================================
+// LAYER 1 — CORE ALGEBRA
+// RelationalSystem: quotient category via generators + congruence.
+// Responsible for: inverse resolution, relation expansion,
+// free reduction (xx⁻¹ → id), and congruence rewriting.
+// No DOM access. No topology. Pure algebra.
+// ================================================================
+
+class RelationalSystem {
+  constructor(generators, inverses, relations) {
+    this.generators = generators;
+    this.inverses = inverses;
+    this.relations = relations;
+
+    this.inv = {};
+    for (const [g, gi] of Object.entries(inverses)) {
+      this.inv[g] = gi;
+      this.inv[gi] = g;
+    }
+
+    // Generator rank for canonical ordering
+    this.genRank = {};
+    generators.forEach((g, i) => {
+      this.genRank[g] = 2 * i;
+      this.genRank[this.inv[g]] = 2 * i + 1;
+    });
+
+    // Expand commutativity relations to all inverse variants
+    this.expandedRelations = this._expandRelations(relations);
+  }
+
+  _expandRelations(relations) {
+    const expanded = new Set();
+    for (const [lhs, rhs] of relations) {
+      if (lhs.length === 2 && rhs.length === 2 &&
+          rhs[0] === lhs[1] && rhs[1] === lhs[0]) {
+        // Commutativity: expand to all inverse combos
+        const g1 = lhs[0], g2 = lhs[1];
+        const g1i = this.inv[g1] || g1;
+        const g2i = this.inv[g2] || g2;
+        for (const a of [g1, g1i]) {
+          for (const b of [g2, g2i]) {
+            const ra = this.genRank[a] ?? 999;
+            const rb = this.genRank[b] ?? 999;
+            if (ra > rb) {
+              expanded.add(JSON.stringify([[a,b],[b,a]]));
+            } else if (rb > ra) {
+              expanded.add(JSON.stringify([[b,a],[a,b]]));
+            }
+          }
+        }
+      } else {
+        expanded.add(JSON.stringify([lhs, rhs]));
+      }
+    }
+    return [...expanded].map(s => JSON.parse(s));
+  }
+
+  rank(word) {
+    return word.map(g => this.genRank[g] ?? 999);
+  }
+
+  _rankLess(a, b) {
+    if (a.length !== b.length) return a.length < b.length;
+    const ra = this.rank(a);
+    const rb = this.rank(b);
+    for (let i = 0; i < ra.length; i++) {
+      if (ra[i] !== rb[i]) return ra[i] < rb[i];
+    }
+    return false;
+  }
+
+  reduce(word) {
+    word = [...word];
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (let i = 0; i < word.length - 1; i++) {
+        if (this.inv[word[i]] === word[i+1]) {
+          word.splice(i, 2);
+          if (i > 0) i--;
+          changed = true;
+          break;
+        }
+      }
+    }
+    return word;
+  }
+
+  applyRelations(word, traceLog = null) {
+    word = this.reduce([...word]);
+    for (let iter = 0; iter < 1000; iter++) {
+      let changed = false;
+      for (const [lhs, rhs] of this.expandedRelations) {
+        // Try lhs -> rhs
+        for (let start = 0; start <= word.length - lhs.length; start++) {
+          const match = lhs.every((g, i) => word[start+i] === g);
+          if (match) {
+            const candidate = this.reduce([
+              ...word.slice(0, start),
+              ...rhs,
+              ...word.slice(start + lhs.length)
+            ]);
+            if (this._rankLess(candidate, word)) {
+              if (traceLog) {
+                traceLog.push({
+                  step: iter,
+                  law: [lhs, rhs],
+                  from: [...word],
+                  to: [...candidate]
+                });
+              }
+              word = candidate;
+              changed = true;
+              break;
+            }
+          }
+        }
+        if (changed) break;
+        // Try rhs -> lhs
+        for (let start = 0; start <= word.length - rhs.length; start++) {
+          const match = rhs.every((g, i) => word[start+i] === g);
+          if (match) {
+            const candidate = this.reduce([
+              ...word.slice(0, start),
+              ...lhs,
+              ...word.slice(start + rhs.length)
+            ]);
+            if (this._rankLess(candidate, word)) {
+              if (traceLog) {
+                traceLog.push({
+                  step: iter,
+                  law: [rhs, lhs],
+                  from: [...word],
+                  to: [...candidate]
+                });
+              }
+              word = candidate;
+              changed = true;
+              break;
+            }
+          }
+        }
+        if (changed) break;
+      }
+      if (!changed) break;
+    }
+    return word;
+  }
+
+  compose(w1, w2) {
+    return this.applyRelations([...w1, ...w2]);
+  }
+
+  identity() { return []; }
+
+  _wordKey(word) { return JSON.stringify(word); }
+}
+
+// Returns a minimal system-compatible object that composes using only
+// free reduction — no congruence laws applied. Used to run the standard
+// boundary machinery on the free nerve without modifying RelationalSystem.
+function makeFreeSystem(system) {
+  return {
+    generators: system.generators,
+    inv:        system.inv,
+    reduce:     system.reduce.bind(system),
+    compose:    (w1, w2) => system.reduce([...w1, ...w2]),
+    _wordKey:   system._wordKey.bind(system),
+  };
+}
+
+// ================================================================
+// LAYER 2 — NERVE & TOPOLOGY
+// Builds simplicial complexes from relational presentations.
+//
+// buildNerve      — nerve of the QUOTIENT category.
+//                   Elements are congruence classes (relations applied).
+//                   This is the classical nerve used for homology output.
+//
+// buildFreeNerve  — nerve of the FREE category (pre-quotient).
+//                   Elements are raw words up to maxWordLen with only
+//                   free reduction (xx⁻¹ cancellation), no congruence.
+//                   Used to compare presentation vs quotient structure.
+//
+// faceMap, buildBoundaryMatrix — boundary operators on simplices.
+// No DOM access. No UI state.
+// ================================================================
+
+function buildNerve(system, maxWordLen) {
+  const elements = new Map();
+  const id = system._wordKey(system.identity());
+  elements.set(id, system.identity());
+
+  const allGens = [
+    ...system.generators,
+    ...system.generators.map(g => system.inv[g])
+  ];
+
+  for (let len = 1; len <= maxWordLen; len++) {
+    const combos = cartesian(allGens, len);
+    for (const combo of combos) {
+      const norm = system.applyRelations(combo);
+      const key = system._wordKey(norm);
+      if (!elements.has(key)) elements.set(key, norm);
+    }
+  }
+
+  const elems = [...elements.values()].sort((a, b) => {
+    const ra = system.rank(a), rb = system.rank(b);
+    if (a.length !== b.length) return a.length - b.length;
+    for (let i = 0; i < Math.min(ra.length, rb.length); i++) {
+      if (ra[i] !== rb[i]) return ra[i] - rb[i];
+    }
+    return 0;
+  });
+
+  const elemSet = new Set(elems.map(e => system._wordKey(e)));
+
+  const s0 = [[]];
+  const s1 = elems.map(g => [g]);
+  const s2 = [];
+  for (const g of elems) {
+    for (const h of elems) {
+      const gh = system.compose(g, h);
+      if (elemSet.has(system._wordKey(gh))) {
+        s2.push([g, h]);
+      }
+    }
+  }
+  const s3 = [];
+  for (const g of elems) {
+    for (const h of elems) {
+      const gh = system.compose(g, h);
+      if (!elemSet.has(system._wordKey(gh))) continue;
+      for (const k of elems) {
+        const hk = system.compose(h, k);
+        if (!elemSet.has(system._wordKey(hk))) continue;
+        const ghk = system.compose(gh, k);
+        if (elemSet.has(system._wordKey(ghk))) {
+          s3.push([g, h, k]);
+        }
+      }
+    }
+  }
+
+  return { simplices: {0:s0,1:s1,2:s2,3:s3}, elements: elems };
+}
+
+// Pre-quotient nerve: enumerate raw words, apply only free reduction
+// (cancel xx⁻¹ pairs), never apply congruence laws.
+// Returns the same shape as buildNerve so they can be compared directly.
+function buildFreeNerve(system, maxWordLen) {
+  const allGens = [
+    ...system.generators,
+    ...system.generators.map(g => system.inv[g])
+  ];
+
+  // Collect elements as freely-reduced words (no relation application)
+  const elements = new Map();
+  const idKey = JSON.stringify([]);
+  elements.set(idKey, []);
+
+  for (let len = 1; len <= maxWordLen; len++) {
+    const combos = cartesian(allGens, len);
+    for (const combo of combos) {
+      const reduced = system.reduce(combo); // free reduction only
+      const key = JSON.stringify(reduced);
+      if (!elements.has(key)) elements.set(key, reduced);
+    }
+  }
+
+  const elems = [...elements.values()].sort((a, b) => {
+    if (a.length !== b.length) return a.length - b.length;
+    return JSON.stringify(a) < JSON.stringify(b) ? -1 : 1;
+  });
+
+  const elemSet = new Set(elems.map(e => JSON.stringify(e)));
+
+  // Compose using free reduction only (no congruence)
+  const freeCompose = (w1, w2) => system.reduce([...w1, ...w2]);
+
+  const s0 = [[]];
+  const s1 = elems.map(g => [g]);
+  const s2 = [];
+  for (const g of elems) {
+    for (const h of elems) {
+      const gh = freeCompose(g, h);
+      if (elemSet.has(JSON.stringify(gh))) s2.push([g, h]);
+    }
+  }
+  const s3 = [];
+  for (const g of elems) {
+    for (const h of elems) {
+      const gh = freeCompose(g, h);
+      if (!elemSet.has(JSON.stringify(gh))) continue;
+      for (const k of elems) {
+        const hk = freeCompose(h, k);
+        if (!elemSet.has(JSON.stringify(hk))) continue;
+        const ghk = freeCompose(gh, k);
+        if (elemSet.has(JSON.stringify(ghk))) s3.push([g, h, k]);
+      }
+    }
+  }
+
+  return { simplices: { 0: s0, 1: s1, 2: s2, 3: s3 }, elements: elems };
+}
+
+function cartesian(arr, n) {
+  if (n === 0) return [[]];
+  const rest = cartesian(arr, n-1);
+  return arr.flatMap(x => rest.map(r => [x, ...r]));
+}
+
+// ---- Face map ----
+
+function faceMap(simplex, i, system) {
+  const n = simplex.length;
+  if (n === 1) return [];
+  if (n === 2) {
+    const [g, h] = simplex;
+    if (i === 0) return [h];
+    if (i === 1) return [system.compose(g, h)];  // wrap: compose returns an element, need a 1-simplex
+    return [g];
+  }
+  if (n === 3) {
+    const [g, h, k] = simplex;
+    if (i === 0) return [h, k];
+    if (i === 1) return [system.compose(g,h), k];
+    if (i === 2) return [g, system.compose(h,k)];
+    return [g, h];
+  }
+}
+
+function buildBoundaryMatrix(simplices, dim, system) {
+  if (dim === 0) return { data: [], rows: 0, cols: simplices[0].length };
+  const lower = simplices[dim-1];
+  const upper = simplices[dim];
+  const lowerIndex = new Map(lower.map((s, i) => [JSON.stringify(s), i]));
+  const data = Array.from({length: lower.length},
+                          () => new Int32Array(upper.length));
+
+  for (let j = 0; j < upper.length; j++) {
+    const sigma = upper[j];
+    for (let i = 0; i <= dim; i++) {
+      const face = faceMap(sigma, i, system);
+      const key = JSON.stringify(face);
+      if (lowerIndex.has(key)) {
+        data[lowerIndex.get(key)][j] += (i % 2 === 0 ? 1 : -1);
+      }
+    }
+  }
+  return { data, rows: lower.length, cols: upper.length };
+}
+
+// ================================================================
+// LAYER 3 — LINEAR ALGEBRA
+// Integer Smith normal form, homology computation, chain complex
+// verification. Pure math — no DOM, no system-specific logic.
+// ================================================================
+
+function smithNF(matData, rows, cols) {
+  if (rows === 0 || cols === 0) return [];
+  // Deep copy
+  const M = matData.map(row => [...row]);
+  const diag = [];
+  let row = 0, col = 0;
+
+  while (row < rows && col < cols) {
+    let pivot = null;
+    for (let c = col; c < cols; c++) {
+      for (let r = row; r < rows; r++) {
+        if (M[r][c] !== 0) {
+          if (pivot === null || Math.abs(M[r][c]) < Math.abs(M[pivot[0]][pivot[1]])) {
+            pivot = [r, c];
+          }
+        }
+      }
+    }
+    if (!pivot) break;
+    const [r0, c0] = pivot;
+    [M[row], M[r0]] = [M[r0], M[row]];
+    for (let r = 0; r < rows; r++) {
+      [M[r][col], M[r][c0]] = [M[r][c0], M[r][col]];
+    }
+
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (let r = row+1; r < rows; r++) {
+        if (M[r][col] !== 0) {
+          const q = Math.trunc(M[r][col] / M[row][col]);
+          for (let c = 0; c < cols; c++) M[r][c] -= q * M[row][c];
+          if (M[r][col] !== 0) changed = true;
+        }
+      }
+      for (let c = col+1; c < cols; c++) {
+        if (M[row][c] !== 0) {
+          const q = Math.trunc(M[row][c] / M[row][col]);
+          for (let r = 0; r < rows; r++) M[r][c] -= q * M[r][col];
+          if (M[row][c] !== 0) changed = true;
+        }
+      }
+    }
+    if (M[row][col] < 0) for (let c = 0; c < cols; c++) M[row][c] = -M[row][c];
+    diag.push(M[row][col]);
+    row++; col++;
+  }
+  return diag;
+}
+
+function computeHomology(boundaryMaps, topDim) {
+  const results = {};
+  for (let n = 0; n <= topDim; n++) {
+    const dn  = boundaryMaps[n];
+    const dn1 = boundaryMaps[n+1];
+
+    let rankIm = 0;
+    if (dn1 && dn1.cols > 0 && dn1.rows > 0) {
+      rankIm = smithNF(dn1.data, dn1.rows, dn1.cols).filter(d => d !== 0).length;
+    }
+
+    let rankKer = 0;
+    if (dn && dn.cols > 0 && dn.rows > 0) {
+      const rankImDn = smithNF(dn.data, dn.rows, dn.cols).filter(d => d !== 0).length;
+      rankKer = dn.cols - rankImDn;
+    } else if (n === 0) {
+      rankKer = 1;
+    }
+
+    const torsion = [];
+    if (dn1 && dn1.cols > 0 && dn1.rows > 0) {
+      smithNF(dn1.data, dn1.rows, dn1.cols)
+        .filter(d => d > 1)
+        .forEach(d => torsion.push(d));
+    }
+
+    results[n] = { free: rankKer - rankIm, torsion };
+  }
+  return results;
+}
+
+function checkD2(boundaryMaps, topDim) {
+  for (let d = 1; d <= topDim; d++) {
+    const dm  = boundaryMaps[d];
+    const dm1 = boundaryMaps[d+1];
+    if (!dm || !dm1 || dm1.cols === 0) continue;
+    // Check dm * dm1 = 0
+    for (let i = 0; i < dm.rows; i++) {
+      for (let j = 0; j < dm1.cols; j++) {
+        let sum = 0;
+        for (let k = 0; k < dm.cols; k++) {
+          sum += dm.data[i][k] * dm1.data[k][j];
+        }
+        if (sum !== 0) return false;
+      }
+    }
+  }
+  return true;
+}
+
+function formatGroup(free, torsion) {
+  const parts = [];
+  if (free === 1) parts.push('ℤ');
+  else if (free > 1) parts.push(`ℤ^${free}`);
+  torsion.forEach(t => parts.push(`ℤ/${t}ℤ`));
+  return parts.join(' × ') || '0';
+}
+
+// Returns the rewrite trace for a single word — used by the rendering layer.
+function getCongruenceTrace(system, word) {
+  const traceLog = [];
+  system.applyRelations(word, traceLog);
+  return traceLog;
+}
+
+// ================================================================
+// LAYER 4 — PRESETS & INPUT PARSING
+// Static preset definitions and user input → system construction.
+// parseGeneratorsAndParams() reads the DOM for generators/depth/topdim.
+// lawsList is the single source of truth for active laws.
+// ================================================================
+
+const PRESETS = {
+  circle:  { gens: 'a',   laws: [],                              depth: 4, topdim: 1, expected: {0:'ℤ',1:'ℤ'} },
+  torus:   { gens: 'a b', laws: ['b a = a b'],                   depth: 3, topdim: 2, expected: {0:'ℤ',1:'ℤ^2',2:'ℤ'} },
+  z3:      { gens: 'a',   laws: ['a a a ='],                     depth: 4, topdim: 1, expected: {0:'ℤ',1:'ℤ/3ℤ'} },
+  z5:      { gens: 'a',   laws: ['a a a a a ='],                 depth: 6, topdim: 1, expected: {0:'ℤ',1:'ℤ/5ℤ'} },
+  free2:   { gens: 'a b', laws: [],                              depth: 2, topdim: 1, expected: {0:'ℤ',1:'ℤ^2'} },
+  // New presets
+  torusT:  { gens: 'a b', laws: ['b a = a b', 'a a a ='],       depth: 3, topdim: 2, expected: {} },
+  klein:   { gens: 'a b', laws: ['b a = a b_inv'],              depth: 3, topdim: 2, expected: {} },
+  pathA:   { gens: 'a b', laws: ['b a = a b', 'a a a ='],       depth: 3, topdim: 2, expected: {} },
+  pathB:   { gens: 'a b', laws: ['a a a =', 'b a = a b'],       depth: 3, topdim: 2, expected: {} },
+  custom:  { gens: 'a b', laws: [],                              depth: 3, topdim: 2, expected: {} },
+};
+
+// Single source of truth for the active law list
+let lawsList = [];
+let currentPreset = 'circle';
+
+function addLaw() {
+  const input = document.getElementById('inp-law-single');
+  const raw = input.value.trim();
+  if (!raw) return;
+  if (!raw.includes('=')) {
+    input.style.borderColor = 'var(--red)';
+    setTimeout(() => input.style.borderColor = '', 800);
+    return;
+  }
+  lawsList.push(raw);
+  input.value = '';
+  input.focus();
+  renderLawList();
+  currentPreset = 'custom';
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+}
+
+function removeLaw(i) {
+  lawsList.splice(i, 1);
+  renderLawList();
+}
+
+function renderLawList() {
+  const container = document.getElementById('law-list');
+  if (lawsList.length === 0) {
+    container.innerHTML = '<div class="law-empty">No laws — free category</div>';
+    return;
+  }
+  container.innerHTML = lawsList.map((law, i) => `
+    <div class="law-item">
+      <span class="law-num">${i + 1}</span>
+      <span class="law-text">${law}</span>
+      <button class="law-remove" onclick="removeLaw(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+// Parse a single law string "lhs = rhs" into [[lhs tokens], [rhs tokens]]
+function parseSingleLaw(raw) {
+  const parts = raw.split('=');
+  if (parts.length !== 2) throw new Error(`Invalid law: "${raw}". Use = to separate sides.`);
+  const lhs = parts[0].trim().split(/\s+/).filter(Boolean);
+  const rhs = parts[1].trim().split(/\s+/).filter(Boolean);
+  return [lhs, rhs];
+}
+
+function parseGeneratorsAndParams() {
+  const gensRaw = document.getElementById('inp-gens').value.trim();
+  const depth   = parseInt(document.getElementById('inp-depth').value);
+  const topdim  = parseInt(document.getElementById('inp-topdim').value);
+
+  const generators = gensRaw.split(/\s+/).filter(Boolean);
+  if (generators.length === 0) throw new Error('No generators specified.');
+
+  const inverses = {};
+  for (const g of generators) {
+    inverses[g]          = g + '_inv';
+    inverses[g + '_inv'] = g;
+  }
+
+  return { generators, inverses, depth, topdim };
+}
+
+function loadPreset(name, btn) {
+  const p = PRESETS[name];
+  document.getElementById('inp-gens').value   = p.gens;
+  document.getElementById('inp-depth').value  = p.depth;
+  document.getElementById('inp-topdim').value = p.topdim;
+  lawsList = [...p.laws];
+  renderLawList();
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  currentPreset = name;
+  clearResults();
+}
+
+// ================================================================
+// LAYER 5 — APP LOGIC
+// Orchestrates layers 1–3 in response to user actions.
+// Reads DOM only for status/button state. No HTML generation.
+// ================================================================
+
+function setStatus(s) {
+  const dot     = document.getElementById('status-dot');
+  const spinner = document.getElementById('spinner');
+  dot.className = 'status-dot ' + s;
+  spinner.className = s === 'running' ? 'spinner active' : 'spinner';
+}
+
+function clearResults() {
+  const body = document.getElementById('results-body');
+  body.innerHTML = `
+    <div class="empty-state">
+      <div class="big">∂²=0</div>
+      <div>Add laws and run to watch the topology build.</div>
+    </div>`;
+  setStatus('');
+}
+
+// Compute one step: build system with given relations, return homology data.
+function computeStep(generators, inverses, relations, depth, topdim) {
+  const system = new RelationalSystem(generators, inverses, relations);
+  const { simplices, elements } = buildNerve(system, depth);
+  const boundaryMaps = { 0: { data: [], rows: 0, cols: 1 } };
+  for (let dim = 1; dim <= topdim + 1; dim++) {
+    if (simplices[dim] && simplices[dim - 1]) {
+      boundaryMaps[dim] = buildBoundaryMatrix(simplices, dim, system);
+    }
+  }
+  const d2ok    = checkD2(boundaryMaps, topdim);
+  const homology = computeHomology(boundaryMaps, topdim);
+  return { system, elements, simplices, homology, d2ok };
+}
+
+function runComputation() {
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true;
+  setStatus('running');
+
+  setTimeout(() => {
+    try {
+      const { generators, inverses, depth, topdim } = parseGeneratorsAndParams();
+      const expected = (PRESETS[currentPreset] || {}).expected || {};
+
+      // Build one step per law prefix: step 0 = free, step i = laws[0..i-1]
+      const steps = [];
+      for (let i = 0; i <= lawsList.length; i++) {
+        const relations = lawsList.slice(0, i).map(parseSingleLaw);
+        const result    = computeStep(generators, inverses, relations, depth, topdim);
+        steps.push({ law: i === 0 ? null : lawsList[i - 1], ...result });
+      }
+
+      renderTimeline(steps, topdim, expected);
+      setStatus('ok');
+
+    } catch (e) {
+      renderError(e.message);
+      setStatus('err');
+    }
+    btn.disabled = false;
+  }, 20);
+}
+
+// ================================================================
+// LAYER 6 — RENDERING
+// All DOM construction lives here. Takes plain data from Layer 5.
+// No math, no system logic.
+// ================================================================
+
+function renderTimeline(steps, topdim, expected) {
+  const body = document.getElementById('results-body');
+  body.innerHTML = '';
+
+  const timeline = document.createElement('div');
+  timeline.className = 'timeline';
+
+  steps.forEach((step, i) => {
+    const prev      = i > 0 ? steps[i - 1] : null;
+    const isBaseline = i === 0;
+    const card      = document.createElement('div');
+    card.className  = 'step-card';
+    card.style.animationDelay = `${i * 0.07}s`;
+
+    // Homology rows — show delta from previous step
+    const homologyHTML = Array.from({ length: topdim + 1 }, (_, n) => {
+      const cur = formatGroup(step.homology[n]?.free || 0, step.homology[n]?.torsion || []);
+      const prv = prev ? formatGroup(prev.homology[n]?.free || 0, prev.homology[n]?.torsion || []) : null;
+      const changed = prv !== null && cur !== prv;
+      let valHTML;
+      if (changed) {
+        const curFree  = step.homology[n]?.free || 0;
+        const prevFree = prev.homology[n]?.free || 0;
+        const curTors  = step.homology[n]?.torsion?.length || 0;
+        const prevTors = prev.homology[n]?.torsion?.length || 0;
+        const gained   = curFree > prevFree || curTors > prevTors;
+        const cls      = gained ? 'gained' : 'lost';
+        valHTML = `<span class="step-prev">${prv}</span>
+                   <span class="step-arrow"> → </span>
+                   <span class="step-hval ${cls}">${cur}</span>`;
+      } else {
+        const isFinal   = i === steps.length - 1;
+        const isExpected = expected[n] && expected[n] === cur;
+        valHTML = `<span class="step-hval">${cur}</span>`;
+      }
+      return `<div class="step-hrow">
+        <span class="step-hn">H_${n}</span>${valHTML}
+      </div>`;
+    }).join('');
+
+    // Stats with delta from previous step
+    function statDelta(cur, prv) {
+      if (prv == null) return '';
+      const d = cur - prv;
+      if (d === 0) return '';
+      const cls = d < 0 ? 'neg' : 'pos';
+      return ` <span class="${cls}">(${d > 0 ? '+' : ''}${d})</span>`;
+    }
+
+    const elemDelta  = statDelta(step.elements.length, prev?.elements.length);
+    const simpStats  = [1, 2, 3].filter(d => step.simplices[d]).map(d => {
+      const cur = step.simplices[d].length;
+      const prv = prev?.simplices[d]?.length;
+      return `<div class="step-stat">${d}-simp <span>${cur}</span>${statDelta(cur, prv)}</div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="step-header">
+        <span class="step-num-label">Step ${i}</span>
+        <span class="step-law-label">${isBaseline ? '— no laws' : '+ ' + step.law}</span>
+        <span class="step-tag" style="color:${isBaseline ? 'var(--dim)' : 'var(--accent)'}">
+          ${isBaseline ? 'baseline' : 'law added'}
+        </span>
+      </div>
+      <div class="step-body">
+        <div class="step-homology">${homologyHTML}</div>
+        <div class="step-stats">
+          <div class="step-stat">elements <span>${step.elements.length}</span>${elemDelta}</div>
+          ${simpStats}
+        </div>
+      </div>
+    `;
+
+    timeline.appendChild(card);
+  });
+
+  body.appendChild(timeline);
+}
+
+function renderError(msg) {
+  const body = document.getElementById('results-body');
+  body.innerHTML = `<div class="error-msg">Error: ${msg}</div>`;
+}
+
+// ================================================================
+// Startup trace — shows framework machinery running
+// ================================================================
+
+function buildStartupTrace() {
+  const body = document.getElementById('results-body');
+  body.innerHTML = '';
+
+  const panel = document.createElement('div');
+  panel.className = 'trace-panel result-card';
+  panel.innerHTML = `
+    <div class="trace-panel-header">
+      <div class="trace-panel-title">Framework Machinery — Startup Trace</div>
+      <div class="card-tag correct">live computation</div>
+    </div>
+    <div class="trace-panel-body" id="startup-trace-body"></div>
+  `;
+  body.appendChild(panel);
+
+  const tb = panel.querySelector('#startup-trace-body');
+
+  // --- Section 1: Congruence rewriting ---
+  const torusSystem = new RelationalSystem(
+    ['a', 'b'],
+    { 'a': 'a_inv', 'b': 'b_inv', 'a_inv': 'a', 'b_inv': 'b' },
+    [[['b','a'],['a','b']]]
+  );
+
+  const rewriteExamples = [
+    { word: ['b','a'],           label: "b · a" },
+    { word: ['b','b','a'],       label: "b · b · a" },
+    { word: ['b','a','b','a'],   label: "b · a · b · a" },
+    { word: ['a','b','a_inv'],   label: "a · b · a⁻¹" },
+  ];
+
+  let rewriteHTML = `<div class="trace-section-title">
+    1 · Congruence rewriting &nbsp;
+    <span style="color:var(--dim);font-weight:400">
+      law: b·a → a·b &nbsp;(torus commutativity)
+    </span>
+  </div>`;
+
+  for (const ex of rewriteExamples) {
+    const log = [];
+    const result = torusSystem.applyRelations(ex.word, log);
+    const steps = log.length;
+    const resultStr = result.length === 0 ? 'id' : result.join(' · ');
+    rewriteHTML += `
+      <div class="trace-row">
+        <span class="tlabel">${ex.label}</span>
+        <span class="tval highlight">
+          → ${resultStr}
+          <span style="color:var(--dim);font-size:10px;margin-left:8px">
+            (${steps} rewrite${steps !== 1 ? 's' : ''})
+          </span>
+        </span>
+      </div>`;
+  }
+
+  // --- Section 2: Nerve construction (circle) ---
+  const circleSystem = new RelationalSystem(
+    ['a'],
+    { 'a': 'a_inv', 'a_inv': 'a' },
+    []
+  );
+  const { simplices: cSimp, elements: cElems } =
+    buildNerve(circleSystem, 4);
+
+  const circleHTML = `
+    <hr class="trace-separator">
+    <div class="trace-section-title">
+      2 · Nerve construction &nbsp;
+      <span style="color:var(--dim);font-weight:400">
+        circle S¹ — depth 4, no congruence laws
+      </span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">configuration classes</span>
+      <span class="tval">${cElems.length} &nbsp;
+        <span style="color:var(--dim);font-size:10px">
+          (id, a, a², a³, a⁻¹, a⁻², a⁻³, a·a⁻¹≡id already reduced…)
+        </span>
+      </span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">0-simplices</span>
+      <span class="tval">${cSimp[0].length} &nbsp;
+        <span style="color:var(--dim);font-size:10px">— the single state</span>
+      </span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">1-simplices</span>
+      <span class="tval">${cSimp[1].length} &nbsp;
+        <span style="color:var(--dim);font-size:10px">— one per configuration class</span>
+      </span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">2-simplices</span>
+      <span class="tval">${cSimp[2].length} &nbsp;
+        <span style="color:var(--dim);font-size:10px">
+          — composable pairs; triangles from composition, not geometry
+        </span>
+      </span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">3-simplices</span>
+      <span class="tval">${cSimp[3].length}</span>
+    </div>`;
+
+  // --- Section 3: Boundary map and d²=0 ---
+  const cBound = {};
+  cBound[0] = { data: [], rows: 0, cols: 1 };
+  for (let dim = 1; dim <= 3; dim++) {
+    if (cSimp[dim] && cSimp[dim-1]) {
+      cBound[dim] = buildBoundaryMatrix(cSimp, dim, circleSystem);
+    }
+  }
+  const d2ok = checkD2(cBound, 2);
+
+  // Show d_1 matrix (first few rows/cols)
+  const d1 = cBound[1];
+  let matrixHTML = '';
+  if (d1 && d1.rows > 0) {
+    const showRows = Math.min(d1.rows, 4);
+    const showCols = Math.min(d1.cols, 6);
+    matrixHTML = `
+      <div class="trace-section-title" style="margin-top:4px">
+        Boundary matrix ∂₁ &nbsp;
+        <span style="color:var(--dim);font-weight:400">
+          (${d1.rows}×${d1.cols}, showing ${showRows}×${showCols})
+        </span>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;
+                  color:var(--dim);line-height:2;overflow-x:auto">
+        ${Array.from({length: showRows}, (_, i) =>
+          '<span style="color:var(--text)">[</span>' +
+          Array.from({length: showCols}, (_, j) => {
+            const v = d1.data[i]?.[j] ?? 0;
+            const col = v > 0 ? 'var(--green)' : v < 0 ? 'var(--red)' : 'var(--dim)';
+            return `<span style="color:${col};min-width:24px;display:inline-block;text-align:right">${v}</span>`;
+          }).join(' ') +
+          (d1.cols > showCols ? ' <span style="color:var(--dim)">…</span>' : '') +
+          '<span style="color:var(--text)">]</span>'
+        ).join('<br>')}
+        ${d1.rows > showRows ? `<br><span style="color:var(--dim)">… ${d1.rows - showRows} more rows</span>` : ''}
+      </div>`;
+  }
+
+  const d2HTML = `
+    <hr class="trace-separator">
+    <div class="trace-section-title">
+      3 · Boundary maps &nbsp;
+      <span style="color:var(--dim);font-weight:400">∂² = 0 verification</span>
+    </div>
+    ${matrixHTML}
+    <div class="trace-row" style="margin-top:8px">
+      <span class="tlabel">∂₁ · ∂₂ = 0</span>
+      <span class="tval ok">${d2ok ? '✓ verified — chain complex is valid' : '✗ failed'}</span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">source</span>
+      <span class="tval" style="color:var(--dim);font-size:10px">
+        follows from associativity of configuration composition
+      </span>
+    </div>`;
+
+  // --- Section 4: No triangulation note ---
+  const noteHTML = `
+    <hr class="trace-separator">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;
+                color:var(--dim);line-height:1.9;padding-top:2px">
+      The simplices above were not constructed geometrically.<br>
+      They were read off from the composable structure of the generators.<br>
+      Select a preset and click <span style="color:var(--accent)">Compute Homology</span>
+      to see the full pipeline.
+    </div>`;
+
+  tb.innerHTML = rewriteHTML + circleHTML + d2HTML + noteHTML;
+}
+
+// ================================================================
+// Init
+// ================================================================
+
+// ================================================================
+// INIT
+// ================================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  const firstBtn = document.querySelector('.preset-btn');
+  const p = PRESETS['circle'];
+  document.getElementById('inp-gens').value   = p.gens;
+  document.getElementById('inp-depth').value  = p.depth;
+  document.getElementById('inp-topdim').value = p.topdim;
+  lawsList = [...p.laws];
+  renderLawList();
+  currentPreset = 'circle';
+  if (firstBtn) firstBtn.classList.add('active');
+  buildStartupTrace();
+});
+</script>
+</body>
+</html>
