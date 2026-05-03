@@ -1,13 +1,13 @@
 # A Process-Relational Presentation of Finite Metric Geometry
 
 **Author:** Jorge Leonardo González Céspedes  
-**Affiliation:** Independent Researcher  
 **Date:** April 2026
 
-> **Status:** This paper is currently under revision following critique from
-> mathematicians in the category theory community. The framework and results
-> are being reviewed for clarity, scope, and accurate situating within existing
-> literature. The version in this repository reflects the work in progress.
+> **Status:** This paper has been set aside following substantive critique from
+> mathematicians in the Category Theory Zulip community. The critique confirmed
+> that the machinery is classical and the contribution is organizational and
+> conceptual rather than novel. The repository is kept as a record of the
+> exploration. The questions remain open.
 
 ---
 
@@ -15,13 +15,13 @@
 
 Classical geometry takes space and points as primitives, treating metric
 and positional properties as intrinsic to geometric objects. This paper
-argues that these are not intrinsic but relational: they arise from explicit
-comparisons with chosen reference structures. A presentation-level semantic
-framework is developed in which only finite relations and their compositions
-are primitive. Finite composable sequences of relations, called *configurations*,
-represent processes. Objects arise as equivalence classes under a *congruence* — an
-equivalence relation compatible with composition — that expresses observational
-indistinguishability.
+explores whether these are not intrinsic but relational: whether they arise
+from explicit comparisons with chosen reference structures. A presentation-level
+semantic framework is sketched in which only finite relations and their
+compositions are primitive. Finite composable sequences of relations, called
+*configurations*, represent processes. Objects are approached as equivalence
+classes under a *congruence* — an equivalence relation compatible with
+composition — that expresses observational indistinguishability.
 
 The machinery is classical: the quotient construction is a category presented
 by generators and relations; metric emergence is the word metric; the
@@ -29,7 +29,8 @@ reconstruction and categorical equivalence results connect to Lawvere metric
 spaces and enriched category theory. The primary contribution is organizational
 and conceptual — geometric structure defined at the level of generators and
 congruence laws, prior to quotienting, with metric properties arising as
-invariants of congruence classes of processes.
+invariants of congruence classes of processes. The paper arrived at this
+territory independently, then found it already mapped.
 
 ---
 
@@ -69,12 +70,14 @@ congruence classification, process-relational presentation, Lawvere metric space
   - *Framework Projections*
 ---
 
-## Interactive Application
+## Interactive Demos
 
-A 3D interactive application demonstrating the framework is in development.
-It will allow users to define relational systems, observe the quotient
-construction in real time, explore the induced metric, and connect two objects
-to see the combined geometric structure. Pseudocode is in `app/`.
+Two interactive demos were built to explore the ideas concretely. They are available in `demos/` and hosted at:
+
+- **[PRG Homology Calculator](https://substrate.lat/prg_homology_calculator.html)** — define a relational system and compute its homology directly from the algebraic definition
+- **[PRG Incremental Homology by Laws](https://substrate.lat/prg_homology_incremental_laws.html)** — observe how homology changes incrementally as relational laws are added
+
+Pseudocode for a fuller application is in `app/`.
 
 ---
 
