@@ -61,20 +61,30 @@ known results, recast within this framework and collected in one
 place. The relationship to existing work is stated explicitly in
 \Cref{sec:related}.
 
-The primary new mathematical result is a complete isomorphism
-classification of single-generator congruences by an invariant
-pair $(n, k)$ of period and shift order
-(Proposition~\ref{prop:congclass}). The main contribution of the
-paper is a \emph{presentation-level semantic framework}: geometric
-structure is defined at the level of generators and congruence
-laws, prior to quotienting, and metric properties arise as
-invariants of congruence classes of processes. This separates
-layers --- syntax (generators), laws (congruence), objects
-(quotient), and distance (emergent metric) --- that are usually
-conflated in classical geometry and in geometric group theory
-expositions. The separation makes explicitly askable a question
-that classical treatments obscure: what geometric structure does
-a specific congruence law produce in the nerve of the free
+The main contribution of the paper is a \emph{presentation-level
+semantic framework}: geometric structure is defined at the level
+of generators and congruence laws, prior to quotienting, and
+metric properties arise as invariants of congruence classes of
+processes. This separates layers --- syntax (generators), laws
+(congruence), objects (quotient), and distance (emergent metric)
+--- that are usually conflated in classical geometry and in
+geometric group theory expositions.
+
+The paper presents a complete isomorphism classification of
+single-generator congruences by the pair $(n, k)$
+(Proposition~\ref{prop:congclass}). For \emph{non-invertible}
+systems this classification is non-trivial: the quotients are
+cyclic monoids $M(n,k)$ and the pair $(n,k)$ is a genuine
+complete invariant. This is an instance of a classical result in
+monoid theory~\cite{cliffordpreston} recast in relational-process
+language. For \emph{invertible} systems the constraint $k = 0$
+is forced (Corollary~\ref{cor:invertible_classification}), the
+pseudo-periodic case does not arise, and the result reduces to
+the elementary classification of cyclic groups by order.
+
+The separation of layers makes explicitly askable a question that
+classical treatments obscure: what geometric structure does a
+specific congruence law produce in the nerve of the free
 category, independently of the quotient it defines?
 \end{abstract}
 
@@ -388,150 +398,156 @@ following holds:
 \begin{enumerate}[label=(\roman*)]
   \item \textbf{Closed.} $a^n \sim \id$ for some $n \geq 1$.
         Quotient: $\mathbb{Z}/n\mathbb{Z}$.
-  \item \textbf{Pseudo-periodic.} $a^n \sim \phi$ for some
-        $n \geq 1$ and some $\phi \sim a^j$ with $0 < j < n$
-        (so $\phi \not\sim \id$, but the orbit revisits a prior
-        class). The system neither closes nor runs free.
+  \item \textbf{Eventually periodic.} $a^n \sim a^k$ for some
+        $n > k \geq 1$ (so the orbit revisits $[a^k]$ without
+        returning to $\id$). Quotient: the cyclic monoid $M(n,k)$.
   \item \textbf{Open.} No periodicity law holds; all powers
-        $a^0, a^1, \dots$ are distinct. Quotient: $\mathbb{Z}$.
+        $a^0, a^1, \dots$ are distinct. Quotient: $\mathbb{N}$
+        (monoid) or $\mathbb{Z}$ (group, if invertible).
 \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-By Lemma~\ref{lem:reduction} it suffices to work at minimal
-period. Cases (i) and (ii) are distinguished by whether the
-return target is $\id$ or some $\phi \not\sim \id$. They cannot
-both hold simultaneously. Case (iii) is the negation of (i) and
-(ii). The three cases are mutually exclusive and exhaustive.
+By Lemma~\ref{lem:reduction} (applied without the invertibility
+assumption in cases (i) and (ii)) it suffices to work at minimal
+$n$. Cases (i) and (ii) are distinguished by whether the return
+target is $[a^0] = [\id]$ or some $[a^k]$ with $k \geq 1$.
+They cannot both hold simultaneously. Case (iii) is the negation
+of (i) and (ii). The three cases are mutually exclusive and
+exhaustive.
 \end{proof}
+
+\begin{remark}[Invertible systems and the vanishing of case (ii)]
+\label{rem:nopp}
+For \emph{invertible} relational systems, case (ii) cannot occur.
+If $a^n \sim a^k$ with $k \geq 1$, composing on the right with
+$a^{-k}$ (which exists by invertibility) gives $a^{n-k} \sim \id$.
+Since $n - k < n$, this contradicts the assumption that $n$ is
+minimal. Therefore, for invertible systems, the taxonomy reduces
+to two cases: closed ($k = 0$, quotient $\mathbb{Z}/n\mathbb{Z}$)
+or open (quotient $\mathbb{Z}$). The pseudo-periodic case is a
+phenomenon of non-invertible systems only.
+\end{remark}
 
 % ==================================================================
 \subsection{Classification of Single-Generator Congruences}
 \label{sec:congruence_classification}
 
-\begin{definition}[Period and shift order]
-\label{def:shiftorder}
-Let $(V, R, s, t)$ be a single-generator invertible relational
-system with generator $a$ and congruence $\sim$.
+The correct setting for a non-trivial classification by $(n,k)$
+is the \emph{general} (possibly non-invertible) single-generator
+system. We develop this case first and then state the invertible
+result as a corollary.
+
+\begin{definition}[Type of a single-generator congruence]
+\label{def:type}
+Let $(V, R, s, t)$ be a relational system with single generator
+$a$ (not necessarily invertible) and congruence $\sim$.
 
 \begin{enumerate}[label=(\roman*)]
-  \item The \emph{period} $n \in \mathbb{N} \cup \{\infty\}$ is
-        the minimal $n > 0$ with $a^n \sim \id$, if it exists,
-        and $\infty$ otherwise.
-  \item When $n < \infty$, define the \emph{loop subgroup}
-        \[
-          S := \bigl\{[m] \in \mathbb{Z}/n\mathbb{Z} \bigm|
-          a^m \sim \id\bigr\}
-          \subseteq \mathbb{Z}/n\mathbb{Z}.
-        \]
-        The \emph{shift order} is $k := n / |S|$.
+  \item The congruence is \emph{open} if all powers
+        $a^0, a^1, a^2, \ldots$ are pairwise inequivalent.
+  \item The congruence is \emph{eventually periodic} if there
+        exist integers $n > k \geq 0$, both minimal subject to
+        $a^n \sim a^k$. The pair $(n, k)$ is the \emph{type} of
+        the congruence; $p := n - k \geq 1$ is the \emph{period}
+        and $k$ is the \emph{index}.
 \end{enumerate}
 \end{definition}
 
-\begin{lemma}
-\label{lem:loopsubgroup}
-The set $S$ in Definition~\ref{def:shiftorder} is a subgroup of
-$\mathbb{Z}/n\mathbb{Z}$.
-\end{lemma}
-
-\begin{proof}
-If $a^m \sim \id$ and $a^p \sim \id$, then $a^{m+p} \sim \id$
-by the congruence property. If $a^m \sim \id$, composing on the
-right by $a^{-m}$ gives $\id \sim a^{-m}$. Hence $S$ is closed
-under addition and negation in $\mathbb{Z}/n\mathbb{Z}$.
-\end{proof}
-
-\begin{remark}[Interpretation of $k$]
-When $S = \{[0]\}$, no nontrivial power of $a$ is identified with
-$\id$: the system is a pure cycle and $k = n/1 = n$.
-The case $S = \mathbb{Z}/n\mathbb{Z}$ is unreachable at minimal
-period (Lemma~\ref{lem:reduction}). The relevant range is
-$1 < k \leq n$, with $k = n$ the closed case and $1 < k < n$
-the pseudo-periodic cases. The shift order $k$ equals the index
-$[\mathbb{Z}/n\mathbb{Z} : S]$.
+\begin{remark}[Cyclic monoid structure]
+\label{rem:cyclicmonoid}
+When the congruence has type $(n,k)$, the quotient $\RC/{\sim}$
+has exactly $n$ elements $\{[a^0], [a^1], \ldots, [a^{n-1}]\}$,
+with multiplication determined by $[a^n] = [a^k]$. This is the
+\emph{cyclic monoid} $M(n,k)$. Its structure has two parts: a
+``tail'' $\{[a^0], \ldots, [a^{k-1}]\}$ of length $k$, and a
+``kernel cycle'' $\{[a^k], \ldots, [a^{n-1}]\}$ of length $p =
+n - k$. The kernel cycle is a cyclic group of order $p$ with
+identity element $[a^n] = [a^k]$. When $k = 0$, the tail is
+empty and $M(n, 0) \cong \mathbb{Z}/n\mathbb{Z}$ is a cyclic group.
 \end{remark}
 
 \begin{proposition}[Complete congruence classification]
 \label{prop:congclass}
-Let $R = \{a, a^{-1}\}$, and let $\sim_1$, $\sim_2$ be congruences
-on $\RC$ with invariants $(n_1, k_1)$ and $(n_2, k_2)$. The
-quotients $\RC/{\sim_1}$ and $\RC/{\sim_2}$ are isomorphic if
-and only if one of the following holds:
-\begin{enumerate}[label=(\roman*)]
-  \item $n_1 = n_2 = \infty$ (both open; both isomorphic to
-        $\mathbb{Z}$);
-  \item $n_1 = n_2 < \infty$ and $k_1 = k_2 = n_1$
-        (both closed with the same period; $S_1 = S_2 = \{[0]\}$);
-  \item $n_1 = n_2 < \infty$ and $1 < k_1 = k_2 < n_1$
-        (both pseudo-periodic with the same period and shift order).
-\end{enumerate}
-No other combination yields isomorphic quotients.
+Let $\sim_1$ and $\sim_2$ be eventually-periodic congruences on
+single-generator systems with types $(n_1, k_1)$ and $(n_2, k_2)$.
+The quotients $\RC/{\sim_1}$ and $\RC/{\sim_2}$ are isomorphic as
+monoids if and only if $(n_1, k_1) = (n_2, k_2)$.
 \end{proposition}
 
 \begin{proof}
-\textbf{Cases (i) and (ii).} Open congruences yield $\mathbb{Z}$;
-closed congruences with period $n$ yield $\mathbb{Z}/n\mathbb{Z}$.
-These are isomorphic as monoids iff the periods agree. A finite
-monoid is never isomorphic to $\mathbb{Z}$.
-
-\textbf{Case (iii).}
-\textit{($\Rightarrow$)} If $\Phi : \RC/{\sim_1} \to \RC/{\sim_2}$
-is an isomorphism, it preserves period: $a^{n_1} \sim_1 \id$ implies
-$a^{n_1} \sim_2 \id$, giving $n_2 \leq n_1$; by symmetry $n_1 \leq n_2$,
-so $n_1 = n_2 =: n$. The isomorphism maps $S_1$ bijectively to $S_2$
-(preserving identity and group operation), so $|S_1| = |S_2|$ and
-$k_1 = k_2$.
-
-\textit{($\Leftarrow$)} Assume $n_1 = n_2 = n$ and $k_1 = k_2$.
-Then $|S_1| = |S_2|$. Since $\mathbb{Z}/n\mathbb{Z}$ is cyclic it
-has exactly one subgroup of each order dividing $n$; therefore
-$S_1 = S_2 =: S$. Define $\Phi : \RC/{\sim_1} \to \RC/{\sim_2}$ by
+\textit{($\Leftarrow$)} If $(n_1,k_1) = (n_2,k_2)$, define
+$\Phi : \RC/{\sim_1} \to \RC/{\sim_2}$ by
 $\Phi([a^j]_1) := [a^j]_2$.
+\emph{Well-definedness}: if $a^j \sim_1 a^{j'}$ then $j$ and
+$j'$ reduce to the same residue modulo the congruence of type
+$(n_1,k_1)$, which is the same as the congruence of type
+$(n_2,k_2)$, so $a^j \sim_2 a^{j'}$. \emph{Bijectivity}: the
+inverse is $\Psi([a^j]_2) := [a^j]_1$ by the same argument.
+\emph{Composition-preservation}: $\Phi([a^j]\circ[a^m]) =
+[a^{j+m}]_2 = [a^j]_2 \circ [a^m]_2$.
 
-\textit{Well-definedness.} If $a^j \sim_1 a^{j'}$, then
-$a^{j-j'} \sim_1 \id$, so $[j-j'] \in S_1 = S_2$, hence
-$a^{j-j'} \sim_2 \id$ and $a^j \sim_2 a^{j'}$.
+\textit{($\Rightarrow$)} Let $\Phi : \RC/{\sim_1} \to \RC/{\sim_2}$
+be an isomorphism. Since $\Phi$ preserves the monoid identity
+$[a^0] \mapsto [a^0]$ and multiplication, the element $\Phi([a])
+= [a]_2$ (the only generator of the cyclic quotient). The
+isomorphism therefore maps $[a^j]_1 \mapsto [a^j]_2$ for all
+$j$. The total number of distinct elements in $\RC/{\sim_i}$ is
+$n_i$, so bijectivity forces $n_1 = n_2$. The index $k_i$ is
+the smallest $j$ such that $[a^j]$ lies in the kernel cycle
+(the maximal subgroup); since $\Phi$ is an isomorphism, it
+maps the kernel cycle of $\RC/{\sim_1}$ bijectively to that of
+$\RC/{\sim_2}$, forcing $k_1 = k_2$. \qed
 
-\textit{Bijectivity.} $\Psi([a^j]_2) := [a^j]_1$ is the inverse
-by the same argument.
-
-\textit{Composition-preservation.}
-$\Phi([a^j]_1 \circ [a^m]_1) = [a^{j+m}]_2
-= [a^j]_2 \circ [a^m]_2 = \Phi([a^j]_1) \circ \Phi([a^m]_1)$.
-
-\textbf{No other combinations.} Closed quotients (finite, $k = n$)
-are not isomorphic to pseudo-periodic quotients (finite, $k < n$),
-nor to open quotients (infinite).
+\textit{Reference}: This result is an instance of the classical
+classification of cyclic monoids; see Clifford and
+Preston~\cite{cliffordpreston}, Vol.~1, \S1.2.
 \end{proof}
 
 \begin{remark}[The $(n,k)$ invariant]
-The pair $(n, k)$ is a complete isomorphism invariant for
-single-generator quotients: it determines the quotient up to
-isomorphism and is determined by it. The parameter $n$ measures
-orbit scale --- how many steps before any return. The parameter
-$k$ measures how far the system is from being purely cyclic:
-when $k = n$ the system is a pure cycle with no internal loop
-structure; as $k$ decreases toward $1$ the internal loop
-subgroup $S$ grows, encoding increasingly rich repetition within
-each orbit. For multi-generator systems, the natural
-generalization is a normal subgroupoid of the free path groupoid;
-a complete invariant theory for that case remains open.
+\label{rem:nkinvariant}
+The type $(n,k)$ is a complete isomorphism invariant for
+eventually-periodic single-generator congruences: it determines
+the quotient up to isomorphism and is determined by it. The
+parameter $n$ is the total number of equivalence classes.
+The parameter $k$ is the length of the non-group tail: when
+$k = 0$ the quotient is a cyclic group; as $k$ increases, more
+elements lie outside the group kernel, encoding longer transient
+behaviour before periodicity sets in. For multi-generator
+systems, no complete invariant analogous to $(n,k)$ is known,
+and the corresponding word problem for finitely presented monoids
+is in general undecidable~\cite{knuthbendix}.
 \end{remark}
 
-\begin{remark}[Multi-generator classification gap]
-\label{rem:multigap}
-The framework is universal (Theorem~\ref{thm:reconstruction}):
-every finite metric space arises from some multi-generator
-relational system. Universality establishes expressiveness but
-not classification. The classification problem reduces to
-describing normal subgroupoids of free path groupoids up to
-isomorphism of quotient categories. Unlike the single-generator
-case, no complete invariant analogous to $(n,k)$ is currently
-known, even for two generators with full invertibility. The
-difficulty is genuine: the corresponding word problem for
-finitely presented groupoids is in general undecidable, and the
-space of possible congruences is not well-understood even in
-simple cases.
+\begin{corollary}[Classification for invertible systems]
+\label{cor:invertible_classification}
+For invertible single-generator relational systems
+($R = \{a, a^{-1}\}$), the index is always $k = 0$. The
+quotient is either $\mathbb{Z}$ (open case) or
+$\mathbb{Z}/n\mathbb{Z}$ for the minimal $n$ with $a^n \sim \id$
+(closed case). Two such quotients are isomorphic if and only if
+they have the same period $n$.
+\end{corollary}
+
+\begin{proof}
+By Remark~\ref{rem:nopp}, invertibility forces $k = 0$.
+The only remaining parameter is $n$, the period. Cyclic groups
+$\mathbb{Z}/n_1\mathbb{Z}$ and $\mathbb{Z}/n_2\mathbb{Z}$ are
+isomorphic iff $n_1 = n_2$.
+\end{proof}
+
+\begin{remark}[The scope of Corollary~\ref{cor:invertible_classification}]
+\label{rem:trivialinvertible}
+Corollary~\ref{cor:invertible_classification} is elementary: it
+states that cyclic groups are classified by their order. This is
+a standard result of group theory and contains no new content.
+The non-trivial classification is Proposition~\ref{prop:congclass}
+for general (non-invertible) systems, where $k \geq 1$ is
+possible and the $(n,k)$ pair genuinely distinguishes non-isomorphic
+quotients that have the same number of elements in their kernel
+cycle but different tail lengths. The examples of pseudo-periodic
+systems in \S\ref{sec:pseudoperiodic} are all in this
+non-invertible regime.
 \end{remark}
 
 % ==================================================================
@@ -918,6 +934,23 @@ holonomy: the signature of nonzero curvature.
 
 Curvature is a discrete, finitely computable property: check
 whether $[a,b] \sim \id$ under the congruence.
+
+\begin{remark}[Relationship to lattice gauge theory]
+\label{rem:wilson}
+The relational commutator $[a,b] = a \circ b \circ a^{-1}
+\circ b^{-1}$ is, in the language of lattice gauge theory, the
+Wilson loop around an elementary plaquette~\cite{wilson74}. When
+the generators carry values in a Lie group $G$ (the group-valued
+extension considered in the companion paper), the commutator
+becomes the face holonomy $g^a \cdot g^b \cdot (g^a)^{-1} \cdot
+(g^b)^{-1} \in G$, and $[a,b] \sim \id$ is the discrete flatness
+condition. The identification of the relational commutator with
+holonomy is not new; it is explicit in Wilson~\cite{wilson74}.
+What the PRG framework adds is the categorical framing: the
+flatness condition $[a,b] \sim \id$ is a congruence relation on
+the free category, and quotienting by it is the same operation as
+restricting to flat discrete connections.
+\end{remark}
 
 \begin{remark}[Algebraic vs.\ metric curvature]
 \label{rem:curvature_gap}
@@ -1307,22 +1340,30 @@ bridge results (\Cref{sec:classical}) are standard applications
 of the GH framework~\cite{buragoetal}.
 
 \paragraph{What is new.}
-The complete isomorphism classification of single-generator
-congruences by the invariant pair $(n, k)$
-(Proposition~\ref{prop:congclass}) reduces algebraically to
-the classification of subgroups of $\mathbb{Z}/n\mathbb{Z}$
-by index, which is classical. The specific contribution is the
-formulation of this classification in relational-process language
---- characterizing period and shift order as intrinsic invariants
-of a congruence on path sequences --- which does not appear in
-the existing literature on monoid and group presentations in
-this form. The pointed GH emergence theorem
-(Theorem~\ref{thm:pointed_gh}) with its three explicit conditions
-is a concrete relational formulation not present in the metric
-geometry literature. The domain of validity theorem
-(Theorem~\ref{thm:scope}), which organizes the boundary between
-exactly representable, GH-approximable, and out-of-scope spaces,
-is new as a unified statement.
+The formulation of the $(n,k)$ classification in
+relational-process language is a restatement of the classical
+theory of cyclic monoids~\cite{cliffordpreston} within the
+four-layer framework (generators, congruence, quotient, metric).
+As a mathematical result, it is an instance of Clifford and
+Preston's classification of cyclic semigroups by index and
+period~\cite{cliffordpreston}. The \emph{specific contribution}
+is making this classical result visible inside a framework that
+separates generators from congruences from quotients, which
+allows its scope to be stated precisely: the classification
+applies to general (non-invertible) single-generator systems;
+for invertible systems the result collapses to the elementary
+fact that cyclic groups are classified by order
+(Corollary~\ref{cor:invertible_classification}). The pointed GH
+emergence theorem (Theorem~\ref{thm:pointed_gh}) with its three
+explicit conditions is a concrete relational formulation not
+present in the metric geometry literature. The domain of
+validity theorem (Theorem~\ref{thm:scope}), which organizes the
+boundary between exactly representable, GH-approximable, and
+out-of-scope spaces, is new as a unified statement.
+
+The identification of the relational commutator with discrete
+holonomy (Section~\ref{sec:curvature}) follows Wilson~\cite{wilson74}
+and is not new.
 
 \paragraph{The honest summary.}
 The machinery is classical. The primary contribution is a
@@ -1357,13 +1398,20 @@ surface.
 
 This observation is not new as a fact about the classifying
 space of the group $\mathbb{Z}^2$, which is well-known to be the
-torus. What is new is the framing: the presentation-level
-perspective makes it possible to isolate the \emph{contribution
-of each law} to the homology of the nerve, by comparing the free
-and quotient nerves directly. The general question --- which
-laws produce which homological changes, and why --- is open
-within this framework and appears not to have been studied
-systematically in terms of presentation-level nerve comparisons.
+torus. The relationship between group presentations and the
+homology of their classifying spaces is the subject of classical
+combinatorial group theory~\cite{lyndonshupp}, developed through
+the Fox calculus, identities among relations, and the bar
+complex. What the presentation-level framework makes possible is
+a \emph{comparison} between the free nerve and the quotient
+nerve for each individual law --- a ``before and after'' view
+that identifies the homological contribution of each relation
+independently. Whether this comparison yields new invariants not
+captured by existing methods in combinatorial group theory is
+the open question. It appears not to have been studied
+systematically in terms of such presentation-level nerve
+comparisons, though the individual components (free nerve, bar
+complex, group homology) are all classical.
 
 % ==================================================================
 \begin{thebibliography}{99}
@@ -1379,6 +1427,25 @@ D.~Burago, Y.~Burago, and S.~Ivanov,
 \textit{A Course in Metric Geometry},
 AMS Graduate Studies in Mathematics \textbf{33}, 2001.
 \newblock \doi{10.1090/gsm/033}.
+
+\bibitem{cliffordpreston}
+A.~H.~Clifford and G.~B.~Preston,
+\textit{The Algebraic Theory of Semigroups}, Vol.~1,
+AMS Mathematical Surveys \textbf{7}, American Mathematical
+Society, 1961. See \S1.2 for the classification of cyclic
+semigroups by index and period.
+
+\bibitem{wilson74}
+K.~G.~Wilson,
+``Confinement of quarks,''
+\textit{Physical Review D} \textbf{10}(8):2445--2459, 1974.
+The plaquette holonomy formula appears in \S2.
+
+\bibitem{lyndonshupp}
+R.~C.~Lyndon and P.~E.~Schupp,
+\textit{Combinatorial Group Theory},
+Springer, 1977. The Fox calculus and identities among relations
+are treated in Chapter~IV.
 
 \bibitem{clrs}
 T.~H.~Cormen, C.~E.~Leiserson, R.~L.~Rivest, and C.~Stein,

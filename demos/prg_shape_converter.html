@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PRG Shape Converter</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --bg:#f7f6f2;--surface:#ffffff;--border:#e0ddd4;--border2:#ccc9be;
+    --text:#1a1a18;--muted:#6b6960;--hint:#a09d94;
+    --blue:#185FA5;--blue-bg:#e6f1fb;--blue-border:#b5d4f4;
+    --teal:#0F6E56;--teal-bg:#e1f5ee;--teal-border:#9fe1cb;
+    --amber:#BA7517;--amber-bg:#faeeda;--amber-border:#fac775;
+    --green:#3B6D11;--green-bg:#eaf3de;
+    --mono:'Courier New',monospace;
+    --radius:8px;--radius-lg:12px;
+  }
+  @media(prefers-color-scheme:dark){:root{
+    --bg:#131311;--surface:#1e1e1c;--border:#2e2e2b;--border2:#3a3a37;
+    --text:#e8e6e0;--muted:#888780;--hint:#555350;
+    --blue:#5DCAA5;--blue-bg:#04342C;--blue-border:#085041;
+    --teal:#5DCAA5;--teal-bg:#04342C;--teal-border:#085041;
+    --amber:#EF9F27;--amber-bg:#412402;--amber-border:#633806;
+    --green:#97C459;--green-bg:#173404;
+  }}
+  body{background:var(--bg);color:var(--text);font-family:'Georgia',serif;font-size:15px;line-height:1.6;min-height:100vh;}
+  header{padding:2rem 2.5rem 1.5rem;border-bottom:0.5px solid var(--border);}
+  header h1{font-size:1.25rem;font-weight:400;letter-spacing:.02em;color:var(--text);}
+  header p{font-size:.8rem;color:var(--muted);margin-top:.25rem;font-family:var(--mono);}
+  .main{display:flex;gap:0;height:calc(100vh - 85px);}
+  .sidebar{width:220px;flex-shrink:0;border-right:0.5px solid var(--border);padding:1.25rem 1rem;display:flex;flex-direction:column;gap:1.25rem;overflow-y:auto;}
+  .canvas-area{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;}
+  canvas{border:0.5px solid var(--border);border-radius:var(--radius-lg);display:block;}
+  .panel{width:260px;flex-shrink:0;border-left:0.5px solid var(--border);display:flex;flex-direction:column;}
+  .panel-head{padding:.75rem 1rem;border-bottom:0.5px solid var(--border);display:flex;gap:0;}
+  .tab{padding:.4rem .75rem;font-size:.75rem;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'Georgia',serif;border-bottom:2px solid transparent;letter-spacing:.02em;}
+  .tab.on{color:var(--text);border-bottom-color:var(--text);}
+  .panel-body{flex:1;overflow-y:auto;padding:1rem;}
+  label{display:block;font-size:.7rem;color:var(--hint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;}
+  .btn-group{display:flex;flex-wrap:wrap;gap:4px;}
+  button.opt{padding:4px 10px;font-size:.75rem;cursor:pointer;border-radius:5px;background:transparent;border:0.5px solid var(--border2);color:var(--muted);font-family:'Georgia',serif;transition:all .15s;}
+  button.opt:hover{background:var(--surface);color:var(--text);}
+  button.opt.on{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border);}
+  .slider-row{display:flex;align-items:center;gap:8px;}
+  input[type=range]{flex:1;accent-color:var(--blue);}
+  .val{font-family:var(--mono);font-size:.8rem;min-width:18px;}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .stat{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:.5rem .75rem;}
+  .stat-k{font-size:.65rem;color:var(--hint);letter-spacing:.05em;text-transform:uppercase;}
+  .stat-v{font-family:var(--mono);font-size:.9rem;font-weight:600;color:var(--text);}
+  .gen-row{display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-top:0.5px solid var(--border);font-size:.75rem;font-family:var(--mono);}
+  .gen-row:first-child{border-top:none;}
+  .law-card{padding:6px 8px;border-radius:5px;border:0.5px solid var(--border);margin-bottom:4px;font-size:.7rem;font-family:var(--mono);cursor:pointer;transition:border-color .15s;}
+  .law-card:hover{border-color:var(--border2);}
+  .law-card.sel{background:var(--blue-bg);border-color:var(--blue-border);}
+  .progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin:.25rem 0;}
+  .progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .3s;}
+  .hint{font-size:.72rem;color:var(--muted);line-height:1.5;margin-top:.5rem;}
+  .closure{padding:6px 10px;border-radius:5px;border:0.5px solid var(--teal-border);background:var(--teal-bg);font-family:var(--mono);font-size:.75rem;color:var(--teal);margin-bottom:.75rem;}
+  section-head{display:block;font-size:.65rem;color:var(--hint);letter-spacing:.06em;text-transform:uppercase;margin:.75rem 0 .35rem;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Process-Relational Geometry — Shape Converter</h1>
+  <p>smooth shape → generators + congruence laws</p>
+</header>
+<div class="main">
+  <div class="sidebar">
+    <div>
+      <label>shape</label>
+      <div class="btn-group">
+        <button class="opt on" data-shape="circle">circle</button>
+        <button class="opt" data-shape="ellipse">ellipse</button>
+        <button class="opt" data-shape="square">square</button>
+        <button class="opt" data-shape="trefoil">trefoil</button>
+        <button class="opt" data-shape="lemniscate">lemniscate</button>
+      </div>
+    </div>
+    <div>
+      <label>sample points (N)</label>
+      <div class="slider-row">
+        <input type="range" id="nSl" min="4" max="10" value="6" step="1"/>
+        <span class="val" id="nV">6</span>
+      </div>
+    </div>
+    <div>
+      <label>distance mode</label>
+      <div class="btn-group">
+        <button class="opt on" data-dist="geodesic">geodesic</button>
+        <button class="opt" data-dist="euclidean">euclidean</button>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+
+  <div class="canvas-area">
+    <canvas id="cv" width="400" height="400"></canvas>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <button class="tab on" data-t="gen">generators</button>
+      <button class="tab" data-t="law">congruences</button>
+      <button class="tab" data-t="str">structure</button>
+    </div>
+    <div class="panel-body" id="tC"></div>
+  </div>
+</div>
+
+<script>
+const EPS=1e-7;
+const SUB='₀₁₂₃₄₅₆₇₈₉';
+const SU='⁰¹²³⁴⁵⁶⁷⁸⁹';
+const sub=n=>String(n).split('').map(d=>SUB[+d]).join('');
+const sup=n=>String(n).split('').map(d=>SU[+d]).join('');
+const fp=p=>p.length?p.map(g=>'e'+sub(g.s)+sub(g.t)).join('∘'):'id';
+
+function sample(sh,N){
+  const pts=[],τ=2*Math.PI;
+  if(sh==='circle'){for(let i=0;i<N;i++){const t=τ*i/N;pts.push([Math.cos(t),Math.sin(t)]);}}
+  else if(sh==='ellipse'){for(let i=0;i<N;i++){const t=τ*i/N;pts.push([1.5*Math.cos(t),0.8*Math.sin(t)]);}}
+  else if(sh==='square'){const segs=[[1,1,-1,1],[-1,1,-1,-1],[-1,-1,1,-1],[1,-1,1,1]];for(const[x0,y0,x1,y1]of segs){const m=Math.ceil(N/4);for(let i=0;i<m&&pts.length<N;i++){const t=i/m;pts.push([x0+t*(x1-x0),y0+t*(y1-y0)]);}}}
+  else if(sh==='trefoil'){for(let i=0;i<N;i++){const t=τ*i/N,r=0.5+0.5*Math.cos(3*t);pts.push([r*Math.cos(t),r*Math.sin(t)]);}}
+  else if(sh==='lemniscate'){for(let i=0;i<N;i++){const t=τ*i/N,d=1+Math.sin(t)**2;pts.push([Math.cos(t)/d,Math.sin(t)*Math.cos(t)/d]);}}
+  return pts;
+}
+function makeDist(pts,mode){
+  const N=pts.length,D=[];
+  for(let i=0;i<N;i++){D[i]=[];for(let j=0;j<N;j++){
+    if(i===j){D[i][j]=0;continue;}
+    if(mode==='geodesic'){const d=Math.abs(i-j);D[i][j]=Math.min(d,N-d);}
+    else{const dx=pts[i][0]-pts[j][0],dy=pts[i][1]-pts[j][1];D[i][j]=Math.sqrt(dx*dx+dy*dy);}
+  }}return D;
+}
+function floyd(D){
+  const N=D.length,d=D.map(r=>[...r]);
+  for(let k=0;k<N;k++)for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=d[i][k]+d[k][j];if(v<d[i][j]-EPS)d[i][j]=v;}
+  return d;
+}
+function minGens(N,dist){
+  const gens=[];
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    if(i===j)continue;
+    let red=false;
+    for(let k=0;k<N;k++){if(k===i||k===j)continue;if(dist[i][k]+dist[k][j]<=dist[i][j]+EPS){red=true;break;}}
+    if(!red)gens.push({s:i,t:j,w:dist[i][j]});
+  }return gens;
+}
+function enumP(src,tgt,target,bySrc,maxL,tol,limit=10){
+  const res=[];
+  function dfs(n,p,w,seen){
+    if(res.length>=limit)return;
+    if(n===tgt&&p.length>0&&Math.abs(w-target)<tol){res.push([...p]);return;}
+    if(p.length>=maxL||w>target+tol)return;
+    for(const g of(bySrc[n]||[])){
+      if(g.t!==tgt&&seen.has(g.t))continue;
+      seen.add(g.t);p.push(g);dfs(g.t,p,w+g.w,seen);p.pop();seen.delete(g.t);
+    }
+  }
+  dfs(src,[],0,new Set([src]));return res;
+}
+function buildLaws(gens,dist,N){
+  const bySrc={};for(const g of gens){if(!bySrc[g.s])bySrc[g.s]=[];bySrc[g.s].push(g);}
+  const laws=[],seen=new Set();
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    if(i===j)continue;const key=i+':'+j;if(seen.has(key))continue;seen.add(key);
+    const paths=enumP(i,j,dist[i][j],bySrc,Math.min(N,6),EPS*1e4);
+    if(paths.length>=2)laws.push({s:i,t:j,w:dist[i][j],paths});
+  }return laws;
+}
+function detectClosure(gens,N){
+  const bySrc={};for(const g of gens){if(!bySrc[g.s])bySrc[g.s]=[];bySrc[g.s].push(g);}
+  let cur=0;const chain=[],vis=new Set([0]);
+  while(vis.size<N){
+    const nx=(bySrc[cur]||[]).filter(g=>!vis.has(g.t)).sort((a,b)=>a.w-b.w);
+    if(!nx.length)return null;chain.push(nx[0]);vis.add(nx[0].t);cur=nx[0].t;
+  }
+  const cl=(bySrc[cur]||[]).find(g=>g.t===0);
+  if(cl){chain.push(cl);return chain;}return null;
+}
+
+let curSh='circle',curN=6,curDist='geodesic',selLaw=null,result=null;
+
+function run(){
+  const pts=sample(curSh,curN),N=pts.length;
+  const raw=makeDist(pts,curDist),dist=floyd(raw);
+  const gens=minGens(N,dist),laws=buildLaws(gens,dist,N),closure=detectClosure(gens,N);
+  result={pts,N,dist,gens,laws,closure};selLaw=null;
+  draw();renderStats();renderTab(document.querySelector('.tab.on').dataset.t);
+}
+
+const cv=document.getElementById('cv');
+const ctx=cv.getContext('2d');
+function draw(){
+  const W=cv.width,H=cv.height;
+  const dark=window.matchMedia('(prefers-color-scheme:dark)').matches;
+  ctx.fillStyle=dark?'#1e1e1c':'#fafaf8';ctx.fillRect(0,0,W,H);
+  if(!result)return;
+  const{pts,gens,laws}=result;
+  const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
+  const mnX=Math.min(...xs),mxX=Math.max(...xs),mnY=Math.min(...ys),mxY=Math.max(...ys);
+  const pad=48,sc=Math.min((W-2*pad)/(mxX-mnX||1),(H-2*pad)/(mxY-mnY||1));
+  const ox=W/2-((mnX+mxX)/2)*sc,oy=H/2+((mnY+mxY)/2)*sc;
+  const toC=([x,y])=>[ox+x*sc,oy-y*sc];
+  const cp=pts.map(toC);
+  const hlE=new Set();
+  if(selLaw!==null&&laws[selLaw])for(const p of laws[selLaw].paths)for(const g of p)hlE.add(g.s+'-'+g.t);
+  ctx.strokeStyle=dark?'#2e2e2b':'#dddbd3';ctx.lineWidth=1;ctx.setLineDash([3,4]);
+  ctx.beginPath();for(let i=0;i<=cp.length;i++){const[x,y]=cp[i%cp.length];i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+  ctx.stroke();ctx.setLineDash([]);
+  for(const g of gens){
+    const[fx,fy]=cp[g.s],[tx,ty]=cp[g.t];
+    const hl=hlE.has(g.s+'-'+g.t);
+    const dx=tx-fx,dy=ty-fy,len=Math.sqrt(dx*dx+dy*dy);if(len<2)continue;
+    const nx=dx/len,ny=dy/len,R=9;
+    const ax=fx+nx*R,ay=fy+ny*R,bx=tx-nx*(R+6),by=ty-ny*(R+6);
+    ctx.globalAlpha=hl?1:0.4;
+    ctx.strokeStyle=hl?(dark?'#5DCAA5':'#0F6E56'):(dark?'#EF9F27':'#BA7517');
+    ctx.lineWidth=hl?2.5:1;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();
+    const px=-ny*4,py=nx*4;
+    ctx.fillStyle=hl?(dark?'#5DCAA5':'#0F6E56'):(dark?'#EF9F27':'#BA7517');
+    ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx-nx*8+px,by-ny*8+py);ctx.lineTo(bx-nx*8-px,by-ny*8-py);ctx.closePath();ctx.fill();
+  }
+  ctx.globalAlpha=1;
+  for(let i=0;i<cp.length;i++){
+    const[x,y]=cp[i];
+    ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);
+    ctx.fillStyle=dark?'#2a2a28':'#f0efe9';ctx.fill();
+    ctx.strokeStyle=dark?'#888780':'#5f5e5a';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle=dark?'#ccc9be':'#3a3a37';
+    ctx.font='11px Courier New';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(i,x,y);
+  }
+}
+
+function renderStats(){
+  if(!result)return;
+  const{N,gens,laws,closure}=result;
+  const total=N*(N-1);
+  document.getElementById('stats').innerHTML=[
+    ['states',N],['generators',gens.length+'/'+total],
+    ['congruences',laws.length],['period',closure?N+'→id':'—']
+  ].map(([k,v])=>`<div class="stat"><div class="stat-k">${k}</div><div class="stat-v">${v}</div></div>`).join('');
+}
+
+function renderTab(t){
+  const el=document.getElementById('tC');
+  if(!result){el.innerHTML='';return;}
+  const{N,gens,laws,closure}=result;
+  if(t==='gen'){
+    el.innerHTML=`<section-head>${gens.length} generators (${N*(N-1)} possible)</section-head>
+    <div style="border:0.5px solid var(--border);border-radius:var(--radius);">
+    ${gens.map(g=>`<div class="gen-row"><span style="color:var(--blue);">e${sub(g.s)}${sub(g.t)}</span><span style="color:var(--muted);">${g.s}→${g.t}</span><span>${g.w.toFixed(3)}</span></div>`).join('')}
+    </div>`;
+  }else if(t==='law'){
+    if(!laws.length){el.innerHTML='<p class="hint">No non-trivial congruence laws. Try geodesic distance mode.</p>';return;}
+    el.innerHTML=`<section-head>${laws.length} law${laws.length!==1?'s':''}</section-head>`+
+    laws.map((law,i)=>`
+      <div class="law-card${selLaw===i?' sel':''}" onclick="window._sl(${i})">
+        <div style="color:var(--hint);margin-bottom:3px;">${law.s}→${law.t} · w=${law.w.toFixed(2)}</div>
+        ${law.paths.map((p,j)=>`<div>${j?'<span style="opacity:.4">~ </span>':''}${fp(p)}</div>`).join('')}
+      </div>`).join('');
+  }else{
+    const total=N*(N-1),red=total?Math.round((total-gens.length)/total*100):0;
+    el.innerHTML=`<section-head>redundancy</section-head>
+    <div class="progress-bar"><div class="progress-fill" style="width:${red}%;"></div></div>
+    <p class="hint">${red}% of possible generators pruned</p>
+    ${closure?`<section-head>closure law</section-head><div class="closure">${fp(closure)} ~ id</div>`:''}
+    <section-head>interpretation</section-head>
+    <p class="hint">${curDist==='geodesic'&&gens.length<=2*N
+      ?`Geodesic mode: only adjacent-step generators survive. ${laws.length} congruence law${laws.length!==1?'s':''} encode equivalent routes.`
+      :`${gens.length} non-redundant generators. ${laws.length} congruence law${laws.length!==1?'s':''}.`}</p>`;
+  }
+}
+
+window._sl=i=>{selLaw=selLaw===i?null:i;draw();renderTab('law');};
+
+document.querySelectorAll('.opt[data-shape]').forEach(b=>b.onclick=()=>{curSh=b.dataset.shape;document.querySelectorAll('.opt[data-shape]').forEach(x=>x.classList.remove('on'));b.classList.add('on');run();});
+document.querySelectorAll('.opt[data-dist]').forEach(b=>b.onclick=()=>{curDist=b.dataset.dist;document.querySelectorAll('.opt[data-dist]').forEach(x=>x.classList.remove('on'));b.classList.add('on');run();});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderTab(b.dataset.t);});
+const sl=document.getElementById('nSl');
+sl.oninput=()=>{curN=+sl.value;document.getElementById('nV').textContent=curN;run();};
+
+run();
+</script>
+</body>
+</html>

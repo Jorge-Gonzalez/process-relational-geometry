@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PRG Frog — Segment Congruences</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --bg:#f7f6f2;--surface:#ffffff;--border:#e0ddd4;--border2:#ccc9be;
+    --text:#1a1a18;--muted:#6b6960;--hint:#a09d94;
+    --blue:#185FA5;--blue-bg:#e6f1fb;--blue-border:#b5d4f4;
+    --teal:#0F6E56;--teal-bg:#e1f5ee;--teal-border:#9fe1cb;
+    --amber:#BA7517;--amber-bg:#faeeda;--amber-border:#fac775;
+    --success:#3B6D11;--success-bg:#eaf3de;--success-border:#c0dd97;
+    --mono:'Courier New',monospace;
+    --radius:8px;--radius-lg:12px;
+  }
+  @media(prefers-color-scheme:dark){:root{
+    --bg:#131311;--surface:#1e1e1c;--border:#2e2e2b;--border2:#3a3a37;
+    --text:#e8e6e0;--muted:#888780;--hint:#555350;
+    --blue:#378ADD;--blue-bg:#042C53;--blue-border:#0C447C;
+    --teal:#5DCAA5;--teal-bg:#04342C;--teal-border:#085041;
+    --amber:#EF9F27;--amber-bg:#412402;--amber-border:#633806;
+    --success:#97C459;--success-bg:#173404;--success-border:#27500A;
+  }}
+  body{background:var(--bg);color:var(--text);font-family:'Georgia',serif;font-size:14px;line-height:1.6;min-height:100vh;}
+  header{padding:1.5rem 2rem 1rem;border-bottom:0.5px solid var(--border);display:flex;align-items:baseline;gap:1.5rem;}
+  header h1{font-size:1.15rem;font-weight:400;letter-spacing:.02em;}
+  header p{font-size:.75rem;color:var(--muted);font-family:var(--mono);}
+  .main{display:flex;height:calc(100vh - 68px);}
+  .canvas-wrap{flex:1;display:flex;flex-direction:column;border-right:0.5px solid var(--border);}
+  .toolbar{padding:.6rem 1rem;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .hint-bar{font-size:.7rem;color:var(--muted);padding:.4rem 1rem;border-bottom:0.5px solid var(--border);font-family:var(--mono);}
+  .canvas-area{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  canvas{display:block;cursor:crosshair;}
+  .panel{width:300px;flex-shrink:0;display:flex;flex-direction:column;overflow:hidden;}
+  .comp-section{padding:.75rem 1rem;border-bottom:0.5px solid var(--border);}
+  .comp-label{font-size:.65rem;color:var(--hint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem;}
+  .comp-flow{display:flex;flex-wrap:wrap;align-items:center;gap:2px;font-size:.75rem;font-family:var(--mono);}
+  .seg-pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;cursor:pointer;border:0.5px solid transparent;transition:all .15s;white-space:nowrap;}
+  .seg-pill:hover{filter:brightness(1.1);}
+  .seg-pill.on{border-color:currentColor;font-weight:600;}
+  .op{color:var(--hint);padding:0 1px;}
+  .alg-panel{flex:1;overflow-y:auto;padding:1rem;}
+  button.btn{padding:3px 10px;font-size:.72rem;cursor:pointer;border-radius:5px;background:transparent;border:0.5px solid var(--border2);color:var(--muted);font-family:'Georgia',serif;transition:all .15s;}
+  button.btn:hover{background:var(--surface);color:var(--text);}
+  button.btn.on{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border);}
+  .law-card{padding:6px 8px;border-radius:5px;border:0.5px solid var(--border);margin-bottom:4px;font-size:.7rem;font-family:var(--mono);cursor:pointer;}
+  .law-card:hover{border-color:var(--border2);}
+  .law-card.sel{background:var(--blue-bg);border-color:var(--blue-border);}
+  .code-block{padding:6px 8px;border-radius:5px;border:0.5px solid var(--border);font-family:var(--mono);font-size:.72rem;word-break:break-all;line-height:1.6;margin-bottom:.5rem;}
+  .sub-label{font-size:.65rem;color:var(--hint);letter-spacing:.05em;text-transform:uppercase;margin:.6rem 0 .2rem;}
+  .stat-row{display:flex;justify-content:space-between;font-size:.75rem;padding:2px 0;border-bottom:0.5px solid var(--border);}
+  .stat-row:last-child{border-bottom:none;}
+</style>
+</head>
+<body>
+<header>
+  <h1>PRG Frog — Segment Congruences</h1>
+  <p>closed shape → composition of algebraic congruence classes</p>
+</header>
+<div class="main">
+  <div class="canvas-wrap">
+    <div class="toolbar">
+      <span style="font-size:.7rem;color:var(--hint);">distance</span>
+      <button class="btn on" id="dstB">geodesic</button>
+      <button class="btn" id="rstB" style="margin-left:auto;">reset segments</button>
+    </div>
+    <div class="hint-bar">click outline → add divider &nbsp;·&nbsp; click divider dot → remove &nbsp;·&nbsp; click segment pill → inspect algebra</div>
+    <div class="canvas-area">
+      <canvas id="fc"></canvas>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="comp-section">
+      <div class="comp-label">composition</div>
+      <div class="comp-flow" id="compD"></div>
+      <div style="font-size:.75rem;font-family:var(--mono);color:var(--muted);margin-top:3px;">&nbsp;∼ <strong>id</strong><sub>v₀</sub> &nbsp;(closed, period n)</div>
+    </div>
+    <div class="alg-panel" id="algD">
+      <p style="font-size:.8rem;color:var(--muted);">click a segment above to inspect its algebra</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const EPS=1e-7;
+const SUB='₀₁₂₃₄₅₆₇₈₉';
+const sub=n=>String(n).split('').map(d=>SUB[+d]).join('');
+const fp=p=>p.length?p.map(g=>'e'+sub(g.s)+sub(g.t)).join('∘'):'id';
+
+const CTRL=[
+  [0,.80],[.18,.85],[.28,.70],
+  [.42,.56],[.62,.56],[.76,.38],[.60,.22],
+  [.46,.08],[.50,-.10],
+  [.58,-.24],[.82,-.42],[.90,-.58],[.74,-.72],[.56,-.64],[.38,-.54],[.26,-.64],[.12,-.70],
+  [0,-.66],
+  [-.12,-.70],[-.26,-.64],[-.38,-.54],[-.56,-.64],[-.74,-.72],[-.90,-.58],[-.82,-.42],[-.58,-.24],
+  [-.50,-.10],[-.46,.08],
+  [-.60,.22],[-.76,.38],[-.62,.56],[-.42,.56],
+  [-.28,.70],[-.18,.85]
+];
+
+function crInterp(pts,nSub){
+  const res=[],N=pts.length,g=i=>pts[(i+N)%N];
+  for(let i=0;i<N;i++){
+    const[p0,p1,p2,p3]=[g(i-1),g(i),g(i+1),g(i+2)];
+    for(let j=0;j<nSub;j++){
+      const t=j/nSub,t2=t*t,t3=t2*t;
+      res.push([
+        .5*(2*p1[0]+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3),
+        .5*(2*p1[1]+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)
+      ]);
+    }
+  }return res;
+}
+
+const OL=crInterp(CTRL,3);
+const NL=OL.length;
+
+const DEF=[0,9,21,27,51,75,81,87,99];
+const NAMES=['head','R front leg','R body','R back leg','L back leg','L body','L front leg','L head'];
+const COLS=['#1D9E75','#BA7517','#185FA5','#D85A30','#639922','#534AB7','#D4537E','#888780'];
+
+let divs=[...DEF],selSeg=null,selLaw=null,distMode='geodesic';
+
+function analyzeSeg(pts){
+  const N=pts.length;
+  const D=Array.from({length:N},(_,i)=>Array.from({length:N},(_,j)=>{
+    if(i===j)return 0;
+    if(distMode==='geodesic')return Math.abs(i-j);
+    const dx=pts[i][0]-pts[j][0],dy=pts[i][1]-pts[j][1];
+    return Math.sqrt(dx*dx+dy*dy);
+  }));
+  const d=D.map(r=>[...r]);
+  for(let k=0;k<N;k++)for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=d[i][k]+d[k][j];if(v<d[i][j]-EPS)d[i][j]=v;}
+  const gens=[];
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    if(i===j)continue;
+    let red=false;
+    for(let k=0;k<N;k++){if(k===i||k===j)continue;if(d[i][k]+d[k][j]<=d[i][j]+EPS){red=true;break;}}
+    if(!red)gens.push({s:i,t:j,w:d[i][j]});
+  }
+  const bySrc={};for(const g of gens){if(!bySrc[g.s])bySrc[g.s]=[];bySrc[g.s].push(g);}
+  const laws=[],seen=new Set();
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    if(i===j)continue;
+    const key=i+':'+j;if(seen.has(key))continue;seen.add(key);
+    const paths=enumP(i,j,d[i][j],bySrc,Math.min(N,5),EPS*1e4);
+    if(paths.length>=2)laws.push({s:i,t:j,w:d[i][j],paths});
+  }
+  return{gens,laws,N,dist:d};
+}
+
+function enumP(src,tgt,target,bySrc,maxL,tol,limit=8){
+  const res=[];
+  function dfs(n,p,w,seen){
+    if(res.length>=limit)return;
+    if(n===tgt&&p.length>0&&Math.abs(w-target)<tol){res.push([...p]);return;}
+    if(p.length>=maxL||w>target+tol)return;
+    for(const g of(bySrc[n]||[])){
+      if(g.t!==tgt&&seen.has(g.t))continue;
+      seen.add(g.t);p.push(g);dfs(g.t,p,w+g.w,seen);p.pop();seen.delete(g.t);
+    }
+  }
+  dfs(src,[],0,new Set([src]));return res;
+}
+
+function buildSegs(){
+  const segs=[];
+  for(let i=0;i<divs.length;i++){
+    const a=divs[i],b=divs[(i+1)%divs.length];
+    const pts=[];let k=a;
+    while(k!==b){pts.push(OL[k]);k=(k+1)%NL;}
+    pts.push(OL[b]);
+    segs.push({a,b,pts,name:NAMES[i]||'seg '+i,col:COLS[i%COLS.length]});
+  }return segs;
+}
+
+// Canvas
+const cv=document.getElementById('fc');
+const ctx=cv.getContext('2d');
+const PAD=28;
+
+function resize(){
+  const area=cv.parentElement;
+  const W=area.clientWidth,H=area.clientHeight;
+  const sz=Math.min(W-20,H-20,520);
+  cv.width=sz;cv.height=sz;
+  draw();
+}
+
+function toC([x,y]){const S=cv.width,H=cv.height;return[PAD+(x+1)/2*(S-2*PAD),PAD+(1-y)/2*(H-2*PAD)];}
+
+function draw(){
+  const W=cv.width,H=cv.height;
+  const dark=window.matchMedia('(prefers-color-scheme:dark)').matches;
+  ctx.fillStyle=dark?'#1a1a18':'#f7f6f2';ctx.fillRect(0,0,W,H);
+  const segs=buildSegs();
+  for(let si=0;si<segs.length;si++){
+    const s=segs[si],sel=selSeg===si;
+    ctx.strokeStyle=s.col+(sel?'':'88');
+    ctx.lineWidth=sel?3.5:2;
+    ctx.beginPath();
+    s.pts.forEach(([x,y],j)=>{const[cx,cy]=toC([x,y]);j?ctx.lineTo(cx,cy):ctx.moveTo(cx,cy);});
+    ctx.stroke();
+  }
+  if(selSeg!==null&&selSeg<segs.length){
+    const s=segs[selSeg];
+    const prg=analyzeSeg(s.pts);
+    for(const g of prg.gens.filter(g=>g.t>g.s+1&&g.s<g.t)){
+      const[fx,fy]=toC(s.pts[g.s]),[tx,ty]=toC(s.pts[g.t]);
+      const dx=tx-fx,dy=ty-fy,len=Math.sqrt(dx*dx+dy*dy);if(len<3)continue;
+      const nx=dx/len,ny=dy/len;
+      ctx.globalAlpha=.5;ctx.strokeStyle='#BA7517';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+      ctx.beginPath();ctx.moveTo(fx+nx*5,fy+ny*5);ctx.lineTo(tx-nx*5,ty-ny*5);ctx.stroke();
+      ctx.setLineDash([]);
+      const px=-ny*3.5,py=nx*3.5;
+      ctx.fillStyle='#BA7517';ctx.beginPath();
+      ctx.moveTo(tx-nx*5,ty-ny*5);
+      ctx.lineTo(tx-nx*5-nx*7+px,ty-ny*5-ny*7+py);
+      ctx.lineTo(tx-nx*5-nx*7-px,ty-ny*5-ny*7-py);
+      ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+    }
+  }
+  for(let i=0;i<NL;i++){
+    const[cx,cy]=toC(OL[i]);
+    ctx.beginPath();ctx.arc(cx,cy,1.3,0,Math.PI*2);
+    ctx.fillStyle=dark?'#3a3a37':'#ccc9be';ctx.fill();
+  }
+  for(let i=0;i<divs.length;i++){
+    const[cx,cy]=toC(OL[divs[i]]);
+    const isSel=selSeg===i||selSeg===(i===0?divs.length-1:i-1);
+    ctx.beginPath();ctx.arc(cx,cy,6,0,Math.PI*2);
+    ctx.fillStyle=isSel?(dark?'#e8e6e0':'#1a1a18'):(dark?'#888780':'#5f5e5a');ctx.fill();
+    ctx.strokeStyle=dark?'#1a1a18':'#f7f6f2';ctx.lineWidth=2;ctx.stroke();
+  }
+}
+
+function renderAll(){
+  draw();
+  const segs=buildSegs();
+  const flow=document.getElementById('compD');
+  flow.innerHTML=segs.map((s,i)=>[
+    `<span class="seg-pill${selSeg===i?' on':''}" style="background:${s.col}20;color:${s.col};" onclick="window._ss(${i})">𝒞<sub>${i}</sub></span>`,
+    i<segs.length-1?`<span class="op">∘</span>`:''
+  ].join('')).join('');
+
+  const algD=document.getElementById('algD');
+  if(selSeg===null||selSeg>=segs.length){
+    algD.innerHTML='<p style="font-size:.8rem;color:var(--muted);">click a segment above to inspect its algebra</p>';
+    return;
+  }
+  const s=segs[selSeg];
+  const prg=analyzeSeg(s.pts);
+  const total=s.pts.length*(s.pts.length-1);
+  const adj=prg.gens.filter(g=>g.t===g.s+1).sort((a,b)=>a.s-b.s);
+  const skip=prg.gens.filter(g=>g.t>g.s+1&&g.s<g.t);
+  const red=Math.round((total-prg.gens.length)/total*100);
+
+  algD.innerHTML=`
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+  <div style="width:12px;height:12px;border-radius:3px;background:${s.col};flex-shrink:0;"></div>
+  <span style="font-size:.85rem;font-weight:500;color:${s.col};">${s.name}</span>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:12px;">
+  ${[['points',s.pts.length],['gens',prg.gens.length+'/'+total],['pruned',red+'%']].map(([k,v])=>`
+  <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:.4rem .6rem;">
+    <div style="font-size:.6rem;color:var(--hint);text-transform:uppercase;letter-spacing:.05em;">${k}</div>
+    <div style="font-family:var(--mono);font-size:.8rem;font-weight:600;">${v}</div>
+  </div>`).join('')}
+</div>
+
+<div class="sub-label">sequential path</div>
+<div class="code-block" style="color:var(--blue);">${adj.map(g=>'e'+sub(g.s)+sub(g.t)).join('∘')||'id'}</div>
+
+${skip.length?`
+<div class="sub-label">shortcut generators (curvature)</div>
+<div class="code-block" style="color:var(--amber);">${skip.slice(0,10).map(g=>'e'+sub(g.s)+sub(g.t)).join('  ')}</div>`:''}
+
+<div class="sub-label">congruence laws ${prg.laws.length?'('+prg.laws.length+')':''}</div>
+${prg.laws.length?prg.laws.slice(0,5).map((law,i)=>`
+  <div class="law-card${selLaw===i?' sel':''}" onclick="window._sl(${i})">
+    <div style="font-size:.65rem;color:var(--hint);margin-bottom:2px;">${law.s}→${law.t} · w≈${law.w.toFixed(2)}</div>
+    ${law.paths.map((p,j)=>`<div>${j?'<span style="opacity:.4">∼ </span>':''}${fp(p)}</div>`).join('')}
+  </div>`).join(''):
+  '<p style="font-size:.75rem;color:var(--muted);">no non-trivial congruences</p>'}
+
+<div class="sub-label">full expression</div>
+<div style="font-size:.7rem;color:var(--muted);font-family:var(--mono);line-height:1.7;padding:6px 8px;border-radius:5px;border:0.5px solid var(--border);">
+  𝒮<sub>frog</sub> ∋ 𝒞<sub>${selSeg}</sub> :<br>
+  <span style="color:var(--text);">${adj.map(g=>'e'+sub(g.s)+sub(g.t)).join('∘')}</span><br>
+  <span style="opacity:.6;">∼ e${sub(0)}${sub(s.pts.length-1)} &nbsp;(sub-path closure)</span>
+</div>`;
+}
+
+window._ss=i=>{selSeg=selSeg===i?null:i;selLaw=null;renderAll();};
+window._sl=i=>{selLaw=selLaw===i?null:i;renderAll();};
+
+function shapePt(e){
+  const r=cv.getBoundingClientRect();
+  const mx=e.clientX-r.left,my=e.clientY-r.top;
+  const S=cv.width,H=cv.height;
+  return[(mx-PAD)/(S-2*PAD)*2-1,1-(my-PAD)/(H-2*PAD)*2];
+}
+function nearOL(x,y){let best=0,bd=1e9;for(let i=0;i<NL;i++){const[ox,oy]=OL[i],d=(ox-x)**2+(oy-y)**2;if(d<bd){bd=d;best=i;}}return best;}
+function nearDiv(x,y){let best=-1,bd=0.06;for(let i=0;i<divs.length;i++){const[dx,dy]=OL[divs[i]],d=(dx-x)**2+(dy-y)**2;if(d<bd){bd=d;best=i;}}return best;}
+function segOf(oi){for(let i=0;i<divs.length;i++){const a=divs[i],b=divs[(i+1)%divs.length];let k=a;while(k!==b){if(k===oi)return i;k=(k+1)%NL;}if(k===oi)return i;}return null;}
+
+cv.onclick=e=>{
+  const[x,y]=shapePt(e);
+  const di=nearDiv(x,y);
+  if(di>=0&&divs.length>2){divs.splice(di,1);selSeg=null;selLaw=null;}
+  else{
+    const oi=nearOL(x,y);const[ox,oy]=OL[oi];
+    if((ox-x)**2+(oy-y)**2<0.08){
+      if(!divs.includes(oi)){divs=[...divs,oi].sort((a,b)=>a-b);selSeg=null;selLaw=null;}
+      else{selSeg=segOf(oi);selLaw=null;}
+    }
+  }
+  renderAll();
+};
+
+document.getElementById('rstB').onclick=()=>{divs=[...DEF];selSeg=null;selLaw=null;renderAll();};
+document.getElementById('dstB').onclick=function(){
+  distMode=distMode==='geodesic'?'euclidean':'geodesic';
+  this.textContent=distMode;
+  this.classList.toggle('on',distMode==='geodesic');
+  renderAll();
+};
+
+window.addEventListener('resize',resize);
+resize();
+renderAll();
+</script>
+</body>
+</html>

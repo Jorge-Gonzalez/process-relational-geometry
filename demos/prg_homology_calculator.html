@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PRG Framework — Homology Calculator</title>
-<script defer src="https://cloud.umami.is/script.js" data-website-id="8605845f-006f-42c1-a094-46a4aa601e04"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
 
@@ -21,6 +20,7 @@
     --yellow:   #f9e2af;
     --lavender: #b4befe;
     --teal:     #94e2d5;
+    --orange:   #fab387;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,7 +65,6 @@
     overflow: hidden;
   }
 
-  /* ---- LEFT PANEL ---- */
   .panel-left {
     border-right: 1px solid var(--border);
     display: flex;
@@ -87,7 +86,6 @@
     margin-bottom: 14px;
   }
 
-  /* preset buttons */
   .presets {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -117,12 +115,8 @@
     margin-bottom: 2px;
   }
 
-  .preset-btn .pdesc {
-    color: var(--dim);
-    font-size: 10px;
-  }
+  .preset-btn .pdesc { color: var(--dim); font-size: 10px; }
 
-  /* inputs */
   label {
     display: block;
     font-family: 'IBM Plex Mono', monospace;
@@ -150,7 +144,6 @@
   }
 
   input:focus, textarea:focus { border-color: var(--accent); }
-
   textarea { min-height: 72px; line-height: 1.6; }
 
   .hint {
@@ -158,7 +151,15 @@
     font-size: 10px;
     color: var(--dim);
     margin-top: 5px;
-    line-height: 1.5;
+    line-height: 1.6;
+  }
+
+  .hint.math {
+    color: #4a4a6a;
+    border-left: 2px solid var(--border);
+    padding-left: 8px;
+    margin-top: 6px;
+    font-style: italic;
   }
 
   .run-btn {
@@ -181,7 +182,6 @@
   .run-btn:active { transform: scale(0.98); }
   .run-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-  /* ---- RIGHT PANEL ---- */
   .panel-right {
     display: grid;
     grid-template-rows: auto 1fr;
@@ -193,7 +193,8 @@
     padding: 14px 28px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   .results-title {
@@ -209,12 +210,27 @@
     border-radius: 50%;
     background: var(--dim);
     transition: background 0.3s;
+    flex-shrink: 0;
   }
   .status-dot.running { background: var(--yellow); animation: pulse 1s infinite; }
   .status-dot.ok      { background: var(--green); }
   .status-dot.err     { background: var(--red); }
 
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* inline badges in the results header */
+  .header-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .header-badge.ok      { color: var(--green);  border-color: var(--green); }
+  .header-badge.warn    { color: var(--yellow); border-color: var(--yellow); }
+  .header-badge.err     { color: var(--red);    border-color: var(--red); }
+  .header-badge.dim     { color: var(--dim);    border-color: var(--border); }
 
   .results-body {
     overflow-y: auto;
@@ -224,7 +240,6 @@
     gap: 28px;
   }
 
-  /* homology result card */
   .result-card {
     border: 1px solid var(--border);
     background: var(--surface);
@@ -233,9 +248,7 @@
     animation: fadein 0.3s forwards;
   }
 
-  @keyframes fadein {
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadein { to { opacity: 1; transform: translateY(0); } }
 
   .card-header {
     border-bottom: 1px solid var(--border);
@@ -243,6 +256,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .card-title {
@@ -259,13 +274,50 @@
     border: 1px solid;
     border-radius: 2px;
   }
-
   .card-tag.correct { color: var(--green); border-color: var(--green); }
   .card-tag.error   { color: var(--red);   border-color: var(--red);   }
+  .card-tag.warn    { color: var(--yellow); border-color: var(--yellow); }
 
   .card-body { padding: 18px; }
 
-  /* homology groups display */
+  /* warning banner inside a card */
+  .warning-banner {
+    background: rgba(249, 226, 175, 0.07);
+    border: 1px solid var(--yellow);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--yellow);
+    line-height: 1.7;
+  }
+
+  .warning-banner .wb-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  /* math annotation block */
+  .math-note {
+    background: rgba(137,180,250,0.04);
+    border-left: 2px solid var(--border);
+    padding: 8px 12px;
+    margin-top: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    line-height: 1.8;
+  }
+
+  .math-note .mn-title {
+    color: #4a5a7a;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    font-size: 9px;
+  }
+
   .homology-groups {
     display: flex;
     flex-wrap: wrap;
@@ -289,14 +341,9 @@
     letter-spacing: 0.1em;
   }
 
-  .hgroup .hval {
-    font-weight: 600;
-    color: var(--teal);
-  }
-
+  .hgroup .hval { font-weight: 600; color: var(--teal); }
   .hgroup.torsion .hval { color: var(--yellow); }
 
-  /* stats row */
   .stats {
     display: flex;
     flex-wrap: wrap;
@@ -312,13 +359,12 @@
     border: 1px solid var(--border);
     padding: 4px 10px;
   }
-
   .stat span { color: var(--text); }
 
-  /* rewriting trace */
   .trace-block {
     border: 1px solid var(--border);
     background: var(--bg);
+    margin-bottom: 10px;
   }
 
   .trace-toggle {
@@ -343,12 +389,7 @@
   .trace-toggle .arrow { transition: transform 0.2s; }
   .trace-toggle.open .arrow { transform: rotate(90deg); }
 
-  .trace-content {
-    display: none;
-    padding: 12px 14px;
-    border-top: 1px solid var(--border);
-  }
-
+  .trace-content { display: none; padding: 12px 14px; border-top: 1px solid var(--border); }
   .trace-content.visible { display: block; }
 
   .trace-line {
@@ -357,14 +398,12 @@
     line-height: 2;
     color: var(--dim);
   }
-
   .trace-line .step-num { color: var(--muted); margin-right: 8px; }
   .trace-line .from { color: var(--text); }
   .trace-line .arrow-sym { color: var(--dim); margin: 0 6px; }
   .trace-line .to { color: var(--accent); }
   .trace-line .law { color: var(--dim); font-size: 10px; margin-left: 8px; }
 
-  /* d²=0 badge */
   .d2-badge {
     display: inline-flex;
     align-items: center;
@@ -377,7 +416,6 @@
   .d2-badge.ok  { color: var(--green); border-color: var(--green); }
   .d2-badge.bad { color: var(--red);   border-color: var(--red);   }
 
-  /* empty state */
   .empty-state {
     height: 100%;
     display: flex;
@@ -390,12 +428,8 @@
     font-size: 12px;
   }
 
-  .empty-state .big {
-    font-size: 48px;
-    opacity: 0.15;
-  }
+  .empty-state .big { font-size: 48px; opacity: 0.15; }
 
-  /* error display */
   .error-msg {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
@@ -407,20 +441,14 @@
     animation: fadein 0.3s forwards;
   }
 
-  /* ---- Comparison card ---- */
   .compare-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
   }
 
-  .compare-col {
-    padding: 14px 16px;
-  }
-
-  .compare-col + .compare-col {
-    border-left: 1px solid var(--border);
-  }
+  .compare-col { padding: 14px 16px; }
+  .compare-col + .compare-col { border-left: 1px solid var(--border); }
 
   .compare-col-title {
     font-family: 'IBM Plex Mono', monospace;
@@ -429,7 +457,6 @@
     text-transform: uppercase;
     margin-bottom: 12px;
   }
-
   .compare-col-title.free    { color: var(--yellow); }
   .compare-col-title.quotient { color: var(--accent); }
 
@@ -442,26 +469,17 @@
     align-items: baseline;
     gap: 8px;
   }
-
   .compare-row .cr-label { color: var(--dim); }
   .compare-row .cr-val   { color: var(--text); }
   .compare-row .cr-val.collapsed { color: var(--yellow); }
   .compare-row .cr-val.gained    { color: var(--green); }
   .compare-row .cr-val.same      { color: var(--dim); }
 
-  .compare-delta {
-    font-size: 10px;
-    color: var(--dim);
-    margin-left: 4px;
-  }
+  .compare-delta { font-size: 10px; color: var(--dim); margin-left: 4px; }
   .compare-delta.neg { color: var(--yellow); }
   .compare-delta.pos { color: var(--green); }
 
-  .compare-divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 10px 0;
-  }
+  .compare-divider { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
 
   .compare-note {
     padding: 10px 16px;
@@ -472,12 +490,10 @@
     line-height: 1.8;
   }
 
-  /* scrollbar */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  /* spinner */
   .spinner {
     display: none;
     width: 16px; height: 16px;
@@ -490,12 +506,7 @@
   .spinner.active { display: block; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* startup trace panel */
-  .trace-panel {
-    border: 1px solid var(--border);
-    background: var(--surface);
-    margin-bottom: 0;
-  }
+  .trace-panel { border: 1px solid var(--border); background: var(--surface); }
 
   .trace-panel-header {
     border-bottom: 1px solid var(--border);
@@ -514,12 +525,7 @@
     color: var(--dim);
   }
 
-  .trace-panel-body {
-    padding: 14px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
+  .trace-panel-body { padding: 14px 18px; display: flex; flex-direction: column; gap: 14px; }
 
   .trace-section-title {
     font-family: 'IBM Plex Mono', monospace;
@@ -539,41 +545,24 @@
     gap: 8px;
     align-items: baseline;
   }
+  .trace-row .tlabel { color: var(--dim); white-space: nowrap; }
+  .trace-row .tval   { color: var(--teal); }
+  .trace-row .tval.highlight { color: var(--accent); }
+  .trace-row .tval.ok        { color: var(--green); }
+  .trace-row .tval.warn      { color: var(--yellow); }
 
-  .trace-row .tlabel {
-    color: var(--dim);
-    white-space: nowrap;
-  }
-
-  .trace-row .tval {
-    color: var(--teal);
-  }
-
-  .trace-row .tval.highlight {
-    color: var(--accent);
-  }
-
-  .trace-row .tval.ok {
-    color: var(--green);
-  }
-
-  .trace-separator {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 2px 0;
-  }
+  .trace-separator { border: none; border-top: 1px solid var(--border); margin: 2px 0; }
 </style>
 </head>
 <body>
 
 <header>
   <h1>PRG Framework</h1>
-  <p>Homology from relational presentations — no triangulation</p>
+  <p>Group homology from relational presentations — no triangulation required</p>
 </header>
 
 <div class="layout">
 
-  <!-- LEFT: INPUT -->
   <div class="panel-left">
 
     <div class="section">
@@ -597,7 +586,7 @@
         </button>
         <button class="preset-btn" onclick="loadPreset('free2', this)">
           <span class="pname">Free ℤ²</span>
-          <span class="pdesc">a,b no relations</span>
+          <span class="pdesc">a,b — no laws</span>
         </button>
         <button class="preset-btn" onclick="loadPreset('custom', this)">
           <span class="pname">Custom</span>
@@ -609,25 +598,40 @@
     <div class="section">
       <div class="section-title">Relational System</div>
 
+      <div class="hint math" style="margin-bottom:12px">
+        Single-object category: all generators are endomorphisms of one state *.
+        The quotient category is a monoid; if inverses are declared, a group.
+        Homology = H*(BG; ℤ), the homology of the classifying space.
+      </div>
+
       <label>Generators</label>
       <input type="text" id="inp-gens" placeholder="a b" />
-      <div class="hint">Space-separated. Inverses named a_inv, b_inv, etc.</div>
+      <div class="hint">Space-separated. Inverses are named a_inv, b_inv, etc. and are added automatically.</div>
 
-      <label>Congruence Laws</label>
+      <label>Congruence Laws (relations)</label>
       <textarea id="inp-laws" placeholder="b a = a b"></textarea>
       <div class="hint">
         One law per line. Use = to separate sides.<br>
-        e.g. &nbsp;<code>b a = a b</code><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>a a a = </code> (empty = identity)
+        e.g. &nbsp;<code>b a = a b</code> &nbsp; (commutativity)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>a a a =</code> &nbsp; (empty RHS = identity, torsion)
+      </div>
+      <div class="hint math">
+        Each law l = r generates the congruence relation l ~ r.
+        Laws are oriented as rewrite rules l→r (or r→l) by the shortlex
+        term order. Confluence of the resulting TRS is checked automatically.
       </div>
 
-      <label>Max Word Length</label>
-      <input type="number" id="inp-depth" value="3" min="1" max="5" />
-      <div class="hint">Higher = more classes but slower. 3 is enough for torus.</div>
+      <label>Nerve Depth — max word length |w|</label>
+      <input type="number" id="inp-depth" value="3" min="1" max="6" />
+      <div class="hint">
+        Determines how many morphism classes are enumerated (all words of length ≤ d in normal form).
+        The computation is exact when the group is finite and depth ≥ group exponent.
+        For infinite groups this is a finite approximation; stabilization is checked automatically.
+      </div>
 
-      <label>Top Dimension</label>
+      <label>Top Homology Dimension</label>
       <input type="number" id="inp-topdim" value="2" min="0" max="3" />
-      <div class="hint">Report homology up to this dimension.</div>
+      <div class="hint">Report H_n for n = 0, 1, …, up to this value.</div>
     </div>
 
     <div class="section">
@@ -638,12 +642,12 @@
 
   </div>
 
-  <!-- RIGHT: OUTPUT -->
   <div class="panel-right">
-    <div class="results-header">
+    <div class="results-header" id="results-header">
       <div class="status-dot" id="status-dot"></div>
       <div class="spinner" id="spinner"></div>
       <div class="results-title">Results</div>
+      <div id="header-badges" style="display:flex;gap:8px;flex-wrap:wrap;margin-left:4px"></div>
     </div>
     <div class="results-body" id="results-body">
       <div class="empty-state">
@@ -657,42 +661,98 @@
 
 <script>
 // ================================================================
-// LAYER 1 — CORE ALGEBRA
-// RelationalSystem: quotient category via generators + congruence.
-// Responsible for: inverse resolution, relation expansion,
-// free reduction (xx⁻¹ → id), and congruence rewriting.
-// No DOM access. No topology. Pure algebra.
+// MATHEMATICAL CONTEXT
 // ================================================================
+//
+// This tool computes the integral homology H_*(G; ℤ) of a group G
+// given by a finite presentation G = ⟨R | ℒ⟩, where R is a set
+// of generators and ℒ is a set of relator words (or equivalences l~r).
+//
+// The computation follows three steps that mirror classical algebraic
+// topology:
+//
+//   1. ALGEBRA  — build the quotient monoid/group G = F(R) / ~
+//                 by computing normal forms via term rewriting.
+//
+//   2. TOPOLOGY — build the nerve N(G), a simplicial set whose
+//                 geometric realization is the classifying space BG.
+//                 Simplices are composable tuples of group elements;
+//                 no geometric embedding or triangulation is used.
+//
+//   3. LINEAR ALGEBRA — compute H_n = ker(∂_n) / im(∂_{n+1})
+//                 by Smith normal form of integer boundary matrices.
+//
+// When congruence laws are present, the tool also builds the nerve
+// of the FREE group F(R) (no laws) and compares it to N(G), making
+// visible exactly what each relation contributes to the topology.
+//
+// References:
+//   Bar complex / classifying space: MacLane, "Homology" §IV
+//   Smith normal form: Munkres, "Elements of Algebraic Topology" §11
+//   Confluence / Knuth-Bendix: Knuth & Bendix (1970)
+//   PRG framework: González Céspedes (2026)
+
+// ================================================================
+// LAYER 1 — CORE ALGEBRA
+// ================================================================
+//
+// A relational system (V, R, s, t) with a single state V={*} reduces
+// to a monoid presentation: generators are elements of R (all with
+// source and target *), and the congruence ~ on the path category
+// C(V, R) = F(R) is generated by the given laws.
+//
+// We represent words as arrays of generator strings and compute
+// normal forms (canonical representatives of congruence classes)
+// via a term rewriting system (TRS) oriented by the shortlex order:
+//   w₁ < w₂  iff  |w₁| < |w₂|, or (|w₁|=|w₂| and w₁ <_lex w₂).
+//
+// This ordering is well-founded, so the TRS always terminates.
+// CONFLUENCE (unique normal forms) is a separate requirement:
+// it holds iff all critical pairs are joinable (Newman's lemma).
+// See checkLocalConfluence() below.
 
 class RelationalSystem {
   constructor(generators, inverses, relations) {
-    this.generators = generators;
-    this.inverses = inverses;
-    this.relations = relations;
+    // generators: array of generator names (elements of R)
+    // inverses:   map g ↦ g⁻¹ (makes the system invertible = group case)
+    // relations:  array of [lhs, rhs] pairs generating the congruence ~
 
+    this.generators = generators;
+    this.inverses   = inverses;
+    this.relations  = relations;
+
+    // Two-way inverse lookup: inv[g] = g⁻¹ and inv[g⁻¹] = g
     this.inv = {};
     for (const [g, gi] of Object.entries(inverses)) {
-      this.inv[g] = gi;
+      this.inv[g]  = gi;
       this.inv[gi] = g;
     }
 
-    // Generator rank for canonical ordering
+    // Generator rank defines the shortlex order.
+    // Rank 0,1 = a, a_inv; rank 2,3 = b, b_inv; etc.
+    // Lower rank = "earlier" in shortlex = preferred in normal forms.
     this.genRank = {};
     generators.forEach((g, i) => {
-      this.genRank[g] = 2 * i;
-      this.genRank[this.inv[g]] = 2 * i + 1;
+      this.genRank[g]              = 2 * i;
+      this.genRank[this.inv[g]]    = 2 * i + 1;
     });
 
-    // Expand commutativity relations to all inverse variants
+    // Expand commutativity relations to all inverse variants.
+    // If ab ~ ba, then a⁻¹b ~ ba⁻¹ and ab⁻¹ ~ b⁻¹a, etc.
+    // This ensures that normal forms are stable under all composites
+    // of the declared laws.
     this.expandedRelations = this._expandRelations(relations);
   }
 
+  // _expandRelations: for each commutativity rule g·h ~ h·g, add the
+  // four variants with g,g⁻¹ × h,h⁻¹. Other rules are kept as-is.
+  // We only keep rules oriented l→r where l > r (shortlex), so each
+  // rule strictly decreases the normal form rank.
   _expandRelations(relations) {
     const expanded = new Set();
     for (const [lhs, rhs] of relations) {
       if (lhs.length === 2 && rhs.length === 2 &&
           rhs[0] === lhs[1] && rhs[1] === lhs[0]) {
-        // Commutativity: expand to all inverse combos
         const g1 = lhs[0], g2 = lhs[1];
         const g1i = this.inv[g1] || g1;
         const g2i = this.inv[g2] || g2;
@@ -714,20 +774,23 @@ class RelationalSystem {
     return [...expanded].map(s => JSON.parse(s));
   }
 
-  rank(word) {
-    return word.map(g => this.genRank[g] ?? 999);
-  }
+  // rank(word): the shortlex rank of a word as a tuple of generator ranks.
+  rank(word) { return word.map(g => this.genRank[g] ?? 999); }
 
+  // _rankLess: strict shortlex comparison.
+  // w₁ < w₂ iff |w₁| < |w₂| or (same length and lex-smaller by rank).
   _rankLess(a, b) {
     if (a.length !== b.length) return a.length < b.length;
-    const ra = this.rank(a);
-    const rb = this.rank(b);
+    const ra = this.rank(a), rb = this.rank(b);
     for (let i = 0; i < ra.length; i++) {
       if (ra[i] !== rb[i]) return ra[i] < rb[i];
     }
     return false;
   }
 
+  // reduce(word): FREE reduction — cancel adjacent inverse pairs g·g⁻¹ → id.
+  // This is the word problem in the free group F(R).
+  // The result is the unique freely-reduced representative in F(R).
   reduce(word) {
     word = [...word];
     let changed = true;
@@ -745,57 +808,50 @@ class RelationalSystem {
     return word;
   }
 
+  // applyRelations(word, traceLog?): FULL normalization.
+  // Computes the canonical representative [w] of w in the quotient G = F(R)/~.
+  //
+  // Algorithm: repeatedly scan for any subword matching a rule LHS,
+  // rewrite to RHS if the result is strictly smaller in shortlex order.
+  // Terminates because each rewrite step strictly decreases shortlex rank.
+  //
+  // Correctness requires CONFLUENCE: two reduction sequences from the
+  // same word must meet. This holds iff all critical pairs are joinable
+  // (Newman's lemma). Checked by checkLocalConfluence().
+  //
+  // The optional traceLog array is appended with each rewrite step,
+  // for display in the Congruence Rewriting card.
   applyRelations(word, traceLog = null) {
     word = this.reduce([...word]);
-    for (let iter = 0; iter < 1000; iter++) {
+    for (let iter = 0; iter < 2000; iter++) {
       let changed = false;
       for (const [lhs, rhs] of this.expandedRelations) {
-        // Try lhs -> rhs
+        // Try lhs → rhs
         for (let start = 0; start <= word.length - lhs.length; start++) {
-          const match = lhs.every((g, i) => word[start+i] === g);
-          if (match) {
+          if (lhs.every((g, i) => word[start+i] === g)) {
             const candidate = this.reduce([
-              ...word.slice(0, start),
-              ...rhs,
-              ...word.slice(start + lhs.length)
+              ...word.slice(0, start), ...rhs, ...word.slice(start + lhs.length)
             ]);
             if (this._rankLess(candidate, word)) {
-              if (traceLog) {
-                traceLog.push({
-                  step: iter,
-                  law: [lhs, rhs],
-                  from: [...word],
-                  to: [...candidate]
-                });
-              }
-              word = candidate;
-              changed = true;
-              break;
+              if (traceLog) traceLog.push({
+                step: iter, law: [lhs, rhs], from: [...word], to: [...candidate]
+              });
+              word = candidate; changed = true; break;
             }
           }
         }
         if (changed) break;
-        // Try rhs -> lhs
+        // Try rhs → lhs (rules are symmetric; we orient by shortlex at rewrite time)
         for (let start = 0; start <= word.length - rhs.length; start++) {
-          const match = rhs.every((g, i) => word[start+i] === g);
-          if (match) {
+          if (rhs.every((g, i) => word[start+i] === g)) {
             const candidate = this.reduce([
-              ...word.slice(0, start),
-              ...lhs,
-              ...word.slice(start + rhs.length)
+              ...word.slice(0, start), ...lhs, ...word.slice(start + rhs.length)
             ]);
             if (this._rankLess(candidate, word)) {
-              if (traceLog) {
-                traceLog.push({
-                  step: iter,
-                  law: [rhs, lhs],
-                  from: [...word],
-                  to: [...candidate]
-                });
-              }
-              word = candidate;
-              changed = true;
-              break;
+              if (traceLog) traceLog.push({
+                step: iter, law: [rhs, lhs], from: [...word], to: [...candidate]
+              });
+              word = candidate; changed = true; break;
             }
           }
         }
@@ -806,67 +862,160 @@ class RelationalSystem {
     return word;
   }
 
-  compose(w1, w2) {
-    return this.applyRelations([...w1, ...w2]);
-  }
-
-  identity() { return []; }
-
-  _wordKey(word) { return JSON.stringify(word); }
+  compose(w1, w2) { return this.applyRelations([...w1, ...w2]); }
+  identity()      { return []; }
+  _wordKey(word)  { return JSON.stringify(word); }
 }
 
-// Returns a minimal system-compatible object that composes using only
-// free reduction — no congruence laws applied. Used to run the standard
-// boundary machinery on the free nerve without modifying RelationalSystem.
+// ================================================================
+// CONFLUENCE CHECK — Knuth-Bendix critical pair analysis
+// ================================================================
+//
+// A term rewriting system (TRS) is LOCALLY CONFLUENT if for every
+// "critical pair" produced by overlapping rules, both sides reduce
+// to a common normal form.
+//
+// Critical pairs arise from two rules (l₁→r₁) and (l₂→r₂) when:
+//   Case A (suffix-prefix overlap): a suffix s of l₁ equals a prefix of l₂.
+//     The word l₁ · l₂[|s|:] can be rewritten to:
+//       via rule 1: r₁ · l₂[|s|:]
+//       via rule 2: l₁[:−|s|] · r₂
+//     These must reduce to the same normal form.
+//
+//   Case B (containment): l₂ occurs inside l₁ as a subword.
+//     The word l₁ can be rewritten to:
+//       via rule 1: r₁
+//       via rule 2: l₁ with the inner occurrence of l₂ replaced by r₂
+//     These must reduce to the same normal form.
+//
+// By NEWMAN'S LEMMA: terminating + locally confluent → globally confluent.
+// Global confluence ⟺ every word has a unique normal form.
+// Without confluence, two equivalent words may get different normal forms,
+// corrupting the nerve (different words representing the same morphism
+// would appear as distinct elements).
+
+function checkLocalConfluence(system) {
+  const rules = system.expandedRelations;
+  const norm  = w => system.applyRelations(w);
+
+  const nonJoinable = [];
+  let   totalPairs  = 0;
+
+  for (let i = 0; i < rules.length; i++) {
+    for (let j = 0; j < rules.length; j++) {
+      const [l1, r1] = rules[i];
+      const [l2, r2] = rules[j];
+
+      // Case A: suffix of l1 of length k equals prefix of l2
+      const maxOv = Math.min(l1.length, l2.length);
+      for (let k = 1; k <= maxOv; k++) {
+        const suf = l1.slice(l1.length - k);
+        const pre = l2.slice(0, k);
+        if (JSON.stringify(suf) !== JSON.stringify(pre)) continue;
+        // Overlap word: l1 · l2[k:]
+        const s1 = norm([...r1, ...l2.slice(k)]);      // rule i on left part
+        const s2 = norm([...l1.slice(0, l1.length-k), ...r2]); // rule j on right part
+        totalPairs++;
+        if (JSON.stringify(s1) !== JSON.stringify(s2)) {
+          nonJoinable.push({ type:'overlap', rule1:i, rule2:j, s1, s2 });
+        }
+      }
+
+      // Case B: l2 is contained in l1 at position p (skip trivial i===j same pos)
+      if (l2.length < l1.length) {
+        for (let p = 0; p <= l1.length - l2.length; p++) {
+          const sub = l1.slice(p, p + l2.length);
+          if (JSON.stringify(sub) !== JSON.stringify(l2)) continue;
+          const s1 = norm([...r1]);
+          const s2 = norm([...l1.slice(0,p), ...r2, ...l1.slice(p+l2.length)]);
+          totalPairs++;
+          if (JSON.stringify(s1) !== JSON.stringify(s2)) {
+            nonJoinable.push({ type:'containment', rule1:i, rule2:j, pos:p, s1, s2 });
+          }
+        }
+      }
+    }
+  }
+
+  return {
+    confluent:       nonJoinable.length === 0,
+    totalPairs,
+    nonJoinable,
+    // Human-readable summary
+    summary: nonJoinable.length === 0
+      ? `Locally confluent (${totalPairs} critical pair${totalPairs!==1?'s':''} all joinable)`
+      : `NOT confluent: ${nonJoinable.length} of ${totalPairs} critical pair${totalPairs!==1?'s':''} not joinable — normal forms may not be unique`
+  };
+}
+
+// makeFreeSystem: a system-compatible object that composes using ONLY
+// free reduction — no congruence laws applied.
+// Used to build the pre-quotient nerve N(F(R)) for comparison.
+// F(R) is the free group on the generators; it has
+//   H₁(F(R)) = ℤ^|R|   and   Hₙ(F(R)) = 0  for n ≥ 2.
+// (Eilenberg-Ganea; free groups are of cohomological dimension 1.)
 function makeFreeSystem(system) {
   return {
     generators: system.generators,
     inv:        system.inv,
+    genRank:    system.genRank,
+    rank:       system.rank.bind(system),
     reduce:     system.reduce.bind(system),
     compose:    (w1, w2) => system.reduce([...w1, ...w2]),
     _wordKey:   system._wordKey.bind(system),
+    applyRelations: (w) => system.reduce([...w]),  // free reduction only
   };
 }
 
 // ================================================================
-// LAYER 2 — NERVE & TOPOLOGY
-// Builds simplicial complexes from relational presentations.
-//
-// buildNerve      — nerve of the QUOTIENT category.
-//                   Elements are congruence classes (relations applied).
-//                   This is the classical nerve used for homology output.
-//
-// buildFreeNerve  — nerve of the FREE category (pre-quotient).
-//                   Elements are raw words up to maxWordLen with only
-//                   free reduction (xx⁻¹ cancellation), no congruence.
-//                   Used to compare presentation vs quotient structure.
-//
-// faceMap, buildBoundaryMatrix — boundary operators on simplices.
-// No DOM access. No UI state.
+// LAYER 2 — NERVE CONSTRUCTION
 // ================================================================
+//
+// The NERVE N(G) of a (small) category G is the simplicial set where:
+//   N(G)_0 = objects of G                         (0-simplices = vertices)
+//   N(G)_1 = morphisms of G                       (1-simplices = edges)
+//   N(G)_n = composable n-tuples (f₁,...,fₙ)      (n-simplices)
+//
+// For a one-object category (a monoid M), every pair is composable:
+//   N(M)_0 = {*}      (one vertex)
+//   N(M)_1 = M        (one 1-simplex per element)
+//   N(M)_n = Mⁿ       (all n-tuples)
+//
+// The geometric realization |N(G)| is the CLASSIFYING SPACE BG.
+// For a group G: H_n(BG; ℤ) = H_n(G; ℤ)  (group homology).
+//
+// This gives the bar complex: the standard chain complex for computing
+// group homology, here built directly from the group presentation
+// without any geometric embedding or triangulation.
+//
+// TRUNCATION: we only include words up to maxWordLen in normal form.
+// This is exact when the group is finite and all elements appear.
+// checkHomologyStabilized() verifies whether homology has stabilized at this depth.
+// new elements (if not, the truncation gives the correct result).
 
 function buildNerve(system, maxWordLen) {
-  const elements = new Map();
-  const id = system._wordKey(system.identity());
-  elements.set(id, system.identity());
-
   const allGens = [
     ...system.generators,
     ...system.generators.map(g => system.inv[g])
   ];
 
+  // Enumerate all elements of G up to word length maxWordLen.
+  // Elements are congruence classes, represented by their normal forms.
+  const elements = new Map();
+  elements.set(system._wordKey(system.identity()), system.identity());
+
   for (let len = 1; len <= maxWordLen; len++) {
-    const combos = cartesian(allGens, len);
-    for (const combo of combos) {
+    for (const combo of cartesian(allGens, len)) {
       const norm = system.applyRelations(combo);
-      const key = system._wordKey(norm);
+      const key  = system._wordKey(norm);
       if (!elements.has(key)) elements.set(key, norm);
     }
   }
 
+  // Sort elements by shortlex rank for stable ordering
   const elems = [...elements.values()].sort((a, b) => {
-    const ra = system.rank(a), rb = system.rank(b);
     if (a.length !== b.length) return a.length - b.length;
+    const ra = system.rank(a), rb = system.rank(b);
     for (let i = 0; i < Math.min(ra.length, rb.length); i++) {
       if (ra[i] !== rb[i]) return ra[i] - rb[i];
     }
@@ -875,112 +1024,193 @@ function buildNerve(system, maxWordLen) {
 
   const elemSet = new Set(elems.map(e => system._wordKey(e)));
 
+  // Build simplices:
+  //   0-simplices: the single object {*}
+  //   1-simplices: one per element of G (each element = a morphism * → *)
+  //   2-simplices: all composable pairs (g, h) where g·h is in elemSet
+  //   3-simplices: all composable triples (g, h, k) where g·h, h·k, g·h·k ∈ elemSet
+  // In a group, all pairs/triples are composable; the elemSet check
+  // ensures the composite lands within our truncation depth.
   const s0 = [[]];
   const s1 = elems.map(g => [g]);
   const s2 = [];
-  for (const g of elems) {
-    for (const h of elems) {
-      const gh = system.compose(g, h);
-      if (elemSet.has(system._wordKey(gh))) {
-        s2.push([g, h]);
-      }
-    }
-  }
   const s3 = [];
+
   for (const g of elems) {
     for (const h of elems) {
       const gh = system.compose(g, h);
       if (!elemSet.has(system._wordKey(gh))) continue;
+      s2.push([g, h]);
       for (const k of elems) {
-        const hk = system.compose(h, k);
+        const hk  = system.compose(h, k);
         if (!elemSet.has(system._wordKey(hk))) continue;
         const ghk = system.compose(gh, k);
-        if (elemSet.has(system._wordKey(ghk))) {
-          s3.push([g, h, k]);
-        }
+        if (elemSet.has(system._wordKey(ghk))) s3.push([g, h, k]);
       }
     }
   }
 
-  return { simplices: {0:s0,1:s1,2:s2,3:s3}, elements: elems };
+  return { simplices: {0:s0, 1:s1, 2:s2, 3:s3}, elements: elems, elemSet };
 }
 
-// Pre-quotient nerve: enumerate raw words, apply only free reduction
-// (cancel xx⁻¹ pairs), never apply congruence laws.
-// Returns the same shape as buildNerve so they can be compared directly.
+// checkHomologyStabilized: the correct stability test for homology computations.
+//
+// PROBLEM WITH ELEMENT-COUNT STABILITY:
+// The naive test "did we find all elements?" never passes for infinite groups
+// (ℤ, ℤ², free groups). But the homology of those groups is correct at any
+// depth ≥ 1, because H_n(G;ℤ) depends only on the low-dimensional structure
+// of the bar complex, not on enumerating all of G.
+//
+// CORRECT TEST — homology stabilization:
+// Compare H_*(G;ℤ) computed at depth d with the same computation at depth d-1.
+// If the two agree for all n ≤ topDim, the result has stabilized: adding more
+// elements does not change the homology groups we are reporting.
+//
+// When this returns false, the user genuinely needs a higher depth.
+// When it returns true for an infinite group, the result is correct even though
+// the nerve is not complete — exactly as the bar complex computes group homology
+// from a finite truncation of an infinite chain complex.
+//
+// Minimum depth is 2 (depth 1 gives a trivial comparison baseline of depth 0).
+function checkHomologyStabilized(system, maxWordLen, topDim) {
+  // Cannot compare at depth < 2
+  if (maxWordLen < 2) return { stabilized: false, reason: 'depth too low to compare' };
+
+  // Build nerve and homology at depth d-1 (one level shallower)
+  const shallowerDepth = maxWordLen - 1;
+  const { simplices: sSimp } = buildNerve(system, shallowerDepth);
+  const sBMaps = { 0: { data:[], rows:0, cols:1 } };
+  for (let dim = 1; dim <= topDim + 1; dim++) {
+    if (sSimp[dim] && sSimp[dim-1]) {
+      sBMaps[dim] = buildBoundaryMatrix(sSimp, dim, system);
+    }
+  }
+  const shallowHom = computeHomology(sBMaps, topDim);
+
+  // Build nerve and homology at depth d (current)
+  const { simplices: dSimp } = buildNerve(system, maxWordLen);
+  const dBMaps = { 0: { data:[], rows:0, cols:1 } };
+  for (let dim = 1; dim <= topDim + 1; dim++) {
+    if (dSimp[dim] && dSimp[dim-1]) {
+      dBMaps[dim] = buildBoundaryMatrix(dSimp, dim, system);
+    }
+  }
+  const deepHom = computeHomology(dBMaps, topDim);
+
+  // Compare H_n at both depths
+  for (let n = 0; n <= topDim; n++) {
+    const sG = formatGroup(shallowHom[n]?.free||0, shallowHom[n]?.torsion||[]);
+    const dG = formatGroup(deepHom[n]?.free||0,    deepHom[n]?.torsion||[]);
+    if (sG !== dG) {
+      return {
+        stabilized: false,
+        reason: `H_${n} changed from ${sG} (depth ${shallowerDepth}) to ${dG} (depth ${maxWordLen}) — try a higher depth`
+      };
+    }
+  }
+
+  return {
+    stabilized: true,
+    reason: `H_* identical at depths ${shallowerDepth} and ${maxWordLen} — result is stable`
+  };
+}
+
+// buildFreeNerve: nerve of the FREE group F(R) at the same depth.
+// Uses only free reduction (g·g⁻¹ → id), no congruence laws.
+// This is the "before" state — the nerve before imposing any laws.
+// Comparing it to buildNerve(G,...) reveals what each law contributes.
+//
+// Mathematical note: H*(F(R)) = H*(BF(R)) where BF(R) is a wedge of
+// circles (one per generator). So H₀ = ℤ, H₁ = ℤ^|R|, Hₙ=0 for n≥2.
+// Any H₂ appearing in the quotient nerve was CREATED by the relations.
 function buildFreeNerve(system, maxWordLen) {
   const allGens = [
     ...system.generators,
     ...system.generators.map(g => system.inv[g])
   ];
 
-  // Collect elements as freely-reduced words (no relation application)
   const elements = new Map();
-  const idKey = JSON.stringify([]);
-  elements.set(idKey, []);
-
+  elements.set('[]', []);
   for (let len = 1; len <= maxWordLen; len++) {
-    const combos = cartesian(allGens, len);
-    for (const combo of combos) {
-      const reduced = system.reduce(combo); // free reduction only
+    for (const combo of cartesian(allGens, len)) {
+      const reduced = system.reduce(combo);  // free reduction only
       const key = JSON.stringify(reduced);
       if (!elements.has(key)) elements.set(key, reduced);
     }
   }
 
-  const elems = [...elements.values()].sort((a, b) => {
+  const elems   = [...elements.values()].sort((a,b) => {
     if (a.length !== b.length) return a.length - b.length;
     return JSON.stringify(a) < JSON.stringify(b) ? -1 : 1;
   });
-
   const elemSet = new Set(elems.map(e => JSON.stringify(e)));
-
-  // Compose using free reduction only (no congruence)
-  const freeCompose = (w1, w2) => system.reduce([...w1, ...w2]);
+  const freeComp = (w1, w2) => system.reduce([...w1, ...w2]);
 
   const s0 = [[]];
   const s1 = elems.map(g => [g]);
   const s2 = [];
-  for (const g of elems) {
-    for (const h of elems) {
-      const gh = freeCompose(g, h);
-      if (elemSet.has(JSON.stringify(gh))) s2.push([g, h]);
-    }
-  }
   const s3 = [];
+
   for (const g of elems) {
     for (const h of elems) {
-      const gh = freeCompose(g, h);
+      const gh = freeComp(g, h);
       if (!elemSet.has(JSON.stringify(gh))) continue;
+      s2.push([g, h]);
       for (const k of elems) {
-        const hk = freeCompose(h, k);
+        const hk  = freeComp(h, k);
         if (!elemSet.has(JSON.stringify(hk))) continue;
-        const ghk = freeCompose(gh, k);
+        const ghk = freeComp(gh, k);
         if (elemSet.has(JSON.stringify(ghk))) s3.push([g, h, k]);
       }
     }
   }
 
-  return { simplices: { 0: s0, 1: s1, 2: s2, 3: s3 }, elements: elems };
+  const freeSystem = makeFreeSystem(system);
+  return { simplices: {0:s0, 1:s1, 2:s2, 3:s3}, elements: elems, system: freeSystem };
 }
 
 function cartesian(arr, n) {
   if (n === 0) return [[]];
   const rest = cartesian(arr, n-1);
-  return arr.flatMap(x => rest.map(r => [x, ...r]));
+  return arr.flatMap(x => rest.map(r => [x,...r]));
 }
 
-// ---- Face map ----
+// ================================================================
+// FACE MAPS — simplicial structure of the nerve
+// ================================================================
+//
+// The face maps dᵢ: N(G)_n → N(G)_{n-1} are the standard bar-complex
+// face maps, implementing the three operations:
+//
+//   d₀(g₁, g₂, …, gₙ) = (g₂, …, gₙ)              [drop the first]
+//   dᵢ(g₁,…,gₙ) = (g₁,…, gᵢ·gᵢ₊₁,…, gₙ)    0<i<n [compose adjacent]
+//   dₙ(g₁, g₂, …, gₙ) = (g₁, …, gₙ₋₁)            [drop the last]
+//
+// The boundary operator is:  ∂ₙ = Σᵢ (-1)ⁱ dᵢ
+// satisfying ∂ₙ₋₁ ∘ ∂ₙ = 0  (the chain complex condition).
 
 function faceMap(simplex, i, system) {
   const n = simplex.length;
+
+  // 1-simplex [g]: both faces are the identity morphism (single state *)
   if (n === 1) return [];
+
+  // 2-simplex [g, h] — 3 face maps (i = 0, 1, 2):
+  //   d₀[g,h] = [h]       (drop g)
+  //   d₁[g,h] = [g·h]     (compose — this is the key "composition face")
+  //   d₂[g,h] = [g]       (drop h)
   if (n === 2) {
     const [g, h] = simplex;
     if (i === 0) return [h];
-    if (i === 1) return [system.compose(g, h)];  // wrap: compose returns an element, need a 1-simplex
+    if (i === 1) return [system.compose(g, h)];
     return [g];
   }
+
+  // 3-simplex [g, h, k] — 4 face maps (i = 0, 1, 2, 3):
+  //   d₀[g,h,k] = [h,k]     (drop g)
+  //   d₁[g,h,k] = [g·h, k]  (compose g and h)
+  //   d₂[g,h,k] = [g, h·k]  (compose h and k)
+  //   d₃[g,h,k] = [g,h]     (drop k)
   if (n === 3) {
     const [g, h, k] = simplex;
     if (i === 0) return [h, k];
@@ -990,19 +1220,32 @@ function faceMap(simplex, i, system) {
   }
 }
 
+// ================================================================
+// BOUNDARY MATRIX
+// ================================================================
+//
+// buildBoundaryMatrix computes the integer matrix of ∂_dim:
+//   C_dim → C_{dim-1}
+// where C_n is the free abelian group on n-simplices.
+//
+// Entry M[τ, σ] = Σᵢ (-1)ⁱ [dᵢ(σ) = τ]
+// = the algebraic multiplicity of (dim-1)-simplex τ in the boundary of σ.
+//
+// This is the standard boundary matrix of the bar complex, computing
+// H*(G; ℤ) via Smith normal form (see Layer 3).
+
 function buildBoundaryMatrix(simplices, dim, system) {
-  if (dim === 0) return { data: [], rows: 0, cols: simplices[0].length };
-  const lower = simplices[dim-1];
-  const upper = simplices[dim];
-  const lowerIndex = new Map(lower.map((s, i) => [JSON.stringify(s), i]));
-  const data = Array.from({length: lower.length},
-                          () => new Int32Array(upper.length));
+  if (dim === 0) return { data: [], rows: 0, cols: 1 };
+  const lower      = simplices[dim-1];
+  const upper      = simplices[dim];
+  const lowerIndex = new Map(lower.map((s,i) => [JSON.stringify(s), i]));
+  const data       = Array.from({length: lower.length}, () => new Int32Array(upper.length));
 
   for (let j = 0; j < upper.length; j++) {
     const sigma = upper[j];
     for (let i = 0; i <= dim; i++) {
       const face = faceMap(sigma, i, system);
-      const key = JSON.stringify(face);
+      const key  = JSON.stringify(face);
       if (lowerIndex.has(key)) {
         data[lowerIndex.get(key)][j] += (i % 2 === 0 ? 1 : -1);
       }
@@ -1013,38 +1256,51 @@ function buildBoundaryMatrix(simplices, dim, system) {
 
 // ================================================================
 // LAYER 3 — LINEAR ALGEBRA
-// Integer Smith normal form, homology computation, chain complex
-// verification. Pure math — no DOM, no system-specific logic.
 // ================================================================
+//
+// Smith Normal Form (SNF): given an integer matrix M (rows × cols),
+// find invertible integer matrices P, Q such that
+//   P · M · Q = diag(d₁, d₂, …, dᵣ, 0, …, 0)
+// with dᵢ | dᵢ₊₁ (divisibility chain) and all dᵢ > 0.
+//
+// The dᵢ are the INVARIANT FACTORS of M. They determine:
+//   rank(M) = r  (number of nonzero diagonal entries)
+//   torsion summands of cok(M) = ℤ/d₁ ⊕ … ⊕ ℤ/dₛ  (where dᵢ > 1)
+//
+// Algorithm: Euclidean elimination — repeatedly find the smallest
+// nonzero entry, move it to the pivot position, reduce the entire
+// row and column modulo the pivot, then advance.
 
 function smithNF(matData, rows, cols) {
   if (rows === 0 || cols === 0) return [];
-  // Deep copy
-  const M = matData.map(row => [...row]);
+  const M    = matData.map(row => [...row]);
   const diag = [];
-  let row = 0, col = 0;
+  let   row  = 0, col = 0;
 
   while (row < rows && col < cols) {
+    // Find smallest nonzero entry in the remaining sub-matrix
     let pivot = null;
     for (let c = col; c < cols; c++) {
       for (let r = row; r < rows; r++) {
         if (M[r][c] !== 0) {
-          if (pivot === null || Math.abs(M[r][c]) < Math.abs(M[pivot[0]][pivot[1]])) {
+          if (!pivot || Math.abs(M[r][c]) < Math.abs(M[pivot[0]][pivot[1]])) {
             pivot = [r, c];
           }
         }
       }
     }
     if (!pivot) break;
+
+    // Move pivot to (row, col)
     const [r0, c0] = pivot;
     [M[row], M[r0]] = [M[r0], M[row]];
-    for (let r = 0; r < rows; r++) {
-      [M[r][col], M[r][c0]] = [M[r][c0], M[r][col]];
-    }
+    for (let r = 0; r < rows; r++) [M[r][col], M[r][c0]] = [M[r][c0], M[r][col]];
 
+    // Eliminate: row-reduce and column-reduce until the pivot divides all entries
     let changed = true;
     while (changed) {
       changed = false;
+      // Row elimination: make M[row][col] divide all M[r][col]
       for (let r = row+1; r < rows; r++) {
         if (M[r][col] !== 0) {
           const q = Math.trunc(M[r][col] / M[row][col]);
@@ -1052,6 +1308,7 @@ function smithNF(matData, rows, cols) {
           if (M[r][col] !== 0) changed = true;
         }
       }
+      // Column elimination: make M[row][col] divide all M[row][c]
       for (let c = col+1; c < cols; c++) {
         if (M[row][c] !== 0) {
           const q = Math.trunc(M[row][c] / M[row][col]);
@@ -1060,6 +1317,7 @@ function smithNF(matData, rows, cols) {
         }
       }
     }
+
     if (M[row][col] < 0) for (let c = 0; c < cols; c++) M[row][c] = -M[row][c];
     diag.push(M[row][col]);
     row++; col++;
@@ -1067,30 +1325,39 @@ function smithNF(matData, rows, cols) {
   return diag;
 }
 
+// computeHomology: H_n(G; ℤ) = ker(∂_n) / im(∂_{n+1})
+//
+// For each degree n:
+//   rank(ker ∂_n)  = cols(∂_n) − rank(∂_n)       [rank-nullity theorem]
+//   rank(im ∂_{n+1}) = rank(∂_{n+1})               [= #{nonzero SNF diagonals}]
+//   free rank of H_n = rank(ker ∂_n) − rank(im ∂_{n+1})
+//   torsion of H_n   = {dᵢ > 1 in SNF(∂_{n+1})}
+//
+// By the structure theorem for finitely generated abelian groups:
+//   H_n ≅ ℤ^{free_rank} ⊕ ℤ/d₁ℤ ⊕ … ⊕ ℤ/dₛℤ
+
 function computeHomology(boundaryMaps, topDim) {
   const results = {};
   for (let n = 0; n <= topDim; n++) {
     const dn  = boundaryMaps[n];
     const dn1 = boundaryMaps[n+1];
 
-    let rankIm = 0;
+    // rank(im ∂_{n+1}) from SNF of ∂_{n+1}
+    let rankIm = 0, torsion = [];
     if (dn1 && dn1.cols > 0 && dn1.rows > 0) {
-      rankIm = smithNF(dn1.data, dn1.rows, dn1.cols).filter(d => d !== 0).length;
+      const diag = smithNF(dn1.data, dn1.rows, dn1.cols);
+      rankIm  = diag.filter(d => d !== 0).length;
+      torsion = diag.filter(d => d > 1);
     }
 
+    // rank(ker ∂_n) = cols(∂_n) − rank(∂_n)
     let rankKer = 0;
     if (dn && dn.cols > 0 && dn.rows > 0) {
-      const rankImDn = smithNF(dn.data, dn.rows, dn.cols).filter(d => d !== 0).length;
-      rankKer = dn.cols - rankImDn;
+      const rankDn = smithNF(dn.data, dn.rows, dn.cols).filter(d => d !== 0).length;
+      rankKer = dn.cols - rankDn;
     } else if (n === 0) {
+      // H_0: the space has one connected component (single object *), so H_0 = ℤ
       rankKer = 1;
-    }
-
-    const torsion = [];
-    if (dn1 && dn1.cols > 0 && dn1.rows > 0) {
-      smithNF(dn1.data, dn1.rows, dn1.cols)
-        .filter(d => d > 1)
-        .forEach(d => torsion.push(d));
     }
 
     results[n] = { free: rankKer - rankIm, torsion };
@@ -1098,18 +1365,19 @@ function computeHomology(boundaryMaps, topDim) {
   return results;
 }
 
+// checkD2: verify the chain complex condition ∂_{n-1} ∘ ∂_n = 0.
+// This must hold for the boundary matrices to compute valid homology.
+// It is a consequence of the simplicial identity dᵢ ∘ dⱼ = dⱼ₋₁ ∘ dᵢ for i < j.
+// A failure here signals a bug in the face map computation, not in the input.
 function checkD2(boundaryMaps, topDim) {
   for (let d = 1; d <= topDim; d++) {
     const dm  = boundaryMaps[d];
     const dm1 = boundaryMaps[d+1];
     if (!dm || !dm1 || dm1.cols === 0) continue;
-    // Check dm * dm1 = 0
     for (let i = 0; i < dm.rows; i++) {
       for (let j = 0; j < dm1.cols; j++) {
         let sum = 0;
-        for (let k = 0; k < dm.cols; k++) {
-          sum += dm.data[i][k] * dm1.data[k][j];
-        }
+        for (let k = 0; k < dm.cols; k++) sum += dm.data[i][k] * dm1.data[k][j];
         if (sum !== 0) return false;
       }
     }
@@ -1119,75 +1387,60 @@ function checkD2(boundaryMaps, topDim) {
 
 function formatGroup(free, torsion) {
   const parts = [];
-  if (free === 1) parts.push('ℤ');
+  if (free === 1)    parts.push('ℤ');
   else if (free > 1) parts.push(`ℤ^${free}`);
   torsion.forEach(t => parts.push(`ℤ/${t}ℤ`));
   return parts.join(' × ') || '0';
 }
 
-// Returns the rewrite trace for a single word — used by the rendering layer.
 function getCongruenceTrace(system, word) {
-  const traceLog = [];
-  system.applyRelations(word, traceLog);
-  return traceLog;
+  const log = [];
+  system.applyRelations(word, log);
+  return log;
 }
 
 // ================================================================
 // LAYER 4 — PRESETS & INPUT PARSING
-// Static preset definitions and user input → system construction.
-// parseInput() is the only function here that reads the DOM.
 // ================================================================
 
 const PRESETS = {
   circle: {
-    gens: 'a',
-    laws: '',
-    depth: 4,
-    topdim: 1,
-    expected: { 0: 'ℤ', 1: 'ℤ' }
+    gens: 'a', laws: '', depth: 4, topdim: 1,
+    expected: { 0:'ℤ', 1:'ℤ' },
+    mathNote: 'G = ℤ (infinite cyclic). BG ≃ S¹. H₀=ℤ (connected), H₁=ℤ (one loop).'
   },
   torus: {
-    gens: 'a b',
-    laws: 'b a = a b',
-    depth: 3,
-    topdim: 2,
-    expected: { 0: 'ℤ', 1: 'ℤ^2', 2: 'ℤ' }
+    gens: 'a b', laws: 'b a = a b', depth: 3, topdim: 2,
+    expected: { 0:'ℤ', 1:'ℤ^2', 2:'ℤ' },
+    mathNote: 'G = ℤ². BG = T² (torus). H₀=ℤ, H₁=ℤ² (two loops), H₂=ℤ (fundamental class). The law ab~ba creates H₂.'
   },
   z3: {
-    gens: 'a',
-    laws: 'a a a =',
-    depth: 4,
-    topdim: 1,
-    expected: { 0: 'ℤ', 1: 'ℤ/3ℤ' }
+    gens: 'a', laws: 'a a a =', depth: 4, topdim: 1,
+    expected: { 0:'ℤ', 1:'ℤ/3ℤ' },
+    mathNote: 'G = ℤ/3ℤ (cyclic, order 3). BG = K(ℤ/3,1). H₁=ℤ/3ℤ (torsion from the relation a³~id).'
   },
   z5: {
-    gens: 'a',
-    laws: 'a a a a a =',
-    depth: 6,
-    topdim: 1,
-    expected: { 0: 'ℤ', 1: 'ℤ/5ℤ' }
+    gens: 'a', laws: 'a a a a a =', depth: 6, topdim: 1,
+    expected: { 0:'ℤ', 1:'ℤ/5ℤ' },
+    mathNote: 'G = ℤ/5ℤ. Same pattern as ℤ/3ℤ; torsion coefficient is 5.'
   },
   free2: {
-    gens: 'a b',
-    laws: '',
-    depth: 2,
-    topdim: 1,
-    expected: { 0: 'ℤ', 1: 'ℤ^2' }
+    gens: 'a b', laws: '', depth: 2, topdim: 1,
+    expected: { 0:'ℤ', 1:'ℤ^2' },
+    mathNote: 'G = F₂ (free group on 2 generators). BF₂ = wedge of 2 circles. H₁=ℤ² (one copy per generator), H_n=0 for n≥2 — free groups have cohomological dimension 1. No comparison card (no laws to impose).'
   },
   custom: {
-    gens: 'a b',
-    laws: '',
-    depth: 3,
-    topdim: 2,
-    expected: {}
+    gens: 'a b', laws: '', depth: 3, topdim: 2,
+    expected: {},
+    mathNote: ''
   }
 };
 
 function loadPreset(name, btn) {
   const p = PRESETS[name];
-  document.getElementById('inp-gens').value = p.gens;
-  document.getElementById('inp-laws').value = p.laws;
-  document.getElementById('inp-depth').value = p.depth;
+  document.getElementById('inp-gens').value   = p.gens;
+  document.getElementById('inp-laws').value   = p.laws;
+  document.getElementById('inp-depth').value  = p.depth;
   document.getElementById('inp-topdim').value = p.topdim;
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
@@ -1197,22 +1450,18 @@ function loadPreset(name, btn) {
 
 let currentPreset = 'circle';
 
-// ================================================================
-// Parse input
-// ================================================================
-
 function parseInput() {
-  const gensRaw = document.getElementById('inp-gens').value.trim();
-  const lawsRaw = document.getElementById('inp-laws').value.trim();
-  const depth   = parseInt(document.getElementById('inp-depth').value);
-  const topdim  = parseInt(document.getElementById('inp-topdim').value);
+  const gensRaw  = document.getElementById('inp-gens').value.trim();
+  const lawsRaw  = document.getElementById('inp-laws').value.trim();
+  const depth    = parseInt(document.getElementById('inp-depth').value);
+  const topdim   = parseInt(document.getElementById('inp-topdim').value);
 
   const generators = gensRaw.split(/\s+/).filter(Boolean);
-  if (generators.length === 0) throw new Error('No generators specified.');
+  if (!generators.length) throw new Error('No generators specified.');
 
   const inverses = {};
   for (const g of generators) {
-    inverses[g] = g + '_inv';
+    inverses[g]          = g + '_inv';
     inverses[g + '_inv'] = g;
   }
 
@@ -1221,7 +1470,7 @@ function parseInput() {
     const trimmed = line.trim();
     if (!trimmed) continue;
     const parts = trimmed.split('=');
-    if (parts.length !== 2) throw new Error(`Invalid law: "${trimmed}". Use = to separate sides.`);
+    if (parts.length !== 2) throw new Error(`Invalid law: "${trimmed}". Use = to separate both sides.`);
     const lhs = parts[0].trim().split(/\s+/).filter(Boolean);
     const rhs = parts[1].trim().split(/\s+/).filter(Boolean);
     relations.push([lhs, rhs]);
@@ -1231,25 +1480,22 @@ function parseInput() {
 }
 
 // ================================================================
-// LAYER 5 — APP LOGIC
-// Orchestrates layers 1–3 in response to user actions.
-// Reads DOM only for status/button state. No HTML generation.
+// LAYER 5 — APPLICATION LOGIC
 // ================================================================
 
 function setStatus(s) {
-  const dot     = document.getElementById('status-dot');
-  const spinner = document.getElementById('spinner');
-  dot.className = 'status-dot ' + s;
-  spinner.className = s === 'running' ? 'spinner active' : 'spinner';
+  document.getElementById('status-dot').className = 'status-dot ' + s;
+  const sp = document.getElementById('spinner');
+  sp.className = s === 'running' ? 'spinner active' : 'spinner';
 }
 
 function clearResults() {
-  const body = document.getElementById('results-body');
-  body.innerHTML = `
+  document.getElementById('results-body').innerHTML = `
     <div class="empty-state">
       <div class="big">∂²=0</div>
       <div>Select a preset or enter a presentation, then compute.</div>
     </div>`;
+  document.getElementById('header-badges').innerHTML = '';
   setStatus('');
 }
 
@@ -1258,67 +1504,100 @@ function runComputation() {
   btn.disabled = true;
   setStatus('running');
 
-  // Small delay to let UI update
   setTimeout(() => {
     try {
       const { generators, inverses, relations, depth, topdim } = parseInput();
-      const system = new RelationalSystem(generators, inverses, relations);
+      const system   = new RelationalSystem(generators, inverses, relations);
       const expected = (PRESETS[currentPreset] || {}).expected || {};
+      const mathNote = (PRESETS[currentPreset] || {}).mathNote || '';
 
-      // Build quotient nerve
-      const { simplices, elements } = buildNerve(system, depth);
+      // ---- Step 1: Confluence check ----
+      // Verify the term rewriting system is locally confluent (Newman's lemma).
+      // Must run before nerve construction; a non-confluent TRS means
+      // applyRelations() may return different normal forms for congruent words,
+      // giving a corrupt nerve.
+      const confluenceResult = checkLocalConfluence(system);
 
-      // Build boundary maps (quotient)
-      const boundaryMaps = {};
-      boundaryMaps[0] = { data: [], rows: 0, cols: 1 };
+      // ---- Step 2: Build the quotient nerve ----
+      const { simplices, elements, elemSet } = buildNerve(system, depth);
+
+      // ---- Step 3: Homology stabilization check ----
+      // Correct test: does H_*(G;ℤ) change if we go one depth deeper?
+      // For infinite groups (ℤ, ℤ², free groups), element enumeration never
+      // completes — but homology stabilizes quickly. This test catches the
+      // genuinely incomplete cases where depth is actually too low.
+      const stabilityResult = depth >= 2
+        ? checkHomologyStabilized(system, depth, topdim)
+        : { stabilized: false, reason: 'depth too low to compare' };
+
+      // ---- Step 4: Build boundary maps and compute homology ----
+      const boundaryMaps = { 0: { data:[], rows:0, cols:1 } };
       for (let dim = 1; dim <= topdim + 1; dim++) {
         if (simplices[dim] && simplices[dim-1]) {
           boundaryMaps[dim] = buildBoundaryMatrix(simplices, dim, system);
         }
       }
-
-      // Check d^2 = 0
-      const d2ok = checkD2(boundaryMaps, topdim);
-
-      // Compute homology (quotient)
+      const d2ok    = checkD2(boundaryMaps, topdim);
       const homology = computeHomology(boundaryMaps, topdim);
 
-      // Build free nerve (pre-quotient) — only when laws exist
+      // ---- Step 5: Free nerve comparison (when laws are present) ----
+      // Build N(F(R)) — the nerve before imposing any congruence laws.
+      // Comparing with N(G) reveals what each law contributes to topology.
       let freeData = null;
       if (system.expandedRelations.length > 0) {
-        const freeSystem = makeFreeSystem(system);
-        const { simplices: fSimp, elements: fElems } = buildFreeNerve(system, depth);
-        const freeBoundaryMaps = {};
-        freeBoundaryMaps[0] = { data: [], rows: 0, cols: 1 };
+        const freeNerveData = buildFreeNerve(system, depth);
+        const fSys = freeNerveData.system;
+        const freeBMaps = { 0: { data:[], rows:0, cols:1 } };
         for (let dim = 1; dim <= topdim + 1; dim++) {
-          if (fSimp[dim] && fSimp[dim-1]) {
-            freeBoundaryMaps[dim] = buildBoundaryMatrix(fSimp, dim, freeSystem);
+          if (freeNerveData.simplices[dim] && freeNerveData.simplices[dim-1]) {
+            freeBMaps[dim] = buildBoundaryMatrix(freeNerveData.simplices, dim, fSys);
           }
         }
-        const freeHomology = computeHomology(freeBoundaryMaps, topdim);
-        freeData = { simplices: fSimp, elements: fElems, homology: freeHomology };
+        freeData = {
+          simplices: freeNerveData.simplices,
+          elements:  freeNerveData.elements,
+          homology:  computeHomology(freeBMaps, topdim)
+        };
       }
 
-      // Generate trace for demo
+      // ---- Step 6: Trace examples for display ----
       const traceExamples = generateTraceExamples(system, generators);
 
-      // Check if all match expected
+      // ---- Step 7: Validate against known answers ----
       let allMatch = true;
       if (Object.keys(expected).length > 0) {
         for (let n = 0; n <= topdim; n++) {
-          const computed = formatGroup(homology[n]?.free || 0, homology[n]?.torsion || []);
-          if (expected[n] && expected[n] !== computed) allMatch = false;
+          const computed = formatGroup(homology[n]?.free||0, homology[n]?.torsion||[]);
+          if (expected[n] && expected[n] !== computed) { allMatch = false; break; }
         }
       }
 
+      // ---- Render ----
       renderResults({
         system, elements, simplices, homology, topdim,
-        d2ok, allMatch, expected, traceExamples, generators,
-        freeData
+        d2ok, allMatch, expected, mathNote, traceExamples,
+        generators, freeData, confluenceResult, stabilityResult
       });
-      setStatus(d2ok ? 'ok' : 'err');
 
-    } catch (e) {
+      // Header badges
+      const badges = document.getElementById('header-badges');
+      badges.innerHTML = '';
+      // Confluence badge
+      const cfBadge = document.createElement('span');
+      cfBadge.className = 'header-badge ' + (confluenceResult.confluent ? 'ok' : 'err');
+      cfBadge.textContent = confluenceResult.confluent ? '✓ confluent' : '✗ non-confluent';
+      cfBadge.title = confluenceResult.summary;
+      badges.appendChild(cfBadge);
+      // Stabilization badge
+      const stBadge = document.createElement('span');
+      stBadge.className = 'header-badge ' + (stabilityResult.stabilized ? 'ok' : 'warn');
+      stBadge.textContent = stabilityResult.stabilized ? '✓ homology stable' : '⚠ homology not yet stable';
+      stBadge.title = stabilityResult.reason;
+      badges.appendChild(stBadge);
+
+      setStatus(d2ok && confluenceResult.confluent ? 'ok' : 'err');
+
+    } catch(e) {
       renderError(e.message);
       setStatus('err');
     }
@@ -1328,112 +1607,125 @@ function runComputation() {
 
 function generateTraceExamples(system, generators) {
   const examples = [];
-  if (generators.length >= 2) {
-    const a = generators[0], b = generators[1];
-    const bi = system.inv[b] || (b + '_inv');
-    const words = [
-      { word: [b, a], desc: `${b}.${a} → canonical` },
-      { word: [b, b, a], desc: `${b}.${b}.${a} → canonical` },
-      { word: [a, b, system.inv[a] || a+'_inv'], desc: `${a}.${b}.${a}_inv → canonical` },
-    ];
-    for (const { word, desc } of words) {
-      const log = [];
-      const result = system.applyRelations(word, log);
-      if (log.length > 0) {
-        examples.push({ word, result, log, desc });
-      }
-    }
+  if (generators.length < 2) return examples;
+  const a = generators[0], b = generators[1];
+  const words = [
+    { word:[b,a],           desc:`${b}·${a} → canonical` },
+    { word:[b,b,a],         desc:`${b}·${b}·${a} → canonical` },
+    { word:[b,a,b,a],       desc:`${b}·${a}·${b}·${a} → canonical` },
+    { word:[a,b,system.inv[a]||a+'_inv'], desc:`${a}·${b}·${a}⁻¹ → canonical` },
+  ];
+  for (const {word, desc} of words) {
+    const log = [], result = system.applyRelations(word, log);
+    if (log.length > 0) examples.push({word, result, log, desc});
   }
   return examples;
 }
 
 // ================================================================
 // LAYER 6 — RENDERING
-// All DOM construction lives here. Takes plain data objects from
-// Layer 5 and turns them into HTML. No math, no system logic.
 // ================================================================
 
-function renderResults({ system, elements, simplices, homology, topdim,
-                         d2ok, allMatch, expected, traceExamples, generators,
-                         freeData }) {
+function renderResults({
+  system, elements, simplices, homology, topdim,
+  d2ok, allMatch, expected, mathNote, traceExamples,
+  generators, freeData, confluenceResult, stabilityResult
+}) {
   const body = document.getElementById('results-body');
   body.innerHTML = '';
 
-  // Main homology card
-  const card = document.createElement('div');
-  card.className = 'result-card';
-
+  // ---- Card 1: Homology Groups ----
   const hasExpected = Object.keys(expected).length > 0;
-  const tagText = hasExpected ? (allMatch ? 'All correct' : 'Discrepancy') : 'Computed';
+  const tagText  = hasExpected ? (allMatch ? 'All correct' : 'Discrepancy') : 'Computed';
   const tagClass = hasExpected ? (allMatch ? 'correct' : 'error') : 'correct';
 
-  card.innerHTML = `
+  const card1 = document.createElement('div');
+  card1.className = 'result-card';
+  card1.innerHTML = `
     <div class="card-header">
-      <div class="card-title">Homology Groups</div>
+      <div class="card-title">Homology Groups — H_*(G; ℤ)</div>
       <div class="card-tag ${tagClass}">${tagText}</div>
     </div>
     <div class="card-body">
-      <div class="homology-groups" id="hgroups"></div>
+      ${!confluenceResult.confluent ? `
+        <div class="warning-banner">
+          <div class="wb-title">⚠ Non-confluent rewriting system</div>
+          ${confluenceResult.summary}<br>
+          Two words in the same congruence class may normalize to different forms,
+          making the nerve incorrect. Add Knuth-Bendix completion rules, or check
+          that your laws form a convergent presentation.
+        </div>` : ''}
+      ${!stabilityResult.stabilized ? `
+        <div class="warning-banner" style="border-color:var(--yellow);color:var(--yellow);background:rgba(249,226,175,0.05)">
+          <div class="wb-title">⚠ Homology not yet stable at this depth</div>
+          ${stabilityResult.reason}.<br>
+          Increase "Nerve Depth" and recompute until this warning disappears.
+        </div>` : ''}
+      <div class="homology-groups" id="hgroups-main"></div>
       <div class="stats">
-        <div class="stat">classes <span>${elements.length}</span></div>
-        ${[0,1,2,3].filter(d => simplices[d]).map(d =>
+        <div class="stat">elements <span>${elements.length}</span></div>
+        ${[0,1,2,3].filter(d=>simplices[d]).map(d=>
           `<div class="stat">${d}-simplices <span>${simplices[d].length}</span></div>`
         ).join('')}
       </div>
-      <div class="d2-badge ${d2ok ? 'ok' : 'bad'}">
-        ${d2ok ? '✓' : '✗'} ∂² = 0 ${d2ok ? 'verified' : 'FAILED'}
+      <div class="d2-badge ${d2ok?'ok':'bad'}">
+        ${d2ok?'✓':'✗'} ∂² = 0 ${d2ok?'verified — valid chain complex':'FAILED — implementation error'}
       </div>
-    </div>
-  `;
-  body.appendChild(card);
+      ${mathNote ? `<div class="math-note">
+        <div class="mn-title">Mathematical context</div>${mathNote}
+      </div>` : ''}
+    </div>`;
+  body.appendChild(card1);
 
-  // Populate homology groups
-  const hgroups = card.querySelector('#hgroups');
+  // Populate H_n tiles
+  const hg = card1.querySelector('#hgroups-main');
   for (let n = 0; n <= topdim; n++) {
-    const { free, torsion } = homology[n] || { free: 0, torsion: [] };
+    const {free, torsion} = homology[n] || {free:0, torsion:[]};
     const computed = formatGroup(free, torsion);
-    const hasTorsion = torsion.length > 0;
     const div = document.createElement('div');
-    div.className = 'hgroup' + (hasTorsion ? ' torsion' : '');
-    const expStr = expected[n] ? `<div style="font-size:10px;color:var(--dim);margin-top:3px">expected ${expected[n]}</div>` : '';
+    div.className = 'hgroup' + (torsion.length > 0 ? ' torsion' : '');
     div.innerHTML = `
       <div class="hn">H_${n}</div>
       <div class="hval">${computed}</div>
-      ${expStr}
-    `;
-    hgroups.appendChild(div);
+      ${expected[n] ? `<div style="font-size:10px;color:var(--dim);margin-top:3px">expected ${expected[n]}</div>` : ''}`;
+    hg.appendChild(div);
   }
 
-  // Congruence trace card (if there are traces)
+  // ---- Card 2: Congruence Rewriting ----
   if (traceExamples.length > 0) {
-    const traceCard = document.createElement('div');
-    traceCard.className = 'result-card';
-    traceCard.style.animationDelay = '0.1s';
-    traceCard.innerHTML = `
+    const card2 = document.createElement('div');
+    card2.className = 'result-card';
+    card2.style.animationDelay = '0.08s';
+    card2.innerHTML = `
       <div class="card-header">
-        <div class="card-title">Congruence Rewriting</div>
-        <div class="card-tag correct">explicit rules</div>
+        <div class="card-title">Congruence Rewriting — normal form computation</div>
+        <div class="card-tag correct">shortlex TRS</div>
       </div>
-      <div class="card-body" id="trace-container"></div>
-    `;
-    body.appendChild(traceCard);
+      <div class="card-body">
+        <div class="math-note" style="margin-bottom:14px">
+          <div class="mn-title">What this shows</div>
+          Each word w is reduced to its canonical representative [w] ∈ G = F(R)/~
+          by repeatedly applying the oriented rewrite rules l→r (where l &gt; r in shortlex order)
+          until no rule applies. The result is the unique normal form assuming confluence.
+        </div>
+        <div id="trace-container2"></div>
+      </div>`;
+    body.appendChild(card2);
 
-    const traceContainer = traceCard.querySelector('#trace-container');
-
+    const tc = card2.querySelector('#trace-container2');
     for (const ex of traceExamples) {
       const block = document.createElement('div');
       block.className = 'trace-block';
-      block.style.marginBottom = '10px';
-
-      const btnId = 'trace-' + Math.random().toString(36).slice(2);
+      const btnId = 'trc-' + Math.random().toString(36).slice(2);
+      const resultStr = ex.result.length === 0 ? '[]' : JSON.stringify(ex.result);
       block.innerHTML = `
         <button class="trace-toggle" onclick="toggleTrace('${btnId}')">
           <span class="arrow">▶</span>
           <span>${ex.desc}</span>
-          <span style="margin-left:auto;color:var(--accent)">${JSON.stringify(ex.result)}</span>
+          <span style="margin-left:auto;color:var(--accent)">${resultStr}</span>
         </button>
         <div class="trace-content" id="${btnId}">
-          ${ex.log.map((step, i) => `
+          ${ex.log.map((step,i) => `
             <div class="trace-line">
               <span class="step-num">[${step.step}]</span>
               <span class="law">${JSON.stringify(step.law[0])}→${JSON.stringify(step.law[1])}</span>
@@ -1441,138 +1733,128 @@ function renderResults({ system, elements, simplices, homology, topdim,
               <span class="from">${JSON.stringify(step.from)}</span>
               <span class="arrow-sym">→</span>
               <span class="to">${JSON.stringify(step.to)}</span>
-            </div>
-          `).join('')}
-        </div>
-      `;
-      traceContainer.appendChild(block);
+            </div>`).join('')}
+        </div>`;
+      tc.appendChild(block);
     }
   }
 
-  // Nerve structure card
-  const nerveCard = document.createElement('div');
-  nerveCard.className = 'result-card';
-  nerveCard.style.animationDelay = '0.2s';
-  nerveCard.innerHTML = `
+  // ---- Card 3: Nerve Structure ----
+  const card3 = document.createElement('div');
+  card3.className = 'result-card';
+  card3.style.animationDelay = '0.16s';
+  card3.innerHTML = `
     <div class="card-header">
-      <div class="card-title">Nerve Structure</div>
+      <div class="card-title">Nerve N(G) — bar complex structure</div>
       <div class="card-tag correct">no triangulation</div>
     </div>
     <div class="card-body">
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;
-                  color:var(--dim);line-height:2.2">
-        <div>
-          <span style="color:var(--text)">0-simplices</span>
-          &nbsp;= states (${simplices[0]?.length || 0})
-        </div>
-        <div>
-          <span style="color:var(--text)">1-simplices</span>
-          &nbsp;= morphism classes (${simplices[1]?.length || 0})
-        </div>
-        <div>
-          <span style="color:var(--text)">2-simplices</span>
-          &nbsp;= composable pairs (${simplices[2]?.length || 0})
-          &nbsp;<span style="color:var(--dim);font-size:10px">
-            — triangles from composition, not geometry
-          </span>
-        </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);line-height:2.2">
+        <div><span style="color:var(--text)">0-simplices</span>
+          &nbsp;= {*} — the single object (${simplices[0]?.length||0})</div>
+        <div><span style="color:var(--text)">1-simplices</span>
+          &nbsp;= elements of G — one per congruence class (${simplices[1]?.length||0})</div>
+        <div><span style="color:var(--text)">2-simplices</span>
+          &nbsp;= composable pairs (g, h) — triangles from composition, not geometry (${simplices[2]?.length||0})</div>
         ${simplices[3] ? `
-        <div>
-          <span style="color:var(--text)">3-simplices</span>
-          &nbsp;= composable triples (${simplices[3].length})
-        </div>` : ''}
-        <div style="margin-top:10px;padding-top:10px;
-                    border-top:1px solid var(--border);color:var(--dim)">
-          Generators: [${system.generators.join(', ')}]
-          &nbsp;·&nbsp;
-          Laws: ${system.expandedRelations.length > 0
-            ? system.expandedRelations.map(([l,r]) =>
-                JSON.stringify(l) + '~' + JSON.stringify(r)
-              ).join(', ')
-            : 'none'}
-        </div>
+        <div><span style="color:var(--text)">3-simplices</span>
+          &nbsp;= composable triples (g, h, k) (${simplices[3].length})</div>` : ''}
       </div>
-    </div>
-  `;
-  body.appendChild(nerveCard);
+      <div class="math-note">
+        <div class="mn-title">Bar complex</div>
+        The n-simplices are composable n-tuples of morphisms in G. The boundary map
+        ∂_n = Σᵢ (-1)ⁱ dᵢ  alternates between dropping endpoints and composing adjacent pairs.
+        This is exactly the normalized bar complex computing H*(G; ℤ) = H*(BG; ℤ).
+        Generators: [${system.generators.join(', ')}].
+        Laws: ${system.expandedRelations.length > 0
+          ? system.expandedRelations.map(([l,r])=>JSON.stringify(l)+'→'+JSON.stringify(r)).join(', ')
+          : 'none (free group / monoid)'}
+      </div>
+    </div>`;
+  body.appendChild(card3);
 
-  // Comparison card — only when congruence laws are present
+  // ---- Card 4: Presentation Comparison (only when laws exist) ----
   if (freeData) {
-    body.appendChild(renderComparisonCard(freeData, { simplices, elements, homology }, topdim));
+    body.appendChild(renderComparisonCard(freeData, {simplices, elements, homology}, topdim, system));
   }
 }
 
-function renderComparisonCard(freeData, quotientData, topdim) {
+// renderComparisonCard: shows N(F(R)) vs N(G) side by side.
+//
+// Mathematical content:
+//   LEFT  — N(F(R)): the nerve of the free group F(R) (no laws).
+//            H₁(F(R)) = ℤ^|R|, Hₙ(F(R)) = 0 for n ≥ 2.
+//   RIGHT — N(G):    the nerve of the presented group G = F(R)/~.
+//
+// Differences between the two nerves reflect what the congruence laws
+// contribute: identified elements (congruent words become one class)
+// and new topological structure (loops, surfaces, etc. created by the laws).
+//
+// Example (torus): imposing ab~ba collapses |F₂| (contractible wedge)
+// to T² = BZ², which acquires H₂ = ℤ — the fundamental class.
+
+function renderComparisonCard(freeData, quotientData, topdim, system) {
   const card = document.createElement('div');
   card.className = 'result-card';
-  card.style.animationDelay = '0.3s';
+  card.style.animationDelay = '0.24s';
 
-  // Helper: delta label — only shown on the quotient side
   function delta(freeCount, quotientCount) {
     const d = quotientCount - freeCount;
     if (d === 0) return '';
     const cls = d < 0 ? 'neg' : 'pos';
-    return `<span class="compare-delta ${cls}"> (${d > 0 ? '+' : ''}${d})</span>`;
+    return `<span class="compare-delta ${cls}">(${d>0?'+':''}${d})</span>`;
   }
 
-  // Simplex rows — free side shows plain counts, quotient side shows count + delta
   function simplexRows(simp, otherSimp, isFree) {
-    const dims = [0, 1, 2, 3].filter(d => simp[d]);
-    return dims.map(d => {
+    return [0,1,2,3].filter(d => simp[d]).map(d => {
       const count = simp[d].length;
       const other = otherSimp[d]?.length ?? 0;
       const diff  = isFree ? '' : delta(other, count);
       const cls   = (!isFree && count < other) ? 'collapsed' : '';
-      return `
-        <div class="compare-row">
-          <span class="cr-label">${d}-simplices</span>
-          <span class="cr-val ${cls}">${count}${diff}</span>
-        </div>`;
+      return `<div class="compare-row">
+        <span class="cr-label">${d}-simplices</span>
+        <span class="cr-val ${cls}">${count} ${diff}</span>
+      </div>`;
     }).join('');
   }
 
-  // Homology rows
   function homologyRows(hom, otherHom, isFree) {
-    return Array.from({ length: topdim + 1 }, (_, n) => {
-      const { free, torsion } = hom[n] || { free: 0, torsion: [] };
+    return Array.from({length: topdim+1}, (_, n) => {
+      const {free,torsion} = hom[n] || {free:0,torsion:[]};
       const computed = formatGroup(free, torsion);
-      const otherComputed = formatGroup(
-        otherHom[n]?.free || 0,
-        otherHom[n]?.torsion || []
-      );
-      const changed = computed !== otherComputed;
-      const cls = changed ? (isFree ? 'collapsed' : 'gained') : 'same';
-      return `
-        <div class="compare-row">
-          <span class="cr-label">H_${n}</span>
-          <span class="cr-val ${cls}">${computed}</span>
-        </div>`;
+      const otherC   = formatGroup(otherHom[n]?.free||0, otherHom[n]?.torsion||[]);
+      const changed  = computed !== otherC;
+      const cls      = changed ? (isFree ? 'collapsed' : 'gained') : 'same';
+      return `<div class="compare-row">
+        <span class="cr-label">H_${n}</span>
+        <span class="cr-val ${cls}">${computed}</span>
+      </div>`;
     }).join('');
   }
 
-  // Build note about what changed
+  // Summarize what changed
   const homChanges = [];
   for (let n = 0; n <= topdim; n++) {
-    const fG = formatGroup(freeData.homology[n]?.free || 0, freeData.homology[n]?.torsion || []);
-    const qG = formatGroup(quotientData.homology[n]?.free || 0, quotientData.homology[n]?.torsion || []);
+    const fG = formatGroup(freeData.homology[n]?.free||0, freeData.homology[n]?.torsion||[]);
+    const qG = formatGroup(quotientData.homology[n]?.free||0, quotientData.homology[n]?.torsion||[]);
     if (fG !== qG) homChanges.push(`H_${n}: ${fG} → ${qG}`);
   }
-  const elemCollapsed = freeData.elements.length - quotientData.elements.length;
-  const noteText = elemCollapsed > 0
-    ? `Congruence laws identified ${elemCollapsed} element class${elemCollapsed !== 1 ? 'es' : ''}.`
-    : 'No element classes were identified by the laws.';
-  const homNote = homChanges.length > 0
-    ? ` Homology changed at: ${homChanges.join(', ')}.`
-    : ' Homology is unchanged by the quotient.';
+  const collapsed = freeData.elements.length - quotientData.elements.length;
+  const noteText  = collapsed > 0
+    ? `The congruence laws identified ${collapsed} element class${collapsed!==1?'es':''} (${freeData.elements.length} free-group words → ${quotientData.elements.length} quotient-group elements).`
+    : `No element classes were identified — the quotient has as many elements as the free group at this depth.`;
+  const homNote   = homChanges.length > 0
+    ? ` Homology changed at: ${homChanges.join(', ')}. New classes were created by the laws.`
+    : ` Homology is unchanged from the free group at this depth.`;
 
   card.innerHTML = `
     <div class="card-header">
-      <div class="card-title">Presentation Comparison</div>
+      <div class="card-title">Presentation Comparison — N(F(R)) vs N(G)</div>
       <div class="card-tag correct">free vs quotient</div>
     </div>
     <div class="compare-grid">
       <div class="compare-col">
-        <div class="compare-col-title free">Free Category</div>
+        <div class="compare-col-title free">Free Group F(R) — before laws</div>
         <div class="compare-row">
           <span class="cr-label">elements</span>
           <span class="cr-val">${freeData.elements.length}</span>
@@ -1582,10 +1864,10 @@ function renderComparisonCard(freeData, quotientData, topdim) {
         ${homologyRows(freeData.homology, quotientData.homology, true)}
       </div>
       <div class="compare-col">
-        <div class="compare-col-title quotient">Quotient Category</div>
+        <div class="compare-col-title quotient">Quotient Group G = F(R)/~ — after laws</div>
         <div class="compare-row">
           <span class="cr-label">elements</span>
-          <span class="cr-val ${elemCollapsed > 0 ? 'collapsed' : ''}">${quotientData.elements.length}${delta(freeData.elements.length, quotientData.elements.length)}</span>
+          <span class="cr-val ${collapsed>0?'collapsed':''}">${quotientData.elements.length} ${delta(freeData.elements.length, quotientData.elements.length)}</span>
         </div>
         ${simplexRows(quotientData.simplices, freeData.simplices, false)}
         <hr class="compare-divider">
@@ -1593,14 +1875,22 @@ function renderComparisonCard(freeData, quotientData, topdim) {
       </div>
     </div>
     <div class="compare-note">${noteText}${homNote}</div>
-  `;
+    <div class="math-note" style="margin:0;border-left:none;border-top:1px solid var(--border);border-radius:0">
+      <div class="mn-title">What the comparison means</div>
+      The LEFT column is the nerve of F(R) truncated at this depth.
+      For any free group: H₀=ℤ, H₁=ℤ^|R|, H_n=0 for n≥2 (cohomological dimension 1).
+      The RIGHT column is the nerve of G = F(R)/~, where ~ is generated by the declared laws.
+      Differences isolate the topological contribution of the laws: identified elements shrink
+      the nerve; new composable paths created by the identifications can produce new homology classes.
+      Yellow = collapsed by the laws. Green = created by the laws.
+    </div>`;
 
   return card;
 }
 
 function renderError(msg) {
-  const body = document.getElementById('results-body');
-  body.innerHTML = `<div class="error-msg">Error: ${msg}</div>`;
+  document.getElementById('results-body').innerHTML =
+    `<div class="error-msg">Error: ${msg}</div>`;
 }
 
 function toggleTrace(id) {
@@ -1611,7 +1901,7 @@ function toggleTrace(id) {
 }
 
 // ================================================================
-// Startup trace — shows framework machinery running
+// STARTUP TRACE — shows the framework pipeline on first load
 // ================================================================
 
 function buildStartupTrace() {
@@ -1622,194 +1912,151 @@ function buildStartupTrace() {
   panel.className = 'trace-panel result-card';
   panel.innerHTML = `
     <div class="trace-panel-header">
-      <div class="trace-panel-title">Framework Machinery — Startup Trace</div>
-      <div class="card-tag correct">live computation</div>
+      <div class="trace-panel-title">Framework Pipeline — Live Startup Trace</div>
+      <div class="card-tag correct">torus example</div>
     </div>
-    <div class="trace-panel-body" id="startup-trace-body"></div>
-  `;
+    <div class="trace-panel-body" id="stb"></div>`;
   body.appendChild(panel);
 
-  const tb = panel.querySelector('#startup-trace-body');
+  const tb = panel.querySelector('#stb');
 
-  // --- Section 1: Congruence rewriting ---
-  const torusSystem = new RelationalSystem(
-    ['a', 'b'],
-    { 'a': 'a_inv', 'b': 'b_inv', 'a_inv': 'a', 'b_inv': 'b' },
+  // --- Section 1: Confluence check ---
+  const torusSys = new RelationalSystem(
+    ['a','b'],
+    {'a':'a_inv','b':'b_inv','a_inv':'a','b_inv':'b'},
     [[['b','a'],['a','b']]]
   );
+  const cfResult = checkLocalConfluence(torusSys);
 
-  const rewriteExamples = [
-    { word: ['b','a'],           label: "b · a" },
-    { word: ['b','b','a'],       label: "b · b · a" },
-    { word: ['b','a','b','a'],   label: "b · a · b · a" },
-    { word: ['a','b','a_inv'],   label: "a · b · a⁻¹" },
+  let html = `
+    <div class="trace-section-title">1 · Confluence check &nbsp;
+      <span style="color:var(--dim);font-weight:400">
+        TRS: b·a → a·b &nbsp;(torus commutativity, expanded to all inverse variants)
+      </span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">rules after expansion</span>
+      <span class="tval">${torusSys.expandedRelations.length} oriented rewrite rules</span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">critical pairs found</span>
+      <span class="tval">${cfResult.totalPairs}</span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">all joinable?</span>
+      <span class="tval ${cfResult.confluent?'ok':'warn'}">${cfResult.confluent?'✓ yes — unique normal forms guaranteed':'✗ no — results unreliable'}</span>
+    </div>`;
+
+  // --- Section 2: Congruence rewriting ---
+  const rwEx = [
+    {word:['b','a'], label:'b·a'},
+    {word:['b','b','a'], label:'b·b·a'},
+    {word:['b','a','b','a'], label:'b·a·b·a'},
+    {word:['a','b','a_inv'], label:'a·b·a⁻¹'},
   ];
 
-  let rewriteHTML = `<div class="trace-section-title">
-    1 · Congruence rewriting &nbsp;
-    <span style="color:var(--dim);font-weight:400">
-      law: b·a → a·b &nbsp;(torus commutativity)
-    </span>
-  </div>`;
+  html += `<hr class="trace-separator">
+    <div class="trace-section-title">2 · Congruence rewriting &nbsp;
+      <span style="color:var(--dim);font-weight:400">normalizing words → canonical elements of G = ℤ²</span>
+    </div>`;
 
-  for (const ex of rewriteExamples) {
+  for (const ex of rwEx) {
     const log = [];
-    const result = torusSystem.applyRelations(ex.word, log);
-    const steps = log.length;
-    const resultStr = result.length === 0 ? 'id' : result.join(' · ');
-    rewriteHTML += `
-      <div class="trace-row">
-        <span class="tlabel">${ex.label}</span>
-        <span class="tval highlight">
-          → ${resultStr}
-          <span style="color:var(--dim);font-size:10px;margin-left:8px">
-            (${steps} rewrite${steps !== 1 ? 's' : ''})
-          </span>
-        </span>
-      </div>`;
+    const result = torusSys.applyRelations(ex.word, log);
+    const rStr = result.length === 0 ? 'id' : result.join('·');
+    html += `<div class="trace-row">
+      <span class="tlabel">${ex.label}</span>
+      <span class="tval highlight">→ ${rStr}
+        <span style="color:var(--dim);font-size:10px;margin-left:8px">(${log.length} rewrite${log.length!==1?'s':''})</span>
+      </span>
+    </div>`;
   }
 
-  // --- Section 2: Nerve construction (circle) ---
-  const circleSystem = new RelationalSystem(
-    ['a'],
-    { 'a': 'a_inv', 'a_inv': 'a' },
-    []
-  );
-  const { simplices: cSimp, elements: cElems } =
-    buildNerve(circleSystem, 4);
+  // --- Section 3: Nerve at depth 3 ---
+  const {simplices:cS, elements:cE, elemSet:cES} = buildNerve(torusSys, 3);
+  const stabResult = checkHomologyStabilized(torusSys, 3, 2);
 
-  const circleHTML = `
-    <hr class="trace-separator">
-    <div class="trace-section-title">
-      2 · Nerve construction &nbsp;
-      <span style="color:var(--dim);font-weight:400">
-        circle S¹ — depth 4, no congruence laws
-      </span>
+  html += `<hr class="trace-separator">
+    <div class="trace-section-title">3 · Nerve construction &nbsp;
+      <span style="color:var(--dim);font-weight:400">N(ℤ²) truncated at depth 3</span>
     </div>
     <div class="trace-row">
-      <span class="tlabel">configuration classes</span>
-      <span class="tval">${cElems.length} &nbsp;
-        <span style="color:var(--dim);font-size:10px">
-          (id, a, a², a³, a⁻¹, a⁻², a⁻³, a·a⁻¹≡id already reduced…)
-        </span>
-      </span>
-    </div>
-    <div class="trace-row">
-      <span class="tlabel">0-simplices</span>
-      <span class="tval">${cSimp[0].length} &nbsp;
-        <span style="color:var(--dim);font-size:10px">— the single state</span>
-      </span>
+      <span class="tlabel">elements of G</span>
+      <span class="tval">${cE.length} congruence classes</span>
     </div>
     <div class="trace-row">
       <span class="tlabel">1-simplices</span>
-      <span class="tval">${cSimp[1].length} &nbsp;
-        <span style="color:var(--dim);font-size:10px">— one per configuration class</span>
-      </span>
+      <span class="tval">${cS[1].length} (one per element)</span>
     </div>
     <div class="trace-row">
       <span class="tlabel">2-simplices</span>
-      <span class="tval">${cSimp[2].length} &nbsp;
-        <span style="color:var(--dim);font-size:10px">
-          — composable pairs; triangles from composition, not geometry
-        </span>
-      </span>
+      <span class="tval">${cS[2].length} composable pairs</span>
     </div>
     <div class="trace-row">
       <span class="tlabel">3-simplices</span>
-      <span class="tval">${cSimp[3].length}</span>
+      <span class="tval">${cS[3]?.length||0} composable triples</span>
+    </div>
+    <div class="trace-row">
+      <span class="tlabel">homology stable?</span>
+      <span class="tval ${stabResult.stabilized?'ok':'warn'}">${stabResult.stabilized?'✓ '+stabResult.reason:'⚠ '+stabResult.reason}</span>
     </div>`;
 
-  // --- Section 3: Boundary map and d²=0 ---
-  const cBound = {};
-  cBound[0] = { data: [], rows: 0, cols: 1 };
-  for (let dim = 1; dim <= 3; dim++) {
-    if (cSimp[dim] && cSimp[dim-1]) {
-      cBound[dim] = buildBoundaryMatrix(cSimp, dim, circleSystem);
-    }
+  // --- Section 4: ∂² = 0 ---
+  const cBM = {0:{data:[],rows:0,cols:1}};
+  for (let d=1;d<=3;d++) {
+    if (cS[d]&&cS[d-1]) cBM[d]=buildBoundaryMatrix(cS,d,torusSys);
   }
-  const d2ok = checkD2(cBound, 2);
-
-  // Show d_1 matrix (first few rows/cols)
-  const d1 = cBound[1];
-  let matrixHTML = '';
+  const d2ok = checkD2(cBM, 2);
+  const d1 = cBM[1];
+  let matHTML = '';
   if (d1 && d1.rows > 0) {
-    const showRows = Math.min(d1.rows, 4);
-    const showCols = Math.min(d1.cols, 6);
-    matrixHTML = `
-      <div class="trace-section-title" style="margin-top:4px">
-        Boundary matrix ∂₁ &nbsp;
-        <span style="color:var(--dim);font-weight:400">
-          (${d1.rows}×${d1.cols}, showing ${showRows}×${showCols})
-        </span>
-      </div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;
-                  color:var(--dim);line-height:2;overflow-x:auto">
-        ${Array.from({length: showRows}, (_, i) =>
-          '<span style="color:var(--text)">[</span>' +
-          Array.from({length: showCols}, (_, j) => {
-            const v = d1.data[i]?.[j] ?? 0;
-            const col = v > 0 ? 'var(--green)' : v < 0 ? 'var(--red)' : 'var(--dim)';
+    const sr = Math.min(d1.rows,4), sc = Math.min(d1.cols,6);
+    matHTML = `<div class="trace-section-title" style="margin-top:4px">∂₁ matrix (${d1.rows}×${d1.cols}, showing ${sr}×${sc})</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);line-height:2;overflow-x:auto">
+        ${Array.from({length:sr},(_,i)=>
+          '<span style="color:var(--text)">[</span>'+
+          Array.from({length:sc},(_,j)=>{
+            const v=d1.data[i]?.[j]??0;
+            const col=v>0?'var(--green)':v<0?'var(--red)':'var(--dim)';
             return `<span style="color:${col};min-width:24px;display:inline-block;text-align:right">${v}</span>`;
-          }).join(' ') +
-          (d1.cols > showCols ? ' <span style="color:var(--dim)">…</span>' : '') +
+          }).join(' ')+
+          (d1.cols>sc?'<span style="color:var(--dim)"> …</span>':'')+
           '<span style="color:var(--text)">]</span>'
         ).join('<br>')}
-        ${d1.rows > showRows ? `<br><span style="color:var(--dim)">… ${d1.rows - showRows} more rows</span>` : ''}
+        ${d1.rows>sr?`<br><span style="color:var(--dim)">… ${d1.rows-sr} more rows</span>`:''}
       </div>`;
   }
 
-  const d2HTML = `
-    <hr class="trace-separator">
-    <div class="trace-section-title">
-      3 · Boundary maps &nbsp;
+  html += `<hr class="trace-separator">
+    <div class="trace-section-title">4 · Boundary maps &nbsp;
       <span style="color:var(--dim);font-weight:400">∂² = 0 verification</span>
     </div>
-    ${matrixHTML}
+    ${matHTML}
     <div class="trace-row" style="margin-top:8px">
       <span class="tlabel">∂₁ · ∂₂ = 0</span>
-      <span class="tval ok">${d2ok ? '✓ verified — chain complex is valid' : '✗ failed'}</span>
+      <span class="tval ok">${d2ok?'✓ verified — chain complex is valid':'✗ failed'}</span>
     </div>
-    <div class="trace-row">
-      <span class="tlabel">source</span>
-      <span class="tval" style="color:var(--dim);font-size:10px">
-        follows from associativity of configuration composition
-      </span>
-    </div>`;
-
-  // --- Section 4: No triangulation note ---
-  const noteHTML = `
     <hr class="trace-separator">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;
-                color:var(--dim);line-height:1.9;padding-top:2px">
-      The simplices above were not constructed geometrically.<br>
-      They were read off from the composable structure of the generators.<br>
-      Select a preset and click <span style="color:var(--accent)">Compute Homology</span>
-      to see the full pipeline.
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);line-height:1.9;padding-top:2px">
+      Simplices arise from composable morphisms — no geometric embedding.<br>
+      Select a preset and click <span style="color:var(--accent)">Compute Homology</span> for the full pipeline.
     </div>`;
 
-  tb.innerHTML = rewriteHTML + circleHTML + d2HTML + noteHTML;
+  tb.innerHTML = html;
 }
-
-// ================================================================
-// Init
-// ================================================================
 
 // ================================================================
 // INIT
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  const firstBtn = document.querySelector('.preset-btn');
-  // Load circle preset values into inputs but don't clear — show trace instead
   const p = PRESETS['circle'];
-  document.getElementById('inp-gens').value = p.gens;
-  document.getElementById('inp-laws').value = p.laws;
-  document.getElementById('inp-depth').value = p.depth;
+  document.getElementById('inp-gens').value   = p.gens;
+  document.getElementById('inp-laws').value   = p.laws;
+  document.getElementById('inp-depth').value  = p.depth;
   document.getElementById('inp-topdim').value = p.topdim;
   currentPreset = 'circle';
-  if (firstBtn) firstBtn.classList.add('active');
-
-  // Show startup trace
+  document.querySelector('.preset-btn')?.classList.add('active');
   buildStartupTrace();
 });
 </script>
