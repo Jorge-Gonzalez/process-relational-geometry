@@ -8,503 +8,294 @@
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
 
   :root {
-    --bg:       #0a0a0f;
-    --surface:  #111118;
-    --border:   #1e1e2e;
-    --muted:    #2a2a3e;
-    --text:     #cdd6f4;
-    --dim:      #585b70;
-    --accent:   #89b4fa;
-    --green:    #a6e3a1;
-    --red:      #f38ba8;
-    --yellow:   #f9e2af;
-    --lavender: #b4befe;
-    --teal:     #94e2d5;
-    --orange:   #fab387;
-    --pink:     #f5c2e7;
+    --bg:#0a0a0f; --surface:#111118; --border:#1e1e2e; --muted:#2a2a3e;
+    --text:#cdd6f4; --dim:#585b70; --accent:#89b4fa; --green:#a6e3a1;
+    --red:#f38ba8; --yellow:#f9e2af; --lavender:#b4befe; --teal:#94e2d5;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing:border-box; margin:0; padding:0; }
 
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    min-height: 100vh;
-    display: grid;
-    grid-template-rows: auto 1fr;
+    background:var(--bg); color:var(--text);
+    font-family:'IBM Plex Sans',sans-serif; font-size:14px;
+    min-height:100vh; display:grid; grid-template-rows:auto 1fr;
   }
 
   header {
-    border-bottom: 1px solid var(--border);
-    padding: 16px 32px;
-    display: flex;
-    align-items: baseline;
-    gap: 20px;
-    flex-wrap: wrap;
+    border-bottom:1px solid var(--border);
+    padding:16px 32px; display:flex; align-items:baseline;
+    gap:20px; flex-wrap:wrap;
   }
-
   header h1 {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    white-space: nowrap;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
   }
-
-  header p {
-    font-size: 11px;
-    color: var(--dim);
-    font-family: 'IBM Plex Mono', monospace;
-  }
+  header p { font-size:11px; color:var(--dim); font-family:'IBM Plex Mono',monospace; }
 
   .layout {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    height: calc(100vh - 53px);
-    overflow: hidden;
+    display:grid; grid-template-columns:310px 1fr;
+    height:calc(100vh - 53px); overflow:hidden;
   }
 
-  /* ── LEFT PANEL ── */
   .panel-left {
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+    border-right:1px solid var(--border);
+    display:flex; flex-direction:column; overflow-y:auto;
   }
 
-  .section { border-bottom: 1px solid var(--border); padding: 18px 20px; }
-
+  .section { border-bottom:1px solid var(--border); padding:16px 18px; }
   .section-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--dim);
-    margin-bottom: 12px;
+    font-family:'IBM Plex Mono',monospace; font-size:9px;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin-bottom:10px;
   }
 
-  .presets { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-
+  .presets { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
   .preset-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    padding: 7px 9px;
-    cursor: pointer;
-    text-align: left;
-    transition: border-color 0.12s, background 0.12s;
-    line-height: 1.5;
+    background:var(--surface); border:1px solid var(--border); color:var(--text);
+    font-family:'IBM Plex Mono',monospace; font-size:10px; padding:6px 8px;
+    cursor:pointer; text-align:left; transition:border-color .12s,background .12s; line-height:1.5;
   }
-  .preset-btn:hover { border-color: var(--accent); background: var(--muted); }
-  .preset-btn.active { border-color: var(--accent); background: var(--muted); color: var(--accent); }
-  .preset-btn .pname { display: block; font-weight: 600; color: var(--lavender); margin-bottom: 1px; }
-  .preset-btn .pdesc { color: var(--dim); font-size: 9px; }
+  .preset-btn:hover { border-color:var(--accent); background:var(--muted); }
+  .preset-btn.active { border-color:var(--accent); background:var(--muted); color:var(--accent); }
+  .preset-btn .pname { display:block; font-weight:600; color:var(--lavender); margin-bottom:1px; }
+  .preset-btn .pdesc { color:var(--dim); font-size:9px; }
 
   label {
-    display: block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--dim);
-    margin-bottom: 5px;
-    margin-top: 12px;
+    display:block; font-family:'IBM Plex Mono',monospace;
+    font-size:9px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--dim); margin-bottom:4px; margin-top:11px;
   }
-  label:first-of-type { margin-top: 0; }
+  label:first-of-type { margin-top:0; }
 
   input, textarea {
-    width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    padding: 7px 9px;
-    outline: none;
-    transition: border-color 0.12s;
-    resize: vertical;
+    width:100%; background:var(--surface); border:1px solid var(--border);
+    color:var(--text); font-family:'IBM Plex Mono',monospace; font-size:11px;
+    padding:6px 8px; outline:none; transition:border-color .12s; resize:vertical;
   }
-  input:focus, textarea:focus { border-color: var(--accent); }
-  textarea { min-height: 60px; line-height: 1.6; }
+  input:focus, textarea:focus { border-color:var(--accent); }
+  textarea { min-height:56px; line-height:1.6; }
 
-  .hint {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    color: var(--dim);
-    margin-top: 4px;
-    line-height: 1.6;
-  }
-  .hint.math {
-    border-left: 2px solid var(--border);
-    padding-left: 7px;
-    margin-top: 5px;
-    color: #45456a;
-  }
+  .hint { font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--dim); margin-top:3px; line-height:1.6; }
+  .hint.math { border-left:2px solid var(--border); padding-left:7px; margin-top:4px; color:#45456a; }
 
   .run-btn {
-    width: 100%;
-    margin-top: 16px;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 10px;
-    cursor: pointer;
-    transition: opacity 0.12s, transform 0.08s;
+    width:100%; margin-top:14px; background:var(--accent); color:var(--bg);
+    border:none; font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600;
+    letter-spacing:.1em; text-transform:uppercase; padding:9px; cursor:pointer;
+    transition:opacity .12s,transform .08s;
   }
-  .run-btn:hover { opacity: 0.88; }
-  .run-btn:active { transform: scale(0.98); }
-  .run-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .run-btn:hover { opacity:.88; }
+  .run-btn:active { transform:scale(.98); }
+  .run-btn:disabled { opacity:.35; cursor:not-allowed; transform:none; }
+
+  /* ── PROGRESS ── */
+  .progress-section {
+    border-bottom:1px solid var(--border);
+    padding:14px 18px;
+    display:none;
+  }
+  .progress-section.visible { display:block; }
+
+  .progress-label {
+    font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--dim);
+    margin-bottom:6px; display:flex; justify-content:space-between; align-items:baseline;
+  }
+  .progress-label .step-msg { color:var(--text); max-width:70%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .progress-label .pct { color:var(--accent); font-weight:600; }
+
+  .progress-bar-track {
+    height:3px; background:var(--border); border-radius:2px; overflow:hidden;
+  }
+  .progress-bar-fill {
+    height:100%; background:var(--accent); border-radius:2px;
+    transition:width .3s ease; width:0%;
+  }
+
+  .depth-dots {
+    display:flex; gap:4px; margin-top:8px; flex-wrap:wrap;
+  }
+  .depth-dot {
+    font-family:'IBM Plex Mono',monospace; font-size:8px;
+    padding:2px 6px; border:1px solid var(--border); color:var(--dim);
+    border-radius:1px; transition:all .2s;
+    white-space:nowrap;
+  }
+  .depth-dot.running { border-color:var(--yellow); color:var(--yellow); animation:pulse .8s infinite; }
+  .depth-dot.done    { border-color:var(--green);  color:var(--green); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
   /* ── RIGHT PANEL ── */
-  .panel-right { display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+  .panel-right { display:grid; grid-template-rows:auto 1fr; overflow:hidden; }
 
   .results-header {
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    border-bottom:1px solid var(--border);
+    padding:11px 22px; display:flex; align-items:center; gap:9px; flex-wrap:wrap;
   }
-
   .results-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--dim);
+    font-family:'IBM Plex Mono',monospace; font-size:9px;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--dim);
   }
-
-  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); transition: background 0.3s; flex-shrink: 0; }
-  .status-dot.running { background: var(--yellow); animation: pulse 1s infinite; }
-  .status-dot.ok      { background: var(--green); }
-  .status-dot.err     { background: var(--red); }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .status-dot {
+    width:6px; height:6px; border-radius:50%; background:var(--dim);
+    transition:background .3s; flex-shrink:0;
+  }
+  .status-dot.running { background:var(--yellow); animation:pulse .8s infinite; }
+  .status-dot.ok { background:var(--green); }
+  .status-dot.err { background:var(--red); }
 
   .hbadge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    padding: 2px 7px;
-    border: 1px solid;
-    border-radius: 2px;
-    white-space: nowrap;
+    font-family:'IBM Plex Mono',monospace; font-size:9px;
+    padding:2px 6px; border:1px solid; border-radius:2px; white-space:nowrap;
   }
-  .hbadge.ok  { color: var(--green);  border-color: var(--green); }
-  .hbadge.err { color: var(--red);    border-color: var(--red); }
-  .hbadge.dim { color: var(--dim);    border-color: var(--border); }
+  .hbadge.ok  { color:var(--green);  border-color:var(--green); }
+  .hbadge.err { color:var(--red);    border-color:var(--red); }
+  .hbadge.dim { color:var(--dim);    border-color:var(--border); }
+  .hbadge.info{ color:var(--accent); border-color:var(--accent); }
 
-  .results-body {
-    overflow-y: auto;
-    padding: 24px 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
+  .results-body { overflow-y:auto; padding:22px 26px; display:flex; flex-direction:column; gap:22px; }
 
-  /* ── CARDS ── */
   .card {
-    border: 1px solid var(--border);
-    background: var(--surface);
-    opacity: 0;
-    transform: translateY(6px);
-    animation: fadein 0.25s forwards;
+    border:1px solid var(--border); background:var(--surface);
+    opacity:0; transform:translateY(5px); animation:fadein .22s forwards;
   }
-  @keyframes fadein { to { opacity:1; transform: translateY(0); } }
+  @keyframes fadein { to { opacity:1; transform:translateY(0); } }
 
   .card-header {
-    border-bottom: 1px solid var(--border);
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 6px;
+    border-bottom:1px solid var(--border); padding:9px 14px;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;
   }
-
-  .card-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--lavender);
-  }
+  .card-title { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; color:var(--lavender); }
 
   .card-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    padding: 1px 7px;
-    border: 1px solid;
-    border-radius: 2px;
+    font-family:'IBM Plex Mono',monospace; font-size:9px;
+    padding:1px 6px; border:1px solid; border-radius:2px;
   }
-  .card-tag.ok   { color: var(--green);  border-color: var(--green); }
-  .card-tag.warn { color: var(--yellow); border-color: var(--yellow); }
-  .card-tag.info { color: var(--accent); border-color: var(--accent); }
+  .card-tag.ok   { color:var(--green);  border-color:var(--green); }
+  .card-tag.info { color:var(--accent); border-color:var(--accent); }
 
-  .card-body { padding: 16px; }
+  .card-body { padding:14px; }
 
   .math-note {
-    background: rgba(137,180,250,0.03);
-    border-left: 2px solid var(--border);
-    padding: 7px 10px;
-    margin-top: 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    color: #3a3a5a;
-    line-height: 1.8;
+    background:rgba(137,180,250,.03); border-left:2px solid var(--border);
+    padding:6px 9px; margin-top:10px; font-family:'IBM Plex Mono',monospace;
+    font-size:9px; color:#3a3a5a; line-height:1.8;
   }
   .math-note .mn-title {
-    color: #4a5a7a;
-    font-weight: 600;
-    font-size: 8px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 3px;
+    color:#4a5a7a; font-weight:600; font-size:8px;
+    letter-spacing:.1em; text-transform:uppercase; margin-bottom:3px;
   }
 
   .warning-banner {
-    background: rgba(249,226,175,0.05);
-    border: 1px solid var(--yellow);
-    padding: 8px 12px;
-    margin-bottom: 14px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--yellow);
-    line-height: 1.7;
+    background:rgba(249,226,175,.05); border:1px solid var(--yellow);
+    padding:7px 10px; margin-bottom:12px; font-family:'IBM Plex Mono',monospace;
+    font-size:10px; color:var(--yellow); line-height:1.7;
   }
-  .warning-banner .wb-title { font-weight: 600; margin-bottom: 3px; }
+  .warning-banner .wb-title { font-weight:600; margin-bottom:2px; }
 
   /* ── BARCODE ── */
-  .barcode-container { overflow-x: auto; }
+  .legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
+  .legend-item { display:flex; align-items:center; gap:5px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--dim); }
+  .legend-bar { width:22px; height:7px; border-radius:1px; }
+  .legend-bar.free-z     { background:rgba(249,226,175,.7); }
+  .legend-bar.quot-z     { background:rgba(148,226,213,.7); }
+  .legend-bar.delta-new  { background:rgba(166,227,161,.85); }
+  .legend-bar.delta-kill { background:rgba(243,139,168,.5); border:1px solid rgba(243,139,168,.6); }
+  .legend-bar.torsion    { background:rgba(148,226,213,.4); border:1px dashed rgba(148,226,213,.6); }
+
+  .barcode-tick-row { display:flex; align-items:flex-end; gap:7px; margin-bottom:2px; }
+  .barcode-tick-spacer { width:78px; flex-shrink:0; }
+  .barcode-tick-track { flex:1; position:relative; height:14px; min-width:180px; }
+  .barcode-tick-label {
+    position:absolute; font-family:'IBM Plex Mono',monospace; font-size:8px;
+    color:var(--dim); top:0; transform:translateX(-50%);
+  }
 
   .barcode-section-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    margin-top: 14px;
+    font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.1em;
+    text-transform:uppercase; margin-bottom:5px; margin-top:12px;
   }
-  .barcode-section-label.free    { color: var(--yellow); }
-  .barcode-section-label.quotient { color: var(--teal); }
-  .barcode-section-label:first-child { margin-top: 0; }
+  .barcode-section-label.free    { color:var(--yellow); }
+  .barcode-section-label.quotient{ color:var(--teal); }
+  .barcode-section-label:first-child { margin-top:0; }
 
-  .barcode-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 22px;
-    margin-bottom: 3px;
-  }
-
+  .barcode-row { display:flex; align-items:center; gap:7px; height:20px; margin-bottom:2px; }
   .barcode-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    color: var(--dim);
-    width: 80px;
-    flex-shrink: 0;
-    text-align: right;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--dim);
+    width:78px; flex-shrink:0; text-align:right; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis;
   }
-
-  .barcode-track {
-    flex: 1;
-    height: 14px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    position: relative;
-    min-width: 200px;
-  }
-
+  .barcode-track { flex:1; height:12px; background:var(--bg); border:1px solid var(--border); position:relative; min-width:180px; }
   .barcode-bar {
-    position: absolute;
-    top: 2px;
-    bottom: 2px;
-    border-radius: 1px;
-    transition: opacity 0.2s;
+    position:absolute; top:2px; bottom:2px; border-radius:1px; transition:opacity .15s; cursor:default;
   }
-  .barcode-bar:hover { opacity: 0.7; }
-
-  .barcode-bar.free-z     { background: rgba(249,226,175,0.7); }
-  .barcode-bar.free-tor   { background: rgba(249,226,175,0.4); border: 1px dashed rgba(249,226,175,0.6); }
-  .barcode-bar.quot-z     { background: rgba(148,226,213,0.7); }
-  .barcode-bar.quot-tor   { background: rgba(148,226,213,0.4); border: 1px dashed rgba(148,226,213,0.6); }
-  .barcode-bar.delta-new  { background: rgba(166,227,161,0.8); box-shadow: 0 0 4px rgba(166,227,161,0.3); }
-  .barcode-bar.delta-kill { background: rgba(243,139,168,0.5); border: 1px solid rgba(243,139,168,0.6); }
-
-  .barcode-arrow {
-    position: absolute;
-    right: -8px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--dim);
-    font-size: 10px;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-
-  .barcode-tick-row {
-    display: flex;
-    align-items: flex-end;
-    gap: 8px;
-    margin-bottom: 2px;
-  }
-  .barcode-tick-spacer { width: 80px; flex-shrink: 0; }
-  .barcode-tick-track { flex: 1; position: relative; height: 16px; min-width: 200px; }
-  .barcode-tick-label {
-    position: absolute;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 8px;
-    color: var(--dim);
-    top: 0;
-    transform: translateX(-50%);
-  }
+  .barcode-bar:hover { opacity:.7; }
+  .barcode-bar.free-z     { background:rgba(249,226,175,.7); }
+  .barcode-bar.free-tor   { background:rgba(249,226,175,.4); border:1px dashed rgba(249,226,175,.6); }
+  .barcode-bar.quot-z     { background:rgba(148,226,213,.7); }
+  .barcode-bar.quot-tor   { background:rgba(148,226,213,.4); border:1px dashed rgba(148,226,213,.6); }
+  .barcode-bar.delta-new  { background:rgba(166,227,161,.85); box-shadow:0 0 4px rgba(166,227,161,.3); }
+  .barcode-bar.delta-kill { background:rgba(243,139,168,.5); border:1px solid rgba(243,139,168,.6); }
+  .barcode-arrow { position:absolute; right:-8px; top:50%; transform:translateY(-50%); color:var(--dim); font-size:9px; }
 
   /* ── ΔPD TABLE ── */
-  .dpd-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-  }
+  .dpd-table { width:100%; border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:10px; }
   .dpd-table th {
-    text-align: left;
-    color: var(--dim);
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 5px 8px;
-    border-bottom: 1px solid var(--border);
-    font-weight: 500;
+    text-align:left; color:var(--dim); font-size:9px; letter-spacing:.1em;
+    text-transform:uppercase; padding:4px 7px; border-bottom:1px solid var(--border); font-weight:500;
   }
-  .dpd-table td { padding: 6px 8px; border-bottom: 1px solid rgba(30,30,46,0.5); color: var(--text); }
-  .dpd-table tr:last-child td { border-bottom: none; }
-  .dpd-table tr.created td { background: rgba(166,227,161,0.04); }
-  .dpd-table tr.killed  td { background: rgba(243,139,168,0.04); }
-  .dpd-table .tag-created { color: var(--green); }
-  .dpd-table .tag-killed  { color: var(--red); }
-  .dpd-table .coeff-z   { color: var(--teal); }
-  .dpd-table .coeff-tor { color: var(--yellow); }
+  .dpd-table td { padding:5px 7px; border-bottom:1px solid rgba(30,30,46,.5); color:var(--text); }
+  .dpd-table tr:last-child td { border-bottom:none; }
+  .dpd-table tr.created td { background:rgba(166,227,161,.04); }
+  .dpd-table tr.killed  td { background:rgba(243,139,168,.04); }
+  .dpd-table .tag-created { color:var(--green); }
+  .dpd-table .tag-killed  { color:var(--red); }
+  .dpd-table .coeff-z   { color:var(--teal); }
+  .dpd-table .coeff-tor { color:var(--yellow); }
 
-  /* ── DEPTH TIMELINE ── */
-  .timeline-grid {
-    overflow-x: auto;
-  }
-  .timeline-table {
-    border-collapse: collapse;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    width: 100%;
-    min-width: max-content;
-  }
+  /* ── TIMELINE ── */
+  .timeline-grid { overflow-x:auto; }
+  .timeline-table { border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:10px; width:100%; min-width:max-content; }
   .timeline-table th {
-    text-align: center;
-    color: var(--dim);
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-bottom: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    font-weight: 500;
-    white-space: nowrap;
+    text-align:center; color:var(--dim); font-size:9px; letter-spacing:.1em;
+    text-transform:uppercase; padding:4px 10px; border-bottom:1px solid var(--border);
+    border-right:1px solid var(--border); font-weight:500; white-space:nowrap;
   }
   .timeline-table td {
-    text-align: center;
-    padding: 7px 12px;
-    border-bottom: 1px solid rgba(30,30,46,0.5);
-    border-right: 1px solid rgba(30,30,46,0.5);
-    white-space: nowrap;
+    text-align:center; padding:5px 10px; border-bottom:1px solid rgba(30,30,46,.5);
+    border-right:1px solid rgba(30,30,46,.5); white-space:nowrap;
   }
-  .timeline-table td:first-child { text-align: left; color: var(--dim); font-size: 9px; }
-  .timeline-table tr:last-child td { border-bottom: none; }
-  .timeline-table td.changed { color: var(--green); }
-  .timeline-table td.torsion { color: var(--yellow); }
-  .timeline-table td.stable  { color: var(--dim); }
-  .timeline-table td.stable-ref { color: var(--dim); opacity: 0.5; }
+  .timeline-table td:first-child { text-align:left; color:var(--dim); font-size:9px; }
+  .timeline-table tr:last-child td { border-bottom:none; }
+  .timeline-table td.changed { color:var(--green); }
+  .timeline-table td.torsion { color:var(--yellow); }
+  .timeline-table td.stable-ref { color:var(--dim); opacity:.5; }
 
-  /* ── REWRITING TRACE ── */
-  .trace-block { border: 1px solid var(--border); background: var(--bg); margin-bottom: 8px; }
+  .trace-block { border:1px solid var(--border); background:var(--bg); margin-bottom:7px; }
   .trace-toggle {
-    width: 100%;
-    background: none;
-    border: none;
-    color: var(--dim);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 7px 12px;
-    cursor: pointer;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    transition: color 0.12s;
+    width:100%; background:none; border:none; color:var(--dim); font-family:'IBM Plex Mono',monospace;
+    font-size:9px; letter-spacing:.1em; text-transform:uppercase; padding:6px 11px;
+    cursor:pointer; text-align:left; display:flex; align-items:center; gap:6px; transition:color .12s;
   }
-  .trace-toggle:hover { color: var(--text); }
-  .trace-toggle .arrow { transition: transform 0.15s; }
-  .trace-toggle.open .arrow { transform: rotate(90deg); }
-  .trace-content { display: none; padding: 10px 12px; border-top: 1px solid var(--border); }
-  .trace-content.visible { display: block; }
-  .trace-line { font-family: 'IBM Plex Mono', monospace; font-size: 10px; line-height: 1.9; color: var(--dim); }
-  .trace-line .step-num { color: var(--muted); margin-right: 6px; }
-  .trace-line .from { color: var(--text); }
-  .trace-line .to { color: var(--accent); }
+  .trace-toggle:hover { color:var(--text); }
+  .trace-toggle .arrow { transition:transform .15s; }
+  .trace-toggle.open .arrow { transform:rotate(90deg); }
+  .trace-content { display:none; padding:9px 11px; border-top:1px solid var(--border); }
+  .trace-content.visible { display:block; }
+  .trace-line { font-family:'IBM Plex Mono',monospace; font-size:10px; line-height:1.9; color:var(--dim); }
 
-  /* ── LEGEND ── */
-  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--dim); }
-  .legend-bar { width: 24px; height: 8px; border-radius: 1px; }
-  .legend-bar.free-z     { background: rgba(249,226,175,0.7); }
-  .legend-bar.quot-z     { background: rgba(148,226,213,0.7); }
-  .legend-bar.delta-new  { background: rgba(166,227,161,0.8); }
-  .legend-bar.delta-kill { background: rgba(243,139,168,0.5); border: 1px solid rgba(243,139,168,0.6); }
-  .legend-bar.torsion    { background: rgba(148,226,213,0.4); border: 1px dashed rgba(148,226,213,0.6); }
-
-  /* empty state */
   .empty-state {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    color: var(--dim);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    height:100%; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:9px;
+    color:var(--dim); font-family:'IBM Plex Mono',monospace; font-size:11px;
   }
-  .empty-state .big { font-size: 40px; opacity: 0.12; }
-
+  .empty-state .big { font-size:36px; opacity:.12; }
   .error-msg {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--red);
-    background: var(--surface);
-    border: 1px solid var(--red);
-    padding: 12px 16px;
-    white-space: pre-wrap;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--red);
+    background:var(--surface); border:1px solid var(--red); padding:11px 14px; white-space:pre-wrap;
   }
 
-  ::-webkit-scrollbar { width: 3px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  .spinner { display:none; width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.6s linear infinite;flex-shrink:0; }
-  .spinner.active { display:block; }
-  @keyframes spin { to{ transform:rotate(360deg); } }
-
-  .divider { border:none; border-top:1px solid var(--border); margin:10px 0; }
+  ::-webkit-scrollbar { width:3px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 </style>
 </head>
 <body>
@@ -521,72 +312,67 @@
       <div class="section-title">Presets</div>
       <div class="presets">
         <button class="preset-btn active" onclick="loadPreset('torus',this)">
-          <span class="pname">Torus T²</span>
-          <span class="pdesc">H₂ born at depth 2</span>
+          <span class="pname">Torus T²</span><span class="pdesc">H₂ born at d=2</span>
         </button>
         <button class="preset-btn" onclick="loadPreset('z3',this)">
-          <span class="pname">ℤ/3ℤ</span>
-          <span class="pdesc">torsion at depth 3</span>
+          <span class="pname">ℤ/3ℤ</span><span class="pdesc">torsion at d=3</span>
         </button>
         <button class="preset-btn" onclick="loadPreset('z5',this)">
-          <span class="pname">ℤ/5ℤ</span>
-          <span class="pdesc">torsion at depth 5</span>
+          <span class="pname">ℤ/5ℤ</span><span class="pdesc">torsion at d=5</span>
         </button>
         <button class="preset-btn" onclick="loadPreset('circle',this)">
-          <span class="pname">Circle ℤ</span>
-          <span class="pdesc">trivial ΔPD</span>
+          <span class="pname">Circle ℤ</span><span class="pdesc">trivial ΔPD</span>
         </button>
         <button class="preset-btn" onclick="loadPreset('free2',this)">
-          <span class="pname">Free ℤ²</span>
-          <span class="pdesc">no laws, baseline</span>
+          <span class="pname">Free ℤ²</span><span class="pdesc">baseline</span>
         </button>
         <button class="preset-btn" onclick="loadPreset('custom',this)">
-          <span class="pname">Custom</span>
-          <span class="pdesc">edit below</span>
+          <span class="pname">Custom</span><span class="pdesc">edit below</span>
         </button>
       </div>
     </div>
 
     <div class="section">
       <div class="section-title">Presentation ⟨R | ℒ⟩</div>
-
-      <div class="hint math" style="margin-bottom:10px">
-        G = F(R)/~ where ~ is generated by ℒ.
-        Homology H*(G;ℤ) = H*(BG;ℤ) via the bar complex.
-      </div>
-
+      <div class="hint math" style="margin-bottom:9px">G = F(R)/~ · Homology H*(G;ℤ) = H*(BG;ℤ) via bar complex</div>
       <label>Generators R</label>
       <input type="text" id="inp-gens" placeholder="a b" />
-      <div class="hint">Space-separated. Inverses a_inv, b_inv added automatically.</div>
-
-      <label>Laws ℒ (congruence relations)</label>
+      <div class="hint">Inverses a_inv, b_inv added automatically.</div>
+      <label>Laws ℒ</label>
       <textarea id="inp-laws" placeholder="b a = a b"></textarea>
-      <div class="hint">One law per line. <code>b a = a b</code> (commute) · <code>a a a =</code> (torsion)</div>
-
+      <div class="hint"><code>b a = a b</code> (commute) · <code>a a a =</code> (torsion)</div>
       <label>Max filtration depth D</label>
-      <input type="number" id="inp-depth" value="5" min="2" max="7" />
+      <input type="number" id="inp-depth" value="5" min="2" max="8" />
       <div class="hint">
-        Persistence computed at d = 1, 2, …, D.<br>
-        Birth depth of law l~r ≥ max(|l|,|r|) (Remark 11.6).<br>
-        Higher D = slower but catches longer laws.
+        Computed at d=1…D in parallel (one thread per depth).<br>
+        Birth depth ≥ max(|l|,|r|) per law l~r (Remark 11.6).
       </div>
-
       <label>Top homology dimension</label>
       <input type="number" id="inp-topdim" value="2" min="1" max="3" />
     </div>
 
-    <div class="section">
-      <button class="run-btn" id="run-btn" onclick="runComputation()">
-        Compute ΔPD
-      </button>
+    <!-- PROGRESS PANEL -->
+    <div class="progress-section" id="progress-section">
+      <div class="section-title">Computation</div>
+      <div class="progress-label">
+        <span class="step-msg" id="progress-msg">Starting…</span>
+        <span class="pct" id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <div class="depth-dots" id="depth-dots"></div>
+      <div class="hint" style="margin-top:8px;color:#45456a" id="perf-note"></div>
     </div>
 
+    <div class="section">
+      <button class="run-btn" id="run-btn" onclick="runComputation()">Compute ΔPD</button>
+    </div>
   </div>
 
   <div class="panel-right">
     <div class="results-header" id="results-header">
       <div class="status-dot" id="status-dot"></div>
-      <div class="spinner" id="spinner"></div>
       <div class="results-title">Presentation Persistence Diagram</div>
       <div id="header-badges" style="display:flex;gap:6px;flex-wrap:wrap;margin-left:4px"></div>
     </div>
@@ -599,31 +385,29 @@
   </div>
 </div>
 
-<script>
-// ================================================================
-// MATHEMATICAL CONTEXT — §11 of González Céspedes (2026)
-// ================================================================
-//
-// Given a group presentation ⟨R | ℒ⟩ with G = F(R)/~, this tool
-// computes the PRESENTATION PERSISTENCE DIAGRAM:
-//
-//   ΔPD_n(⟨R|ℒ⟩) = PD(𝒬, n) ∖ PD(ℱ, n)
-//
-// where:
-//   ℱ_d = N(F(R), d) — nerve of the free group at depth d
-//   𝒬_d = N(G, d)    — nerve of the quotient group at depth d
-//
-// A class α ∈ H_n is BORN at depth d if it first appears at d.
-// It DIES at depth e if it vanishes at e, or has ∞ persistence.
-//
-// Three theorems are implemented (§11, Theorems 11.3–11.5):
-//   T1: PD(ℱ,1) = {(1,∞)^|R|}, PD(ℱ,n)=∅ for n≥2 [Eilenberg-Ganea]
-//   T2: Commutativity a·b~b·a creates (2,∞) in PD(𝒬,2)
-//   T3: Torsion a^n~id creates (n,∞)_{ℤ/nℤ} modifying PD(𝒬,1)
+<!-- ================================================================
+     WORKER SOURCE — embedded as non-executing script.
+     This entire block runs in a Web Worker thread, with no DOM access.
+     One worker is spawned per depth level; they run in parallel.
 
-// ================================================================
-// LAYER 1 — ALGEBRA  (unchanged from previous version)
-// ================================================================
+     PERFORMANCE NOTES:
+     1. compose() results are cached (all |G|² pairs computed once).
+        Without cache: ~20M ops/depth for torus d=5.
+        With cache:    ~400K ops/depth. ~50× speedup.
+     2. Free group persistence is computed analytically (Theorem 11.3).
+        We know PD(F(R),n) exactly: H₁ has |R| classes born at d=1 with ∞
+        persistence, H_n=0 for n≥2 (Eilenberg-Ganea). No need to build
+        the free nerve at all. Eliminates half the nerve builds.
+     3. Each depth runs in its own Web Worker thread (parallel on multi-core).
+        D depths → up to D-fold parallelism.
+     GPU NOTE: Smith normal form is inherently sequential integer arithmetic
+     (not GPU-parallelizable). The bottleneck (compose cache) is parallelized
+     via workers. WebGPU could accelerate boundary matrix construction but
+     gains would be modest compared to the cache+parallel-worker approach.
+================================================================ -->
+<script id="worker-src" type="text/plain">
+
+// ── ALGEBRA ─────────────────────────────────────────────────────────────────
 
 class RelationalSystem {
   constructor(generators, inverses, relations) {
@@ -631,89 +415,66 @@ class RelationalSystem {
     this.inverses   = inverses;
     this.relations  = relations;
     this.inv = {};
-    for (const [g, gi] of Object.entries(inverses)) {
-      this.inv[g] = gi;
-      this.inv[gi] = g;
-    }
+    for (const [g, gi] of Object.entries(inverses)) { this.inv[g]=gi; this.inv[gi]=g; }
     this.genRank = {};
-    generators.forEach((g, i) => {
-      this.genRank[g]           = 2 * i;
-      this.genRank[this.inv[g]] = 2 * i + 1;
-    });
+    generators.forEach((g,i) => { this.genRank[g]=2*i; this.genRank[this.inv[g]]=2*i+1; });
     this.expandedRelations = this._expandRelations(relations);
   }
 
   _expandRelations(relations) {
     const expanded = new Set();
-    for (const [lhs, rhs] of relations) {
-      if (lhs.length === 2 && rhs.length === 2 &&
-          rhs[0] === lhs[1] && rhs[1] === lhs[0]) {
-        const g1 = lhs[0], g2 = lhs[1];
-        const g1i = this.inv[g1] || g1, g2i = this.inv[g2] || g2;
-        for (const a of [g1, g1i])
-          for (const b of [g2, g2i]) {
-            const ra = this.genRank[a]??999, rb = this.genRank[b]??999;
-            if (ra > rb) expanded.add(JSON.stringify([[a,b],[b,a]]));
-            else if (rb > ra) expanded.add(JSON.stringify([[b,a],[a,b]]));
-          }
-      } else {
-        expanded.add(JSON.stringify([lhs, rhs]));
-      }
+    for (const [lhs,rhs] of relations) {
+      if (lhs.length===2 && rhs.length===2 && rhs[0]===lhs[1] && rhs[1]===lhs[0]) {
+        const g1=lhs[0],g2=lhs[1],g1i=this.inv[g1]||g1,g2i=this.inv[g2]||g2;
+        for (const a of [g1,g1i]) for (const b of [g2,g2i]) {
+          const ra=this.genRank[a]??999, rb=this.genRank[b]??999;
+          if (ra>rb) expanded.add(JSON.stringify([[a,b],[b,a]]));
+          else if (rb>ra) expanded.add(JSON.stringify([[b,a],[a,b]]));
+        }
+      } else { expanded.add(JSON.stringify([lhs,rhs])); }
     }
-    return [...expanded].map(s => JSON.parse(s));
+    return [...expanded].map(s=>JSON.parse(s));
   }
 
-  rank(word) { return word.map(g => this.genRank[g] ?? 999); }
+  rank(word) { return word.map(g=>this.genRank[g]??999); }
 
-  _rankLess(a, b) {
-    if (a.length !== b.length) return a.length < b.length;
-    const ra = this.rank(a), rb = this.rank(b);
-    for (let i = 0; i < ra.length; i++) if (ra[i] !== rb[i]) return ra[i] < rb[i];
+  _rankLess(a,b) {
+    if (a.length!==b.length) return a.length<b.length;
+    const ra=this.rank(a),rb=this.rank(b);
+    for (let i=0;i<ra.length;i++) if (ra[i]!==rb[i]) return ra[i]<rb[i];
     return false;
   }
 
-  // Free reduction: cancel adjacent inverse pairs g·g⁻¹ → id
+  // Free reduction: cancel g·g⁻¹ → id. Word problem in F(R).
   reduce(word) {
-    word = [...word];
-    let changed = true;
+    word=[...word]; let changed=true;
     while (changed) {
-      changed = false;
-      for (let i = 0; i < word.length - 1; i++) {
-        if (this.inv[word[i]] === word[i+1]) {
-          word.splice(i, 2);
-          if (i > 0) i--;
-          changed = true;
-          break;
-        }
+      changed=false;
+      for (let i=0;i<word.length-1;i++) {
+        if (this.inv[word[i]]===word[i+1]) { word.splice(i,2); if(i>0)i--; changed=true; break; }
       }
     }
     return word;
   }
 
-  // Full normalization via shortlex TRS. Termination guaranteed by
-  // well-foundedness of shortlex order. Correctness requires confluence.
-  applyRelations(word, traceLog = null) {
-    word = this.reduce([...word]);
-    for (let iter = 0; iter < 2000; iter++) {
-      let changed = false;
-      for (const [lhs, rhs] of this.expandedRelations) {
-        for (let s = 0; s <= word.length - lhs.length; s++) {
-          if (lhs.every((g, i) => word[s+i] === g)) {
-            const cand = this.reduce([...word.slice(0,s),...rhs,...word.slice(s+lhs.length)]);
-            if (this._rankLess(cand, word)) {
-              if (traceLog) traceLog.push({step:iter,law:[lhs,rhs],from:[...word],to:[...cand]});
-              word = cand; changed = true; break;
-            }
+  // Full normalization via shortlex TRS. Termination by well-foundedness.
+  // Correctness requires confluence (checked before nerve construction).
+  applyRelations(word) {
+    word=this.reduce([...word]);
+    for (let iter=0;iter<2000;iter++) {
+      let changed=false;
+      for (const [lhs,rhs] of this.expandedRelations) {
+        for (let s=0;s<=word.length-lhs.length;s++) {
+          if (lhs.every((g,i)=>word[s+i]===g)) {
+            const cand=this.reduce([...word.slice(0,s),...rhs,...word.slice(s+lhs.length)]);
+            if (this._rankLess(cand,word)) { word=cand; changed=true; break; }
           }
         }
         if (changed) break;
-        for (let s = 0; s <= word.length - rhs.length; s++) {
-          if (rhs.every((g, i) => word[s+i] === g)) {
-            const cand = this.reduce([...word.slice(0,s),...lhs,...word.slice(s+rhs.length)]);
-            if (this._rankLess(cand, word)) {
-              if (traceLog) traceLog.push({step:iter,law:[rhs,lhs],from:[...word],to:[...cand]});
-              word = cand; changed = true; break;
-            }
+        for (let s=0;s<=word.length-rhs.length;s++) {
+          if (rhs.every((g,i)=>word[s+i]===g)) {
+            const cand=this.reduce([...word.slice(0,s),...lhs,...word.slice(s+rhs.length)]);
+            if (this._rankLess(cand,word)) { word=cand; changed=true; break; }
           }
         }
         if (changed) break;
@@ -723,176 +484,105 @@ class RelationalSystem {
     return word;
   }
 
-  compose(w1, w2)  { return this.applyRelations([...w1, ...w2]); }
-  identity()       { return []; }
-  _wordKey(word)   { return JSON.stringify(word); }
+  _wordKey(w) { return JSON.stringify(w); }
 }
 
-// Local confluence check via critical pair analysis (Newman's Lemma).
-// Overlap types: suffix-prefix (A) and containment (B).
+// Local confluence: check all critical pairs (Newman's Lemma).
+// Type A: suffix of l₁ = prefix of l₂. Type B: l₂ contained in l₁.
+// If all pairs joinable → globally confluent → unique normal forms.
 function checkLocalConfluence(system) {
-  const rules = system.expandedRelations;
-  const norm  = w => system.applyRelations(w);
-  const nonJoinable = [], totalPairs = { count: 0 };
-
-  for (let i = 0; i < rules.length; i++) {
-    for (let j = 0; j < rules.length; j++) {
-      const [l1,r1] = rules[i], [l2,r2] = rules[j];
-      // Case A: suffix of l1 = prefix of l2
-      for (let k = 1; k <= Math.min(l1.length, l2.length); k++) {
-        if (JSON.stringify(l1.slice(l1.length-k)) !== JSON.stringify(l2.slice(0,k))) continue;
-        const s1 = norm([...r1,...l2.slice(k)]);
-        const s2 = norm([...l1.slice(0,l1.length-k),...r2]);
-        totalPairs.count++;
-        if (JSON.stringify(s1) !== JSON.stringify(s2)) nonJoinable.push({type:'A',i,j,s1,s2});
-      }
-      // Case B: l2 contained in l1
-      if (l2.length < l1.length) {
-        for (let p = 0; p <= l1.length-l2.length; p++) {
-          if (JSON.stringify(l1.slice(p,p+l2.length)) !== JSON.stringify(l2)) continue;
-          const s1 = norm([...r1]);
-          const s2 = norm([...l1.slice(0,p),...r2,...l1.slice(p+l2.length)]);
-          totalPairs.count++;
-          if (JSON.stringify(s1) !== JSON.stringify(s2)) nonJoinable.push({type:'B',i,j,p,s1,s2});
-        }
-      }
+  const rules=system.expandedRelations;
+  const norm=w=>system.applyRelations(w);
+  const bad=[]; let total=0;
+  for (const [l1,r1] of rules) for (const [l2,r2] of rules) {
+    for (let k=1;k<=Math.min(l1.length,l2.length);k++) {
+      if (JSON.stringify(l1.slice(l1.length-k))!==JSON.stringify(l2.slice(0,k))) continue;
+      total++;
+      const s1=norm([...r1,...l2.slice(k)]), s2=norm([...l1.slice(0,l1.length-k),...r2]);
+      if (JSON.stringify(s1)!==JSON.stringify(s2)) bad.push({type:'A',s1,s2});
+    }
+    if (l2.length<l1.length) for (let p=0;p<=l1.length-l2.length;p++) {
+      if (JSON.stringify(l1.slice(p,p+l2.length))!==JSON.stringify(l2)) continue;
+      total++;
+      const s1=norm([...r1]), s2=norm([...l1.slice(0,p),...r2,...l1.slice(p+l2.length)]);
+      if (JSON.stringify(s1)!==JSON.stringify(s2)) bad.push({type:'B',s1,s2});
     }
   }
-  return {
-    confluent: nonJoinable.length === 0,
-    totalPairs: totalPairs.count,
-    nonJoinable,
-    summary: nonJoinable.length === 0
-      ? `${totalPairs.count} critical pair${totalPairs.count!==1?'s':''} — all joinable`
-      : `${nonJoinable.length}/${totalPairs.count} critical pair${totalPairs.count!==1?'s':''} not joinable`
-  };
+  return { confluent:bad.length===0, totalPairs:total, nonJoinable:bad.length,
+    summary:`${bad.length===0?'All':'NOT ALL'} ${total} critical pair${total!==1?'s':''} joinable` };
 }
 
-// ================================================================
-// LAYER 2 — NERVE CONSTRUCTION
-// ================================================================
+// ── NERVE CONSTRUCTION WITH COMPOSE CACHE ────────────────────────────────────
 //
-// The bar complex nerve N(G)_n = G^n with face maps (Definition 11.1).
-// buildNerve(system, d) enumerates G_≤d (elements whose normal form
-// has length ≤ d) and builds all composable tuples within G_≤d.
-// buildFreeNerve(system, d) does the same without applying congruence laws.
+// KEY OPTIMIZATION: instead of calling system.applyRelations() inside every
+// triple loop iteration (O(n³) calls, each O(len²) ops), we:
+//   1. Build a compose cache of all (g,h)→gh pairs: O(n²) calls.
+//   2. Inner loop uses only cache lookups: O(1) per lookup.
+// For torus at d=5: n≈61 → 3721 cache entries vs. ~226k raw compose calls.
+// Speedup: ~60× for the 3-simplex construction step.
+//
+// The bar complex nerve N(G): 0-simplices={*}, k-simplices = G^k,
+// face maps dᵢ drop/compose (Definition 11.1 of paper).
 
-function buildNerve(system, maxWordLen) {
-  const allGens = [...system.generators, ...system.generators.map(g => system.inv[g])];
-  const elements = new Map();
-  elements.set(system._wordKey(system.identity()), system.identity());
+function buildNerveWithCache(system, maxWordLen) {
+  const allGens=[...system.generators,...system.generators.map(g=>system.inv[g])];
+  const elements=new Map();
+  elements.set(system._wordKey([]),[]);
 
-  for (let len = 1; len <= maxWordLen; len++) {
-    for (const combo of cartesian(allGens, len)) {
-      const norm = system.applyRelations(combo);
-      const key  = system._wordKey(norm);
-      if (!elements.has(key)) elements.set(key, norm);
+  for (let len=1;len<=maxWordLen;len++) {
+    for (const combo of cartesian(allGens,len)) {
+      const norm=system.applyRelations(combo);
+      const key=system._wordKey(norm);
+      if (!elements.has(key)) elements.set(key,norm);
     }
   }
 
-  const elems = [...elements.values()].sort((a,b) => {
-    if (a.length !== b.length) return a.length - b.length;
-    const ra = system.rank(a), rb = system.rank(b);
-    for (let i = 0; i < Math.min(ra.length,rb.length); i++) if (ra[i]!==rb[i]) return ra[i]-rb[i];
+  const elems=[...elements.values()].sort((a,b)=>{
+    if (a.length!==b.length) return a.length-b.length;
+    const ra=system.rank(a),rb=system.rank(b);
+    for (let i=0;i<Math.min(ra.length,rb.length);i++) if(ra[i]!==rb[i]) return ra[i]-rb[i];
     return 0;
   });
-  const elemSet = new Set(elems.map(e => system._wordKey(e)));
+  const elemSet=new Set(elems.map(e=>system._wordKey(e)));
 
-  const s0 = [[]], s1 = elems.map(g=>[g]), s2 = [], s3 = [];
+  // Build compose cache: all |elems|² pairs, computed once.
+  // Total cost: |elems|² × applyRelations calls (each O(len²)).
+  // Without cache the inner triple loop would repeat many of these.
+  const composeCache=new Map();
+  const cachedCompose=(g,h)=>{
+    const k=system._wordKey(g)+'|'+system._wordKey(h);
+    if (!composeCache.has(k)) composeCache.set(k,system.applyRelations([...g,...h]));
+    return composeCache.get(k);
+  };
+
+  // Build s2 only. s3 is NOT stored.
+  // REASON: at d=5 the s3 array has 56,749 entries whose boundary matrix
+  // is 2089×56749 = 474MB as a dense Int32Array — this triggers OOM or
+  // extreme GC pressure. Instead, ∂3 is generated column-by-column on the
+  // fly inside buildD3Lazy below, using the compose cache (O(1) per lookup).
+  const s0=[[]], s1=elems.map(g=>[g]), s2=[];
+
   for (const g of elems) {
     for (const h of elems) {
-      const gh = system.compose(g, h);
+      const gh=cachedCompose(g,h);
       if (!elemSet.has(system._wordKey(gh))) continue;
       s2.push([g,h]);
-      for (const k of elems) {
-        const hk = system.compose(h,k);
-        if (!elemSet.has(system._wordKey(hk))) continue;
-        const ghk = system.compose(gh,k);
-        if (elemSet.has(system._wordKey(ghk))) s3.push([g,h,k]);
-      }
     }
   }
-  return { simplices:{0:s0,1:s1,2:s2,3:s3}, elements:elems, elemSet };
+
+  return { simplices:{0:s0,1:s1,2:s2}, elements:elems, cc:cachedCompose, elemSet };
 }
 
-function buildFreeNerve(system, maxWordLen) {
-  const allGens = [...system.generators, ...system.generators.map(g => system.inv[g])];
-  const elements = new Map();
-  elements.set('[]', []);
-  for (let len = 1; len <= maxWordLen; len++) {
-    for (const combo of cartesian(allGens, len)) {
-      const reduced = system.reduce(combo);
-      const key = JSON.stringify(reduced);
-      if (!elements.has(key)) elements.set(key, reduced);
-    }
-  }
-  const elems = [...elements.values()].sort((a,b)=>a.length!==b.length?a.length-b.length:JSON.stringify(a)<JSON.stringify(b)?-1:1);
-  const elemSet = new Set(elems.map(e => JSON.stringify(e)));
-  const freeComp = (w1,w2) => system.reduce([...w1,...w2]);
-
-  const s0=[[]], s1=elems.map(g=>[g]), s2=[], s3=[];
-  for (const g of elems) {
-    for (const h of elems) {
-      const gh = freeComp(g,h);
-      if (!elemSet.has(JSON.stringify(gh))) continue;
-      s2.push([g,h]);
-      for (const k of elems) {
-        const hk = freeComp(h,k);
-        if (!elemSet.has(JSON.stringify(hk))) continue;
-        const ghk = freeComp(gh,k);
-        if (elemSet.has(JSON.stringify(ghk))) s3.push([g,h,k]);
-      }
-    }
-  }
-  const freeSystem = { generators:system.generators, inv:system.inv, genRank:system.genRank,
-    rank:system.rank.bind(system), reduce:system.reduce.bind(system),
-    compose:freeComp, _wordKey:w=>JSON.stringify(w), applyRelations:(w)=>system.reduce([...w]) };
-  return { simplices:{0:s0,1:s1,2:s2,3:s3}, elements:elems, elemSet, system:freeSystem };
-}
-
-function cartesian(arr, n) {
+function cartesian(arr,n) {
   if (n===0) return [[]];
-  return arr.flatMap(x => cartesian(arr,n-1).map(r=>[x,...r]));
+  return arr.flatMap(x=>cartesian(arr,n-1).map(r=>[x,...r]));
 }
 
-// Face maps dᵢ: N(G)_n → N(G)_{n-1} (Definition 11.1)
-// d₀ drops first; dᵢ (0<i<n) composes adjacent pair i,i+1; dₙ drops last
-function faceMap(simplex, i, system) {
-  if (simplex.length===1) return [];
-  if (simplex.length===2) {
-    const [g,h]=simplex;
-    if (i===0) return [h]; if (i===1) return [system.compose(g,h)]; return [g];
-  }
-  if (simplex.length===3) {
-    const [g,h,k]=simplex;
-    if (i===0) return [h,k]; if (i===1) return [system.compose(g,h),k];
-    if (i===2) return [g,system.compose(h,k)]; return [g,h];
-  }
-}
-
-function buildBoundaryMatrix(simplices, dim, system) {
-  if (dim===0) return {data:[],rows:0,cols:1};
-  const lower=simplices[dim-1], upper=simplices[dim];
-  const idx=new Map(lower.map((s,i)=>[JSON.stringify(s),i]));
-  const data=Array.from({length:lower.length},()=>new Int32Array(upper.length));
-  for (let j=0;j<upper.length;j++) {
-    for (let i=0;i<=dim;i++) {
-      const face=faceMap(upper[j],i,system);
-      const key=JSON.stringify(face);
-      if (idx.has(key)) data[idx.get(key)][j]+=(i%2===0?1:-1);
-    }
-  }
-  return {data,rows:lower.length,cols:upper.length};
-}
-
-// ================================================================
-// LAYER 3 — LINEAR ALGEBRA
-// ================================================================
-
-function smithNF(matData, rows, cols) {
+// ── SMITH NORMAL FORM ────────────────────────────────────────────────────────
+// Used for small dense matrices (∂1, ∂2). Not used for ∂3 — see sparseRankAndTorsion.
+function smithNF(matData,rows,cols) {
   if (rows===0||cols===0) return [];
-  const M=matData.map(r=>[...r]);
-  const diag=[];
+  const M=matData.map(r=>[...r]), diag=[];
   let row=0,col=0;
   while (row<rows&&col<cols) {
     let pivot=null;
@@ -918,620 +608,808 @@ function smithNF(matData, rows, cols) {
     }
     if (M[row][col]<0) for (let c=0;c<cols;c++) M[row][c]=-M[row][c];
     diag.push(M[row][col]);
-    row++;col++;
+    row++; col++;
   }
   return diag;
 }
 
-function computeHomologyFromNerve(simplices, sysObj, topDim) {
-  const bMaps={0:{data:[],rows:0,cols:1}};
-  for (let dim=1;dim<=topDim+1;dim++)
-    if (simplices[dim]&&simplices[dim-1])
-      bMaps[dim]=buildBoundaryMatrix(simplices,dim,sysObj);
-  const results={};
-  for (let n=0;n<=topDim;n++) {
-    const dn=bMaps[n], dn1=bMaps[n+1];
-    let rankIm=0, torsion=[];
-    if (dn1&&dn1.cols>0&&dn1.rows>0) {
-      const diag=smithNF(dn1.data,dn1.rows,dn1.cols);
-      rankIm=diag.filter(d=>d!==0).length;
-      torsion=diag.filter(d=>d>1);
-    }
-    let rankKer=0;
-    if (dn&&dn.cols>0&&dn.rows>0) {
-      const rDn=smithNF(dn.data,dn.rows,dn.cols).filter(d=>d!==0).length;
-      rankKer=dn.cols-rDn;
-    } else if (n===0) rankKer=1;
-    results[n]={free:rankKer-rankIm,torsion};
+// faceMap: uses the compose cache (cc) for O(1) composition lookups.
+// Avoids calling applyRelations() again during boundary construction.
+function faceMapCached(simplex,fi,cc) {
+  if (simplex.length===1) return [];
+  if (simplex.length===2) {
+    const [g,h]=simplex;
+    if (fi===0) return [h]; if (fi===1) return [cc(g,h)]; return [g];
   }
-  return results;
+  if (simplex.length===3) {
+    const [g,h,k]=simplex;
+    if (fi===0) return [h,k];
+    if (fi===1) return [cc(g,h),k];
+    if (fi===2) return [g,cc(h,k)];
+    return [g,h];
+  }
 }
 
-// ================================================================
-// LAYER 4 — PERSISTENCE ENGINE  (new)
-// ================================================================
-//
-// computePersistenceHistory: runs the nerve+homology computation at
-// each depth d = 1…maxDepth for both the free and quotient filtrations.
-// Returns an array of snapshots and the derived persistence classes.
-//
-// buildPersistenceClasses: translates the history of H_n groups into
-// a list of (birth, death, coefficient) pairs — the persistence diagram.
-// Method: elder rule on rank changes. For each degree n, track the
-// free rank and torsion coefficients across depths, recording events.
-//
-// computeDeltaPD: computes ΔPD_n = PD(𝒬,n) ∖ PD(ℱ,n) as a signed
-// list of classes, each labeled 'created' (in 𝒬 not in ℱ) or
-// 'killed' (in ℱ not in 𝒬).
-
-function computePersistenceHistory(system, maxDepth, topDim) {
-  const history = [];
-  for (let d = 1; d <= maxDepth; d++) {
-    // Free nerve at depth d
-    const fNerve = buildFreeNerve(system, d);
-    const fHom   = computeHomologyFromNerve(fNerve.simplices, fNerve.system, topDim);
-
-    // Quotient nerve at depth d
-    const qNerve = buildNerve(system, d);
-    const qHom   = computeHomologyFromNerve(qNerve.simplices, system, topDim);
-
-    history.push({
-      d,
-      freeHom: fHom,
-      quotHom: qHom,
-      freeElemCount: fNerve.elements.length,
-      quotElemCount: qNerve.elements.length,
-    });
+// buildBoundaryMatrix: for dim ≤ 2, build dense matrix as before.
+// dim=3 is handled by buildD3Sparse below.
+function buildBoundaryMatrix(simplices,dim,cc) {
+  if (dim===0) return {data:[],rows:0,cols:1};
+  const lower=simplices[dim-1], upper=simplices[dim];
+  const idx=new Map(lower.map((s,i)=>[JSON.stringify(s),i]));
+  const data=Array.from({length:lower.length},()=>new Int32Array(upper.length));
+  for (let j=0;j<upper.length;j++) for (let fi=0;fi<=dim;fi++) {
+    const face=faceMapCached(upper[j],fi,cc), key=JSON.stringify(face);
+    if (idx.has(key)) data[idx.get(key)][j]+=(fi%2===0?1:-1);
   }
-  return history;
+  return {data,rows:lower.length,cols:upper.length};
 }
 
-// buildPersistenceClasses: extracts (birth, death, coeff) pairs from
-// the history of H_n values. Uses the elder rule: when free rank increases,
-// new class born at current depth; when it decreases, eldest open class dies.
-// Torsion coefficients are matched by value (approximate for repeated coefficients).
-function buildPersistenceClasses(history, topDim, maxDepth, useQuot) {
-  const classes = [];   // {n, birth, death, coeff}
-  const key = useQuot ? 'quotHom' : 'freeHom';
+// buildD3Sparse: generates ∂3 column-by-column without storing s3.
+//
+// Each valid (g,h,k) triple contributes one COLUMN to ∂3.
+// Its 4 nonzero entries (one per face map) are written directly
+// into a sparse COO accumulator. No s3 array is ever allocated.
+//
+// Memory: 4 × (number of valid triples) integers — compared to
+// storing the full s3 array and a dense |s2|×|s3| matrix.
+// At d=5: 4×56749 nonzeros vs 2089×56749 = 118M dense entries.
+//
+// The compose cache cc makes each inner lookup O(1), so the total
+// cost of this function is O(|G|³) iterations with O(1) work each.
+function buildD3Sparse(elems, elemSet, cc, s2, wkey) {
+  const s2Idx=new Map(s2.map((s,i)=>[JSON.stringify(s),i]));
+  const rows=s2.length;
 
-  for (let n = 0; n <= topDim; n++) {
-    let prevFree = 0, prevTorsion = [];
+  // COO sparse format: parallel arrays for row, col, val.
+  const cooRow=[], cooCol=[], cooVal=[];
+  let colIdx=0;
 
-    for (let i = 0; i < history.length; i++) {
-      const d   = history[i].d;
-      const hom = history[i][key][n] || {free:0, torsion:[]};
+  for (const g of elems) {
+    for (const h of elems) {
+      const gh=cc(g,h);
+      if (!elemSet.has(wkey(gh))) continue;
+      for (const k of elems) {
+        const hk=cc(h,k);
+        if (!elemSet.has(wkey(hk))) continue;
+        const ghk=cc(gh,k);
+        if (!elemSet.has(wkey(ghk))) continue;
 
-      // Free rank births
-      for (let k = 0; k < hom.free - prevFree; k++)
-        classes.push({n, birth:d, death:Infinity, coeff:'ℤ', alive:true});
-
-      // Free rank deaths (kill eldest open class of type ℤ in this degree)
-      let toKill = Math.max(0, prevFree - hom.free);
-      for (let k = classes.length-1; k >= 0 && toKill > 0; k--) {
-        if (classes[k].n===n && classes[k].coeff==='ℤ' && classes[k].alive) {
-          classes[k].death = d - 1;
-          classes[k].alive = false;
-          toKill--;
-        }
-      }
-
-      // Torsion: compute added / removed by sorted diff
-      const addedTor  = sortedDiff(hom.torsion, prevTorsion);
-      const killedTor = sortedDiff(prevTorsion, hom.torsion);
-
-      for (const t of addedTor)
-        classes.push({n, birth:d, death:Infinity, coeff:`ℤ/${t}ℤ`, alive:true});
-
-      for (const t of killedTor) {
-        for (let k = classes.length-1; k >= 0; k--) {
-          if (classes[k].n===n && classes[k].coeff===`ℤ/${t}ℤ` && classes[k].alive) {
-            classes[k].death = d - 1;
-            classes[k].alive = false;
-            break;
+        // Valid 3-simplex. Boundary faces (bar complex §11, Def. 11.1):
+        //   d0=(h,k), d1=(gh,k), d2=(g,hk), d3=(g,h)  with signs (-1)^i
+        const faces=[[h,k],[gh,k],[g,hk],[g,h]];
+        for (let fi=0;fi<4;fi++) {
+          const row=s2Idx.get(JSON.stringify(faces[fi]));
+          if (row!==undefined) {
+            cooRow.push(row); cooCol.push(colIdx); cooVal.push(fi%2===0?1:-1);
           }
         }
+        colIdx++;
       }
+    }
+  }
 
-      prevFree    = hom.free;
-      prevTorsion = [...hom.torsion].sort((a,b)=>a-b);
+  return {rows, cols:colIdx, cooRow, cooCol, cooVal};
+}
+
+// sparseRankAndTorsion: computes rank and torsion of a sparse integer matrix
+// using column reduction over ℤ (Hermite normal form approach).
+//
+// Avoids building the full |s2|×|s3| dense matrix (474MB at d=5).
+// Instead works with sparse column vectors. Each column has exactly 4
+// nonzeros for ∂3, so column operations stay sparse throughout.
+//
+// Returns {rank, torsion}: rank = number of pivot columns found,
+// torsion = diagonal entries > 1 (invariant factors from SNF perspective).
+function sparseRankAndTorsion(sparse) {
+  const {rows, cols, cooRow, cooCol, cooVal} = sparse;
+  if (cols===0) return {rank:0, torsion:[]};
+
+  // Build column vectors as Maps: row → value
+  const colVecs=Array.from({length:cols},()=>new Map());
+  for (let i=0;i<cooRow.length;i++) {
+    const r=cooRow[i], c=cooCol[i], v=cooVal[i];
+    colVecs[c].set(r,(colVecs[c].get(r)||0)+v);
+  }
+
+  // Pivot tracking: row → {pivotValue, pivotColVec}
+  // When a pivot is placed at row r with value p, all subsequent
+  // columns are reduced modulo p at row r.
+  const pivots=new Map(); // row → {val, vec: Map}
+  const invariantFactors=[];
+  let rank=0;
+
+  for (let c=0;c<cols;c++) {
+    let vec=new Map(colVecs[c]);
+    // Remove explicit zeros
+    for (const [r,v] of vec) if(v===0) vec.delete(r);
+    if (vec.size===0) continue;
+
+    // Reduce vec using existing pivots (column operation)
+    let changed=true;
+    while (changed) {
+      changed=false;
+      for (const [r,v] of vec) {
+        const piv=pivots.get(r);
+        if (!piv) continue;
+        const q=Math.trunc(v/piv.val);
+        if (q===0) continue;
+        for (const [pr,pv] of piv.vec) {
+          const cur=vec.get(pr)||0;
+          const next=cur-q*pv;
+          if (next===0) vec.delete(pr); else vec.set(pr,next);
+        }
+        changed=true;
+      }
+    }
+
+    if (vec.size===0) continue;
+
+    // Find row with smallest absolute value in remaining vec (pivot selection)
+    let pivRow=-1, pivVal=0;
+    for (const [r,v] of vec) {
+      if (pivRow===-1||Math.abs(v)<Math.abs(pivVal)) { pivRow=r; pivVal=v; }
+    }
+
+    // Normalize pivot to positive
+    if (pivVal<0) { for (const [r,v] of vec) vec.set(r,-v); pivVal=-pivVal; }
+
+    rank++;
+    invariantFactors.push(pivVal);
+    pivots.set(pivRow,{val:pivVal,vec:new Map(vec)});
+  }
+
+  return {rank, torsion:invariantFactors.filter(f=>f>1)};
+}
+
+// computeHomologyFromNerve: uses lazy ∂3 — never stores the s3 array
+// or the dense ∂3 matrix.
+// ∂0, ∂1, ∂2: built as dense matrices (small enough).
+// ∂3: built as sparse COO and reduced via sparseRankAndTorsion.
+function computeHomologyFromNerve(nerve, topDim) {
+  const {simplices, elements:elems, cc, elemSet} = nerve;
+  const wkey = w=>JSON.stringify(w);
+
+  // Dense boundary maps for dims 0..topDim (all except dim=topDim+1=3 when topdim=2)
+  const bMaps={0:{data:[],rows:0,cols:1}};
+  for (let dim=1;dim<=Math.min(topDim,2);dim++)
+    if (simplices[dim]&&simplices[dim-1])
+      bMaps[dim]=buildBoundaryMatrix(simplices,dim,cc);
+
+  // ∂_{topDim+1}: generated lazily as sparse COO
+  let sparseD_top=null;
+  if (topDim>=2) {
+    sparseD_top=buildD3Sparse(elems, elemSet, cc, simplices[2], wkey);
+  }
+
+  const res={};
+  for (let n=0;n<=topDim;n++) {
+    const dn=bMaps[n];
+    let rankIm=0, torsion=[];
+
+    if (n===topDim-1 && sparseD_top && topDim>=2) {
+      // For H_{n} where ∂_{n+1}=∂3: use sparse rank
+      // (only applies when n=1 and topDim=2, i.e. computing H1 using ∂2)
+      // Actually for H_1 we use ∂2 (dense); for H_2 we use ∂3 (sparse).
+      const d=smithNF(bMaps[2].data,bMaps[2].rows,bMaps[2].cols);
+      rankIm=d.filter(x=>x!==0).length; torsion=d.filter(x=>x>1);
+    } else if (n===topDim && sparseD_top) {
+      // H_topDim uses ∂_{topDim+1} = sparse ∂3
+      const r=sparseRankAndTorsion(sparseD_top);
+      rankIm=r.rank; torsion=r.torsion;
+    } else {
+      const dn1=bMaps[n+1];
+      if (dn1&&dn1.cols>0&&dn1.rows>0) {
+        const d=smithNF(dn1.data,dn1.rows,dn1.cols);
+        rankIm=d.filter(x=>x!==0).length; torsion=d.filter(x=>x>1);
+      }
+    }
+
+    let rankKer=0;
+    if (dn&&dn.cols>0&&dn.rows>0) {
+      rankKer=dn.cols-smithNF(dn.data,dn.rows,dn.cols).filter(x=>x!==0).length;
+    } else if (n===0) rankKer=1;
+    res[n]={free:rankKer-rankIm, torsion};
+  }
+  return res;
+}
+
+// ── WORKER ENTRY POINT ───────────────────────────────────────────────────────
+//
+// Each worker instance computes ONE depth level (targetDepth).
+// The main thread spawns D workers for D depths; they run in parallel.
+// Progress is reported between the nerve-build and homology-compute steps.
+
+self.onmessage = function(event) {
+  try {
+    const {generators,inverses,relations,targetDepth,topdim,isFirst} = event.data;
+    const system = new RelationalSystem(generators,inverses,relations);
+
+    // Step 1 (first worker only): confluence check
+    let cf = null;
+    if (isFirst) {
+      self.postMessage({type:'progress', depth:targetDepth, step:'checking confluence'});
+      cf = checkLocalConfluence(system);
+    }
+
+    // Step 2: build nerve with compose cache
+    self.postMessage({type:'progress', depth:targetDepth, step:'building nerve'});
+    const t0 = Date.now();
+    const nerve = buildNerveWithCache(system, targetDepth);
+    const nerveMs = Date.now() - t0;
+
+    // Step 3: compute homology via lazy ∂3 (no dense 474MB matrix)
+    self.postMessage({type:'progress', depth:targetDepth, step:'Smith normal form'});
+    const t1 = Date.now();
+    const hom = computeHomologyFromNerve(nerve, topdim);
+    const homMs = Date.now() - t1;
+
+    self.postMessage({
+      type: 'depth-complete',
+      depth: targetDepth,
+      quotHom: hom,
+      quotElemCount: nerve.elements.length,
+      simplexCounts: {
+        s0: nerve.simplices[0].length,
+        s1: nerve.simplices[1].length,
+        s2: nerve.simplices[2].length,
+        s3: '(lazy — not stored)',
+      },
+      nerveMs,
+      homMs,
+      cf,
+    });
+  } catch(err) {
+    self.postMessage({type:'error', message: err.message});
+  }
+};
+</script>
+
+<script>
+// ================================================================
+// MAIN THREAD — UI, orchestration, persistence synthesis
+// ================================================================
+
+// ── PRESETS ──────────────────────────────────────────────────────
+
+const PRESETS = {
+  torus:  { gens:'a b', laws:'b a = a b', depth:5, topdim:2,
+    ref:'Theorem 11.4: commutativity creates (2,∞) in PD(𝒬,2). ΔPD₂={(2,∞)}.' },
+  z3:     { gens:'a', laws:'a a a =', depth:5, topdim:1,
+    ref:'Theorem 11.5: torsion law of length 3 creates (3,∞)_{ℤ/3} in PD(𝒬,1).' },
+  z5:     { gens:'a', laws:'a a a a a =', depth:6, topdim:1,
+    ref:'Theorem 11.5: torsion law of length 5 creates (5,∞)_{ℤ/5}.' },
+  circle: { gens:'a', laws:'', depth:4, topdim:1,
+    ref:'No laws ⟹ ΔPD_n=∅ for all n. Baseline: PD(ℱ,1)={(1,∞)} [Theorem 11.3].' },
+  free2:  { gens:'a b', laws:'', depth:3, topdim:2,
+    ref:'Free group: H₁=ℤ², H_n=0 for n≥2 [Theorem 11.3, Eilenberg-Ganea].' },
+  custom: { gens:'a b', laws:'', depth:4, topdim:2, ref:'' },
+};
+
+let currentPreset='torus';
+let activeWorkers=[];
+
+function loadPreset(name,btn) {
+  const p=PRESETS[name];
+  document.getElementById('inp-gens').value=p.gens;
+  document.getElementById('inp-laws').value=p.laws;
+  document.getElementById('inp-depth').value=p.depth;
+  document.getElementById('inp-topdim').value=p.topdim;
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  currentPreset=name;
+  clearResults();
+}
+
+function parseInput() {
+  const gensRaw=document.getElementById('inp-gens').value.trim();
+  const lawsRaw=document.getElementById('inp-laws').value.trim();
+  const depth=parseInt(document.getElementById('inp-depth').value);
+  const topdim=parseInt(document.getElementById('inp-topdim').value);
+  const generators=gensRaw.split(/\s+/).filter(Boolean);
+  if (!generators.length) throw new Error('No generators.');
+  const inverses={};
+  for (const g of generators) { inverses[g]=g+'_inv'; inverses[g+'_inv']=g; }
+  const relations=[];
+  for (const line of lawsRaw.split('\n')) {
+    const tr=line.trim(); if (!tr) continue;
+    const parts=tr.split('=');
+    if (parts.length!==2) throw new Error(`Invalid law: "${tr}". Use = to separate sides.`);
+    relations.push([parts[0].trim().split(/\s+/).filter(Boolean), parts[1].trim().split(/\s+/).filter(Boolean)]);
+  }
+  return {generators,inverses,relations,depth,topdim};
+}
+
+// ── ANALYTICAL FREE GROUP PERSISTENCE ────────────────────────────
+//
+// Theorem 11.3 (Eilenberg-Ganea): free groups have cohomological dimension 1.
+//   PD(ℱ,0) = {(1,∞)}              one H₀ class (connectedness)
+//   PD(ℱ,1) = {(1,∞)^|R|}          one H₁ class per generator
+//   PD(ℱ,n) = ∅  for n≥2           free groups have no higher homology
+//
+// We skip building the free nerve entirely. This eliminates half the
+// nerve builds and the associated exponential enumeration of freely-
+// reduced words (which grow as 4·3^(d-1) per depth level).
+
+function analyticalFreeGroupPersistence(numGenerators, topdim) {
+  const classes=[];
+  if (topdim>=0) classes.push({n:0,birth:1,death:Infinity,coeff:'ℤ',alive:true});
+  if (topdim>=1) for (let i=0;i<numGenerators;i++)
+    classes.push({n:1,birth:1,death:Infinity,coeff:'ℤ',alive:true});
+  // H_n=0 for n≥2: no classes added
+  return classes;
+}
+
+// Analytical free group homology at a given depth (for timeline display)
+function analyticalFreeHom(numGenerators, topdim) {
+  const res={};
+  for (let n=0;n<=topdim;n++) res[n]={free:n===0?1:n===1?numGenerators:0,torsion:[]};
+  return res;
+}
+
+// ── PERSISTENCE SYNTHESIS ─────────────────────────────────────────
+//
+// buildPersistenceClasses: translates a history of H_n groups across depths
+// into (birth, death, coeff) pairs. Uses the elder rule:
+//   - free rank increase → new ℤ class born at current depth
+//   - free rank decrease → eldest open ℤ class dies at previous depth
+//   - torsion addition/removal → corresponding birth/death events
+
+function sortedDiff(a,b) {
+  const bc=[...b].sort((x,y)=>x-y), res=[];
+  for (const x of [...a].sort((x,y)=>x-y)) {
+    const i=bc.indexOf(x); if(i===-1) res.push(x); else bc.splice(i,1);
+  }
+  return res;
+}
+
+function buildPersistenceClasses(history, topdim, isQuot) {
+  const classes=[];
+  const key=isQuot?'quotHom':'freeHom';
+  for (let n=0;n<=topdim;n++) {
+    let prevFree=0, prevTorsion=[];
+    for (const h of history) {
+      const hom=h[key][n]||{free:0,torsion:[]};
+      for (let k=0;k<hom.free-prevFree;k++)
+        classes.push({n,birth:h.d,death:Infinity,coeff:'ℤ',alive:true});
+      let toKill=Math.max(0,prevFree-hom.free);
+      for (let k=classes.length-1;k>=0&&toKill>0;k--)
+        if (classes[k].n===n&&classes[k].coeff==='ℤ'&&classes[k].alive) { classes[k].death=h.d-1; classes[k].alive=false; toKill--; }
+      for (const t of sortedDiff(hom.torsion,prevTorsion))
+        classes.push({n,birth:h.d,death:Infinity,coeff:`ℤ/${t}ℤ`,alive:true});
+      for (const t of sortedDiff(prevTorsion,hom.torsion))
+        for (let k=classes.length-1;k>=0;k--)
+          if (classes[k].n===n&&classes[k].coeff===`ℤ/${t}ℤ`&&classes[k].alive) { classes[k].death=h.d-1; classes[k].alive=false; break; }
+      prevFree=hom.free; prevTorsion=[...hom.torsion].sort((a,b)=>a-b);
     }
   }
   return classes;
 }
 
-// sortedDiff: multiset subtraction — returns elements in a not in b
-function sortedDiff(a, b) {
-  const bCopy = [...b].sort((x,y)=>x-y);
-  const result = [];
-  for (const x of [...a].sort((x,y)=>x-y)) {
-    const idx = bCopy.indexOf(x);
-    if (idx === -1) result.push(x);
-    else bCopy.splice(idx, 1);
-  }
-  return result;
-}
-
-// computeDeltaPD: ΔPD_n = PD(𝒬,n) ∖ PD(ℱ,n)
-// Classes in quotient not matched by the free persistence are 'created'.
-// Classes in free not matched by the quotient are 'killed'.
+// ΔPD_n = PD(𝒬,n) ∖ PD(ℱ,n) as a signed list (Definition 11.4)
 function computeDeltaPD(freeClasses, quotClasses) {
-  const delta = [];
-
-  // Build a frequency map of free classes
-  const freeMap = new Map();
+  const fMap=new Map();
   for (const c of freeClasses) {
-    const k = `${c.n}|${c.birth}|${c.death}|${c.coeff}`;
-    freeMap.set(k, (freeMap.get(k)||0) + 1);
+    const k=`${c.n}|${c.birth}|${c.death}|${c.coeff}`;
+    fMap.set(k,(fMap.get(k)||0)+1);
   }
-
-  // Find quotient classes not in free (created by laws)
+  const delta=[];
   for (const c of quotClasses) {
-    const k = `${c.n}|${c.birth}|${c.death}|${c.coeff}`;
-    if (freeMap.has(k) && freeMap.get(k) > 0) {
-      freeMap.set(k, freeMap.get(k) - 1);
-    } else {
-      delta.push({...c, type:'created'});
-    }
+    const k=`${c.n}|${c.birth}|${c.death}|${c.coeff}`;
+    if (fMap.has(k)&&fMap.get(k)>0) fMap.set(k,fMap.get(k)-1);
+    else delta.push({...c,type:'created'});
   }
-
-  // Find free classes not in quotient (killed by laws)
-  const quotMap = new Map();
+  const qMap=new Map();
   for (const c of quotClasses) {
-    const k = `${c.n}|${c.birth}|${c.death}|${c.coeff}`;
-    quotMap.set(k, (quotMap.get(k)||0) + 1);
+    const k=`${c.n}|${c.birth}|${c.death}|${c.coeff}`;
+    qMap.set(k,(qMap.get(k)||0)+1);
   }
   for (const c of freeClasses) {
-    const k = `${c.n}|${c.birth}|${c.death}|${c.coeff}`;
-    if (quotMap.has(k) && quotMap.get(k) > 0) {
-      quotMap.set(k, quotMap.get(k) - 1);
-    } else {
-      delta.push({...c, type:'killed'});
-    }
+    const k=`${c.n}|${c.birth}|${c.death}|${c.coeff}`;
+    if (qMap.has(k)&&qMap.get(k)>0) qMap.set(k,qMap.get(k)-1);
+    else delta.push({...c,type:'killed'});
   }
-
   return delta;
 }
 
-function formatGroup(free, torsion) {
-  const parts = [];
-  if (free===1) parts.push('ℤ');
-  else if (free>1) parts.push(`ℤ^${free}`);
-  torsion.forEach(t => parts.push(`ℤ/${t}ℤ`));
-  return parts.join('×') || '0';
+function formatGroup(free,torsion) {
+  const parts=[];
+  if(free===1)parts.push('ℤ'); else if(free>1)parts.push(`ℤ^${free}`);
+  torsion.forEach(t=>parts.push(`ℤ/${t}ℤ`));
+  return parts.join('×')||'0';
 }
 
-// ================================================================
-// LAYER 5 — PRESETS & PARSING
-// ================================================================
+// ── COMPUTATION ORCHESTRATION ─────────────────────────────────────
+//
+// One Web Worker per depth — genuine OS-thread parallelism.
+// Each worker returns independently; progress updates as each completes.
+// When all D workers are done, synthesize persistence in the main thread.
 
-const PRESETS = {
-  torus: {
-    gens:'a b', laws:'b a = a b', depth:5, topdim:2,
-    mathRef:'Theorem 11.4: commutativity creates (2,∞) in PD(𝒬,2). ΔPD₂ = {(2,∞)}.'
-  },
-  z3: {
-    gens:'a', laws:'a a a =', depth:5, topdim:1,
-    mathRef:'Theorem 11.5: torsion law of length 3 creates (3,∞)_{ℤ/3} modifying PD(𝒬,1).'
-  },
-  z5: {
-    gens:'a', laws:'a a a a a =', depth:6, topdim:1,
-    mathRef:'Theorem 11.5: torsion law of length 5 creates (5,∞)_{ℤ/5}.'
-  },
-  circle: {
-    gens:'a', laws:'', depth:4, topdim:1,
-    mathRef:'No laws ⟹ ΔPD_n = ∅ for all n. Baseline: PD(ℱ,1)={(1,∞)} [Theorem 11.3].'
-  },
-  free2: {
-    gens:'a b', laws:'', depth:3, topdim:2,
-    mathRef:'Free group: PD(ℱ,1)={(1,∞),(1,∞)}, PD(ℱ,n)=∅ for n≥2 [Theorem 11.3, Eilenberg-Ganea].'
-  },
-  custom: { gens:'a b', laws:'', depth:4, topdim:2, mathRef:'' }
-};
+let workerBlobURL = null;
 
-let currentPreset = 'torus';
-
-function loadPreset(name, btn) {
-  const p = PRESETS[name];
-  document.getElementById('inp-gens').value   = p.gens;
-  document.getElementById('inp-laws').value   = p.laws;
-  document.getElementById('inp-depth').value  = p.depth;
-  document.getElementById('inp-topdim').value = p.topdim;
-  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  currentPreset = name;
-  clearResults();
-}
-
-function parseInput() {
-  const gensRaw = document.getElementById('inp-gens').value.trim();
-  const lawsRaw = document.getElementById('inp-laws').value.trim();
-  const depth   = parseInt(document.getElementById('inp-depth').value);
-  const topdim  = parseInt(document.getElementById('inp-topdim').value);
-
-  const generators = gensRaw.split(/\s+/).filter(Boolean);
-  if (!generators.length) throw new Error('No generators specified.');
-
-  const inverses = {};
-  for (const g of generators) { inverses[g]=g+'_inv'; inverses[g+'_inv']=g; }
-
-  const relations = [];
-  for (const line of lawsRaw.split('\n')) {
-    const tr = line.trim();
-    if (!tr) continue;
-    const parts = tr.split('=');
-    if (parts.length!==2) throw new Error(`Invalid law: "${tr}". Use = to separate both sides.`);
-    const lhs = parts[0].trim().split(/\s+/).filter(Boolean);
-    const rhs = parts[1].trim().split(/\s+/).filter(Boolean);
-    relations.push([lhs, rhs]);
+function getWorkerBlobURL() {
+  if (!workerBlobURL) {
+    const src = document.getElementById('worker-src').textContent;
+    workerBlobURL = URL.createObjectURL(new Blob([src],{type:'application/javascript'}));
   }
-
-  return { generators, inverses, relations, depth, topdim };
-}
-
-// ================================================================
-// LAYER 6 — APPLICATION LOGIC
-// ================================================================
-
-function setStatus(s) {
-  document.getElementById('status-dot').className = 'status-dot '+s;
-  document.getElementById('spinner').className = s==='running'?'spinner active':'spinner';
-}
-
-function clearResults() {
-  document.getElementById('results-body').innerHTML =
-    '<div class="empty-state"><div class="big">ΔPD</div><div>Select a preset and compute.</div></div>';
-  document.getElementById('header-badges').innerHTML = '';
-  setStatus('');
+  return workerBlobURL;
 }
 
 function runComputation() {
-  const btn = document.getElementById('run-btn');
-  btn.disabled = true;
-  setStatus('running');
+  // Terminate any still-running workers
+  activeWorkers.forEach(w=>w.terminate());
+  activeWorkers=[];
 
-  setTimeout(() => {
-    try {
-      const {generators, inverses, relations, depth, topdim} = parseInput();
-      const system   = new RelationalSystem(generators, inverses, relations);
-      const mathRef  = (PRESETS[currentPreset]||{}).mathRef || '';
-      const hasLaws  = system.expandedRelations.length > 0;
+  let input;
+  try { input=parseInput(); } catch(e) { showError(e.message); return; }
 
-      // Step 1: Confluence
-      const cf = checkLocalConfluence(system);
+  const {generators,inverses,relations,depth,topdim}=input;
+  const ref=(PRESETS[currentPreset]||{}).ref||'';
+  const hasLaws=relations.length>0;
 
-      // Step 2: Compute filtration history at d = 1..depth
-      const history = computePersistenceHistory(system, depth, topdim);
+  document.getElementById('run-btn').disabled=true;
+  document.getElementById('status-dot').className='status-dot running';
 
-      // Step 3: Build persistence classes
-      const freeClasses = buildPersistenceClasses(history, topdim, depth, false);
-      const quotClasses = buildPersistenceClasses(history, topdim, depth, true);
+  // Show progress panel
+  const progSection=document.getElementById('progress-section');
+  progSection.classList.add('visible');
+  document.getElementById('progress-msg').textContent='Spawning workers…';
+  document.getElementById('progress-pct').textContent='0%';
+  document.getElementById('progress-fill').style.width='0%';
 
-      // Step 4: ΔPD
-      const deltaPD = computeDeltaPD(freeClasses, quotClasses);
+  // Depth dots: one per depth
+  const dotsEl=document.getElementById('depth-dots');
+  dotsEl.innerHTML='';
+  const dots={};
+  for (let d=1;d<=depth;d++) {
+    const dot=document.createElement('div');
+    dot.className='depth-dot';
+    dot.id=`dot-${d}`;
+    dot.textContent=`d=${d}`;
+    dotsEl.appendChild(dot);
+    dots[d]=dot;
+  }
 
-      // Step 5: Congruence trace examples
-      const traceExamples = buildTraceExamples(system, generators);
+  const tStart=Date.now();
+  const results=new Array(depth+1).fill(null);
+  let completed=0;
+  let globalCf=null;
 
-      // Header badges
-      const badges = document.getElementById('header-badges');
-      badges.innerHTML = '';
-      const cfB = document.createElement('span');
-      cfB.className = 'hbadge '+(cf.confluent?'ok':'err');
-      cfB.textContent = cf.confluent ? '✓ confluent' : '✗ non-confluent';
-      cfB.title = cf.summary;
-      badges.appendChild(cfB);
+  // Analytical free group persistence — no nerve build needed
+  const freeClasses=analyticalFreeGroupPersistence(generators.length,topdim);
 
-      const stabB = document.createElement('span');
-      const stab = checkHomologyStabilized(history, topdim, depth);
-      stabB.className = 'hbadge '+(stab.stable?'ok':'warn');
-      stabB.textContent = stab.stable ? `✓ stable at d=${stab.depth}` : `⚠ not yet stable`;
-      stabB.title = stab.reason;
-      badges.appendChild(stabB);
+  const blobURL=getWorkerBlobURL();
 
-      if (deltaPD.length === 0 && hasLaws) {
-        const dpB = document.createElement('span');
-        dpB.className = 'hbadge dim';
-        dpB.textContent = 'ΔPD = ∅';
-        badges.appendChild(dpB);
-      } else if (deltaPD.length > 0) {
-        const dpB = document.createElement('span');
-        dpB.className = 'hbadge ok';
-        dpB.textContent = `|ΔPD| = ${deltaPD.length}`;
-        badges.appendChild(dpB);
+  for (let d=1;d<=depth;d++) {
+    const worker=new Worker(blobURL);
+    activeWorkers.push(worker);
+    dots[d].className='depth-dot running';
+
+    worker.onmessage=function(e) {
+      const msg=e.data;
+
+      if (msg.type==='progress') {
+        // Update the dot for this depth
+        dots[msg.depth].textContent=`d=${msg.depth} — ${msg.step}`;
+
+      } else if (msg.type==='depth-complete') {
+        if (msg.cf) globalCf=msg.cf;
+
+        dots[msg.depth].className='depth-dot done';
+        dots[msg.depth].textContent=`d=${msg.depth} ✓ (${msg.nerveMs+msg.homMs}ms)`;
+
+        results[msg.depth]={
+          d: msg.depth,
+          quotHom: msg.quotHom,
+          freeHom: analyticalFreeHom(generators.length,topdim),
+          quotElemCount: msg.quotElemCount,
+          simplexCounts: msg.simplexCounts,
+        };
+
+        completed++;
+        const pct=Math.round((completed/depth)*100);
+        document.getElementById('progress-fill').style.width=pct+'%';
+        document.getElementById('progress-pct').textContent=pct+'%';
+        document.getElementById('progress-msg').textContent=`${completed}/${depth} depths complete`;
+
+        worker.terminate();
+
+        // ── EARLY STOPPING ────────────────────────────────────────────────────
+        // Check whether homology has stabilized after each pair of consecutive
+        // depths. Stabilization means H_*(d) = H_*(d-1) for all n ≤ topDim.
+        //
+        // Why we need TWO matching depths before stopping:
+        //   - At d=1 the torus has H2=0 (law not yet visible)
+        //   - At d=2 the torus has H2=ℤ (law creates the class — BIRTH EVENT)
+        //   - At d=3 the torus still has H2=ℤ → d=2 and d=3 agree → STOP
+        //
+        // This gives us the birth depth (d=2) AND one confirmation depth (d=3).
+        // Workers for d=4 and d=5 are terminated immediately.
+        //
+        // Effect for torus: 18ms + 63ms + 2308ms = 2.4s instead of 75 minutes.
+
+        const completedResults = results.slice(1).filter(Boolean);
+        if (completedResults.length >= 2) {
+          const last = completedResults[completedResults.length-1];
+          const prev = completedResults[completedResults.length-2];
+          let stable = true;
+          for (let n=0; n<=topdim; n++) {
+            const g1=fmt(last.quotHom[n]?.free||0,last.quotHom[n]?.torsion||[]);
+            const g2=fmt(prev.quotHom[n]?.free||0,prev.quotHom[n]?.torsion||[]);
+            if (g1!==g2) { stable=false; break; }
+          }
+
+          if (stable) {
+            // Cancel all workers still running (higher depths not yet complete)
+            activeWorkers.forEach(w => w.terminate());
+
+            // Mark skipped depths in the UI
+            for (let d=last.d+1; d<=depth; d++) {
+              if (dots[d]) {
+                dots[d].className='depth-dot';
+                dots[d].textContent=`d=${d} — skipped (stable at d=${last.d})`;
+                dots[d].style.opacity='0.35';
+              }
+            }
+
+            document.getElementById('progress-fill').style.width='100%';
+            document.getElementById('progress-pct').textContent='100%';
+            document.getElementById('progress-msg').textContent=
+              `Stable at d=${last.d} — ${last.d - (results.slice(1).filter(Boolean).length-1)} depth(s) skipped`;
+
+            finalize();
+            return;
+          }
+        }
+
+        if (completed===depth) finalize();
+
+      } else if (msg.type==='error') {
+        dots[msg.depth].className='depth-dot'; dots[msg.depth].textContent=`d=${msg.depth} ✗`;
+        showError(msg.message);
       }
+    };
 
-      renderResults({system, history, freeClasses, quotClasses, deltaPD,
-                     topdim, depth, cf, traceExamples, mathRef, hasLaws});
-      setStatus(cf.confluent ? 'ok' : 'err');
+    worker.onerror=function(e) {
+      showError(e.message||'Worker error');
+      worker.terminate();
+    };
 
-    } catch(e) {
-      document.getElementById('results-body').innerHTML =
-        `<div class="error-msg">Error: ${e.message}</div>`;
-      setStatus('err');
-    }
-    btn.disabled = false;
-  }, 20);
-}
-
-// Homology stabilization: does H_n stop changing across the last two depths?
-function checkHomologyStabilized(history, topdim, maxDepth) {
-  if (history.length < 2) return {stable:false, reason:'not enough depths', depth:null};
-  const last  = history[history.length-1];
-  const prev  = history[history.length-2];
-  for (let n = 0; n <= topdim; n++) {
-    const g1 = formatGroup(last.quotHom[n]?.free||0, last.quotHom[n]?.torsion||[]);
-    const g2 = formatGroup(prev.quotHom[n]?.free||0, prev.quotHom[n]?.torsion||[]);
-    if (g1 !== g2) return {stable:false, reason:`H_${n} changed at d=${last.d}`, depth:null};
+    worker.postMessage({generators,inverses,relations,targetDepth:d,topdim,isFirst:(d===1)});
   }
-  return {stable:true, reason:`H_* identical at d=${prev.d} and d=${last.d}`, depth:last.d};
-}
 
-function buildTraceExamples(system, generators) {
-  if (generators.length < 2) return [];
-  const a = generators[0], b = generators[1];
-  const examples = [];
-  const words = [
-    {word:[b,a], desc:`${b}·${a}`},
-    {word:[b,b,a], desc:`${b}²·${a}`},
-    {word:[b,a,b,a], desc:`(${b}·${a})²`},
-  ];
-  for (const {word, desc} of words) {
-    const log=[], result=system.applyRelations(word,log);
-    if (log.length>0) examples.push({word,result,log,desc});
+  function fmt(free, torsion) {
+    const p=[];
+    if(free===1)p.push('Z'); else if(free>1)p.push('Z^'+free);
+    (torsion||[]).forEach(t=>p.push('Z/'+t+'Z'));
+    return p.join('x')||'0';
   }
-  return examples;
+
+  function finalize() {
+    const totalMs=Date.now()-tStart;
+    const history=results.slice(1).filter(Boolean);
+
+    document.getElementById('perf-note').textContent=
+      `Completed in ${(totalMs/1000).toFixed(2)}s. `+
+      `Stopped at d=${history[history.length-1]?.d||'?'} (early stopping). `+
+      `Free group analytical (Theorem 11.3). ∂3 generated lazily — no dense matrix allocated.`;
+
+    const quotClasses=buildPersistenceClasses(history,topdim,true);
+    const deltaPD=computeDeltaPD(freeClasses,quotClasses);
+
+    if (!globalCf) globalCf={confluent:true,summary:'No laws — trivially confluent'};
+
+    const stab=checkHomologyStabilized(history,topdim);
+
+    renderResults({history,freeClasses,quotClasses,deltaPD,
+      topdim,depth,cf:globalCf,stab,generators,ref,hasLaws});
+
+    document.getElementById('run-btn').disabled=false;
+    document.getElementById('status-dot').className='status-dot '+(globalCf.confluent?'ok':'err');
+
+    const badges=document.getElementById('header-badges');
+    badges.innerHTML='';
+    addBadge(badges, globalCf.confluent?'✓ confluent':'✗ non-confluent', globalCf.confluent?'ok':'err', globalCf.summary);
+    addBadge(badges, stab.stable?`✓ stable d=${stab.depth}`:'⚠ not stable', stab.stable?'ok':'dim', stab.reason);
+    if (deltaPD.length===0&&hasLaws) addBadge(badges,'ΔPD = ∅','dim','Laws had no topological effect within max depth D.');
+    else if (deltaPD.length>0) addBadge(badges,`|ΔPD| = ${deltaPD.length}`,'ok','');
+    addBadge(badges,'free: analytic','dim','Theorem 11.3: PD(ℱ) computed without nerve. ∂3: lazy sparse.');
+  }
 }
 
-// ================================================================
-// LAYER 7 — RENDERING
-// ================================================================
-
-function renderResults({system, history, freeClasses, quotClasses, deltaPD,
-                        topdim, depth, cf, traceExamples, mathRef, hasLaws}) {
-  const body = document.getElementById('results-body');
-  body.innerHTML = '';
-
-  // ── Card 1: Persistence Barcode ──
-  body.appendChild(renderBarcodeCard(freeClasses, quotClasses, deltaPD, depth, topdim, cf, mathRef, hasLaws));
-
-  // ── Card 2: ΔPD Table ──
-  body.appendChild(renderDeltaPDCard(deltaPD, depth, topdim, hasLaws));
-
-  // ── Card 3: Depth Timeline ──
-  body.appendChild(renderTimelineCard(history, topdim, hasLaws));
-
-  // ── Card 4: Congruence Rewriting ──
-  if (traceExamples.length > 0) body.appendChild(renderTraceCard(traceExamples));
+function addBadge(container, text, cls, title) {
+  const b=document.createElement('span');
+  b.className='hbadge '+cls;
+  b.textContent=text;
+  if(title) b.title=title;
+  container.appendChild(b);
 }
 
-// ── BARCODE ──
-// Each class renders as a horizontal bar from birth to death (or depth for ∞).
-// Free classes: yellow. Quotient classes (unchanged): teal.
-// ΔPD classes: green (created) or red dashed (killed).
-function renderBarcodeCard(freeClasses, quotClasses, deltaPD, maxDepth, topdim, cf, mathRef, hasLaws) {
-  const card = document.createElement('div');
-  card.className = 'card';
+function checkHomologyStabilized(history,topdim) {
+  if (history.length<2) return {stable:false,reason:'Not enough depths',depth:null};
+  const last=history[history.length-1], prev=history[history.length-2];
+  for (let n=0;n<=topdim;n++) {
+    const g1=formatGroup(last.quotHom[n]?.free||0,last.quotHom[n]?.torsion||[]);
+    const g2=formatGroup(prev.quotHom[n]?.free||0,prev.quotHom[n]?.torsion||[]);
+    if(g1!==g2) return {stable:false,reason:`H_${n} changed at d=${last.d}`,depth:null};
+  }
+  return {stable:true,reason:`H_* identical at d=${prev.d} and d=${last.d}`,depth:last.d};
+}
 
-  const deltaTag = deltaPD.length===0
-    ? '<span class="card-tag info">ΔPD = ∅</span>'
-    : `<span class="card-tag ok">|ΔPD| = ${deltaPD.length}</span>`;
+function clearResults() {
+  document.getElementById('results-body').innerHTML=
+    '<div class="empty-state"><div class="big">ΔPD</div><div>Select a preset and compute.</div></div>';
+  document.getElementById('header-badges').innerHTML='';
+  document.getElementById('status-dot').className='status-dot';
+  document.getElementById('progress-section').classList.remove('visible');
+}
 
-  card.innerHTML = `
+function showError(msg) {
+  document.getElementById('results-body').innerHTML=`<div class="error-msg">Error: ${msg}</div>`;
+  document.getElementById('run-btn').disabled=false;
+  document.getElementById('status-dot').className='status-dot err';
+}
+
+// ── RENDERING ────────────────────────────────────────────────────
+
+function renderResults({history,freeClasses,quotClasses,deltaPD,
+                        topdim,depth,cf,stab,generators,ref,hasLaws}) {
+  const body=document.getElementById('results-body');
+  body.innerHTML='';
+  body.appendChild(renderBarcodeCard(freeClasses,quotClasses,deltaPD,depth,topdim,cf,ref,hasLaws));
+  body.appendChild(renderDeltaPDCard(deltaPD,topdim,hasLaws));
+  body.appendChild(renderTimelineCard(history,topdim,hasLaws,generators.length));
+
+  // Rewriting trace (only for multi-generator with laws)
+  if (generators.length>=2&&hasLaws) {
+    // build trace examples in main thread (fast — just normalization display)
+    body.appendChild(renderTraceNote());
+  }
+}
+
+// ── BARCODE ──────────────────────────────────────────────────────
+
+function renderBarcodeCard(freeClasses,quotClasses,deltaPD,maxDepth,topdim,cf,ref,hasLaws) {
+  const card=document.createElement('div');
+  card.className='card';
+  card.innerHTML=`
     <div class="card-header">
       <div class="card-title">Persistence Barcode — PD(ℱ,n) and PD(𝒬,n)</div>
-      ${deltaTag}
+      <span class="card-tag ${deltaPD.length>0?'ok':'info'}">${deltaPD.length>0?'|ΔPD|='+deltaPD.length:'ΔPD = ∅'}</span>
     </div>
     <div class="card-body">
-      ${!cf.confluent ? `<div class="warning-banner"><div class="wb-title">⚠ Non-confluent TRS</div>${cf.summary}. Normal forms may not be unique — barcode may be incorrect.</div>` : ''}
+      ${!cf.confluent?`<div class="warning-banner"><div class="wb-title">⚠ Non-confluent TRS</div>${cf.summary}. Normal forms may not be unique.</div>`:''}
       <div class="legend">
-        <div class="legend-item"><div class="legend-bar free-z"></div>ℱ free class (ℤ)</div>
-        <div class="legend-item"><div class="legend-bar quot-z"></div>𝒬 class (ℤ)</div>
-        <div class="legend-item"><div class="legend-bar torsion"></div>torsion (ℤ/nℤ)</div>
-        <div class="legend-item"><div class="legend-bar delta-new"></div>created by laws</div>
+        <div class="legend-item"><div class="legend-bar free-z"></div>ℱ free (ℤ)</div>
+        <div class="legend-item"><div class="legend-bar quot-z"></div>𝒬 free (ℤ)</div>
+        <div class="legend-item"><div class="legend-bar torsion"></div>torsion</div>
+        <div class="legend-item"><div class="legend-bar delta-new"></div>created by laws ★</div>
         <div class="legend-item"><div class="legend-bar delta-kill"></div>killed by laws</div>
       </div>
-      <div class="barcode-container" id="barcode-container"></div>
-      ${mathRef ? `<div class="math-note"><div class="mn-title">Paper reference</div>${mathRef}</div>` : ''}
+      <div id="barcode-inner"></div>
+      ${ref?`<div class="math-note"><div class="mn-title">Paper reference</div>${ref}</div>`:''}
     </div>`;
-
-  // Draw after insertion
-  requestAnimationFrame(() => {
-    const container = card.querySelector('#barcode-container');
-    renderBarcode(container, freeClasses, quotClasses, deltaPD, maxDepth, topdim, hasLaws);
-  });
-
+  requestAnimationFrame(()=>drawBarcode(card.querySelector('#barcode-inner'),
+    freeClasses,quotClasses,deltaPD,maxDepth,topdim,hasLaws));
   return card;
 }
 
-function renderBarcode(container, freeClasses, quotClasses, deltaPD, maxDepth, topdim, hasLaws) {
-  const deltaSet = new Set(deltaPD.map(c=>`${c.n}|${c.birth}|${c.death}|${c.coeff}|${c.type}`));
-
-  function pct(d) { return ((d - 0.5) / maxDepth * 100).toFixed(2) + '%'; }
-  function pctW(birth, death) {
-    const end = death === Infinity ? maxDepth + 0.3 : Math.min(death, maxDepth);
-    return ((end - birth + 1) / maxDepth * 100).toFixed(2) + '%';
+function drawBarcode(container,freeClasses,quotClasses,deltaPD,maxDepth,topdim,hasLaws) {
+  function pct(d) { return ((d-0.5)/maxDepth*100).toFixed(2)+'%'; }
+  function pctW(b,d) {
+    const e=d===Infinity?maxDepth+0.25:Math.min(d,maxDepth);
+    return ((e-b+1)/maxDepth*100).toFixed(2)+'%';
   }
-  const isInfinity = c => c.death === Infinity;
-  const isNew = c => deltaPD.some(d=>d.type==='created'&&d.n===c.n&&d.birth===c.birth&&d.coeff===c.coeff);
-  const isKilled = c => deltaPD.some(d=>d.type==='killed'&&d.n===c.n&&d.birth===c.birth&&d.coeff===c.coeff);
+  const isNew=c=>deltaPD.some(d=>d.type==='created'&&d.n===c.n&&d.birth===c.birth&&d.coeff===c.coeff);
 
   // Tick row
-  const tickRow = document.createElement('div');
-  tickRow.className = 'barcode-tick-row';
-  tickRow.innerHTML = `<div class="barcode-tick-spacer"></div>`;
-  const tickTrack = document.createElement('div');
-  tickTrack.className = 'barcode-tick-track';
-  for (let d = 1; d <= maxDepth; d++) {
-    const tick = document.createElement('span');
-    tick.className = 'barcode-tick-label';
-    tick.style.left = pct(d);
-    tick.textContent = d;
-    tickTrack.appendChild(tick);
+  const ticks=document.createElement('div');
+  ticks.className='barcode-tick-row';
+  ticks.innerHTML='<div class="barcode-tick-spacer"></div>';
+  const tt=document.createElement('div'); tt.className='barcode-tick-track';
+  for (let d=1;d<=maxDepth;d++) {
+    const t=document.createElement('span'); t.className='barcode-tick-label';
+    t.style.left=pct(d); t.textContent=d; tt.appendChild(t);
   }
-  tickRow.appendChild(tickTrack);
-  container.appendChild(tickRow);
+  ticks.appendChild(tt); container.appendChild(ticks);
 
-  // Section: Free Group
-  const fLabel = document.createElement('div');
-  fLabel.className = 'barcode-section-label free';
-  fLabel.textContent = 'ℱ  —  Free Group F(R)';
-  container.appendChild(fLabel);
-
-  for (let n = 0; n <= topdim; n++) {
-    const deg = freeClasses.filter(c=>c.n===n);
-    if (deg.length === 0) continue;
-    for (let i = 0; i < deg.length; i++) {
-      const c = deg[i];
-      const row = document.createElement('div');
-      row.className = 'barcode-row';
-      const isTorsion = c.coeff !== 'ℤ';
-      const label = document.createElement('div');
-      label.className = 'barcode-label';
-      label.textContent = `H_${n} ${c.coeff}`;
-      const track = document.createElement('div');
-      track.className = 'barcode-track';
-      const bar = document.createElement('div');
-      bar.className = 'barcode-bar ' + (isTorsion ? 'free-tor' : 'free-z');
-      bar.style.left  = pct(c.birth);
-      bar.style.width = pctW(c.birth, c.death);
-      bar.title = `H_${n} ${c.coeff}: born ${c.birth}, ${c.death===Infinity?'∞':'died '+c.death}`;
-      if (isInfinity(c)) { const arr=document.createElement('span'); arr.className='barcode-arrow'; arr.textContent='→'; bar.appendChild(arr); }
-      track.appendChild(bar);
-      row.appendChild(label); row.appendChild(track);
-      container.appendChild(row);
+  function addSection(label,cls,classes,barClass) {
+    const sl=document.createElement('div');
+    sl.className='barcode-section-label '+cls; sl.textContent=label;
+    container.appendChild(sl);
+    for (let n=0;n<=topdim;n++) {
+      const deg=classes.filter(c=>c.n===n);
+      if(!deg.length) continue;
+      for (const c of deg) {
+        const row=document.createElement('div'); row.className='barcode-row';
+        const isTorsion=c.coeff!=='ℤ';
+        const created=isNew(c);
+        const label2=document.createElement('div'); label2.className='barcode-label';
+        label2.style.color=created?'var(--green)':'';
+        label2.textContent=`H_${n} ${c.coeff}${created?' ★':''}`;
+        label2.title=`H_${n} ${c.coeff}: born ${c.birth}, ${c.death===Infinity?'∞':'died '+c.death}`;
+        const track=document.createElement('div'); track.className='barcode-track';
+        const bar=document.createElement('div');
+        bar.className='barcode-bar '+(created?'delta-new':isTorsion?barClass+'-tor':barClass);
+        bar.style.left=pct(c.birth); bar.style.width=pctW(c.birth,c.death);
+        bar.title=label2.title;
+        if (c.death===Infinity) { const arr=document.createElement('span'); arr.className='barcode-arrow'; arr.textContent='→'; bar.appendChild(arr); }
+        track.appendChild(bar); row.appendChild(label2); row.appendChild(track);
+        container.appendChild(row);
+      }
     }
   }
 
-  if (!hasLaws) return;
-
-  // Section: Quotient Group
-  const qLabel = document.createElement('div');
-  qLabel.className = 'barcode-section-label quotient';
-  qLabel.textContent = 'Q  —  Quotient Group G = F(R)/~';
-  container.appendChild(qLabel);
-
-  for (let n = 0; n <= topdim; n++) {
-    const deg = quotClasses.filter(c=>c.n===n);
-    if (deg.length === 0) continue;
-    for (let i = 0; i < deg.length; i++) {
-      const c = deg[i];
-      const row = document.createElement('div');
-      row.className = 'barcode-row';
-      const isTorsion = c.coeff !== 'ℤ';
-      const created = isNew(c);
-      const killed  = isKilled(c);
-      const label = document.createElement('div');
-      label.className = 'barcode-label';
-      label.style.color = created ? 'var(--green)' : killed ? 'var(--red)' : '';
-      label.textContent = `H_${n} ${c.coeff}${created?' ★':''}`;
-      const track = document.createElement('div');
-      track.className = 'barcode-track';
-      const bar = document.createElement('div');
-      bar.className = 'barcode-bar ' + (created ? 'delta-new' : isTorsion ? 'quot-tor' : 'quot-z');
-      bar.style.left  = pct(c.birth);
-      bar.style.width = pctW(c.birth, c.death);
-      bar.title = `H_${n} ${c.coeff}: born ${c.birth}, ${c.death===Infinity?'∞':'died '+c.death}${created?' [created by laws]':''}`;
-      if (isInfinity(c)) { const arr=document.createElement('span'); arr.className='barcode-arrow'; arr.textContent='→'; bar.appendChild(arr); }
-      track.appendChild(bar);
-      row.appendChild(label); row.appendChild(track);
-      container.appendChild(row);
-    }
-  }
+  addSection('ℱ  —  Free Group F(R)  [analytical, Theorem 11.3]','free',freeClasses,'free-z');
+  if (hasLaws) addSection('𝒬  —  Quotient Group G = F(R)/~','quotient',quotClasses,'quot-z');
 }
 
-// ── ΔPD TABLE ──
-function renderDeltaPDCard(deltaPD, maxDepth, topdim, hasLaws) {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.style.animationDelay = '0.08s';
+// ── ΔPD TABLE ────────────────────────────────────────────────────
 
-  const emptyMsg = !hasLaws
-    ? '<div style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--dim);padding:6px 0">No laws — ΔPD_n = ∅ for all n. This is the free group baseline (Theorem 11.3).</div>'
-    : deltaPD.length === 0
-    ? '<div style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--dim);padding:6px 0">ΔPD_n = ∅ for all computed degrees. The laws have not yet produced a topological effect within the max depth D. Try increasing D, or the birth depth may exceed D.</div>'
-    : '';
-
-  const rows = deltaPD.length > 0 ? deltaPD.map(c => {
-    const created = c.type === 'created';
-    const deathStr = c.death === Infinity ? '∞' : String(c.death);
-    const coeffClass = c.coeff === 'ℤ' ? 'coeff-z' : 'coeff-tor';
-    return `<tr class="${c.type}">
+function renderDeltaPDCard(deltaPD,topdim,hasLaws) {
+  const card=document.createElement('div');
+  card.className='card'; card.style.animationDelay='.07s';
+  const rows=deltaPD.map(c=>`
+    <tr class="${c.type}">
       <td>H_${c.n}</td>
       <td>${c.birth}</td>
-      <td>${deathStr}</td>
-      <td class="${coeffClass}">${c.coeff}</td>
-      <td class="tag-${c.type}">${created?'created by laws':'killed by laws'}</td>
-    </tr>`;
-  }).join('') : '';
-
-  card.innerHTML = `
+      <td>${c.death===Infinity?'∞':c.death}</td>
+      <td class="${c.coeff==='ℤ'?'coeff-z':'coeff-tor'}">${c.coeff}</td>
+      <td class="tag-${c.type}">${c.type==='created'?'created by laws':'killed by laws'}</td>
+    </tr>`).join('');
+  const empty=!hasLaws
+    ?'<div style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--dim);padding:4px 0">No laws — ΔPD_n = ∅. This is the free group baseline (Theorem 11.3).</div>'
+    :deltaPD.length===0
+    ?'<div style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--dim);padding:4px 0">ΔPD_n = ∅. Laws have no detected topological effect within depth D. Try increasing D (birth depth ≥ law length).</div>'
+    :'';
+  card.innerHTML=`
     <div class="card-header">
       <div class="card-title">Presentation Persistence Diagram — ΔPD_n = PD(𝒬,n) ∖ PD(ℱ,n)</div>
-      <span class="card-tag info">§11, Definition 11.4</span>
+      <span class="card-tag info">Definition 11.4</span>
     </div>
     <div class="card-body">
-      ${emptyMsg}
-      ${deltaPD.length > 0 ? `
-      <table class="dpd-table">
-        <thead><tr>
-          <th>Degree</th><th>Birth d</th><th>Death d</th><th>Coefficient</th><th>Type</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table>` : ''}
+      ${empty}
+      ${deltaPD.length>0?`<table class="dpd-table"><thead><tr><th>Degree</th><th>Birth d</th><th>Death d</th><th>Coefficient</th><th>Type</th></tr></thead><tbody>${rows}</tbody></table>`:''}
       <div class="math-note">
         <div class="mn-title">What ΔPD encodes</div>
-        Each row is a class whose persistence differs between F(R) and G.
-        <em>Created</em> (green ★): a class present in PD(𝒬) not in PD(ℱ) — topology made by the laws.
-        <em>Killed</em> (red): a class in PD(ℱ) absent from PD(𝒬) — topology destroyed by the laws.
-        Birth depth ≥ max(|l|,|r|) for any responsible law l~r (Remark 11.6).
+        Created (★): topology made by the laws — absent from ℱ, present in 𝒬.
+        Killed: topology destroyed by the laws. Birth depth ≥ max(|l|,|r|) for responsible law l~r (Remark 11.6).
+        ℱ persistence computed analytically; 𝒬 computed by Smith normal form at each depth.
       </div>
     </div>`;
-
   return card;
 }
 
-// ── DEPTH TIMELINE ──
-function renderTimelineCard(history, topdim, hasLaws) {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.style.animationDelay = '0.16s';
+// ── DEPTH TIMELINE ────────────────────────────────────────────────
 
-  const depths = history.map(h => h.d);
-
-  // Build rows: one for "ℱ H_n" and one for "𝒬 H_n" per degree
-  let rows = '';
-  for (let n = 0; n <= topdim; n++) {
-    // Free row
-    let fCells = '';
-    let prevG = '';
+function renderTimelineCard(history,topdim,hasLaws,numGens) {
+  const card=document.createElement('div');
+  card.className='card'; card.style.animationDelay='.14s';
+  const depths=history.map(h=>h.d);
+  let rows='';
+  for (let n=0;n<=topdim;n++) {
+    let fCells='',prevG='';
     for (const h of history) {
-      const g = formatGroup(h.freeHom[n]?.free||0, h.freeHom[n]?.torsion||[]);
-      const cls = g !== prevG ? 'changed' : 'stable-ref';
-      fCells += `<td class="${cls}">${g}</td>`;
-      prevG = g;
+      const g=formatGroup(h.freeHom[n]?.free||0,h.freeHom[n]?.torsion||[]);
+      fCells+=`<td class="${g!==prevG?'changed':'stable-ref'}">${g}</td>`;
+      prevG=g;
     }
-    rows += `<tr><td>ℱ &nbsp;H_${n}</td>${fCells}</tr>`;
-
+    rows+=`<tr><td>ℱ &nbsp;H_${n}</td>${fCells}</tr>`;
     if (!hasLaws) continue;
-
-    // Quotient row
-    let qCells = '';
-    prevG = '';
+    let qCells=''; prevG='';
     for (const h of history) {
-      const g = formatGroup(h.quotHom[n]?.free||0, h.quotHom[n]?.torsion||[]);
-      const hasTor = (h.quotHom[n]?.torsion||[]).length > 0;
-      const changed = g !== prevG;
-      const cls = changed ? (hasTor ? 'torsion' : 'changed') : 'stable-ref';
-      qCells += `<td class="${cls}">${g}</td>`;
-      prevG = g;
+      const g=formatGroup(h.quotHom[n]?.free||0,h.quotHom[n]?.torsion||[]);
+      const hasTor=(h.quotHom[n]?.torsion||[]).length>0;
+      const cls=g!==prevG?(hasTor?'torsion':'changed'):'stable-ref';
+      qCells+=`<td class="${cls}">${g}</td>`;
+      prevG=g;
     }
-    rows += `<tr><td>𝒬 &nbsp;H_${n}</td>${qCells}</tr>`;
+    rows+=`<tr><td>𝒬 &nbsp;H_${n}</td>${qCells}</tr>`;
   }
-
-  // Element counts
-  let eCells = history.map(h=>`<td class="stable-ref">${h.quotElemCount}</td>`).join('');
-
-  card.innerHTML = `
+  if (hasLaws) {
+    rows+=`<tr><td>|G_≤d|</td>${history.map(h=>`<td class="stable-ref">${h.quotElemCount}</td>`).join('')}</tr>`;
+    rows+=`<tr><td>|G_≤d|²→3-simp</td>${history.map(h=>`<td class="stable-ref">${h.simplexCounts?.s3||0}</td>`).join('')}</tr>`;
+  }
+  card.innerHTML=`
     <div class="card-header">
       <div class="card-title">Filtration History — H_n at each depth d</div>
       <span class="card-tag info">N(F(R),d) vs N(G,d)</span>
@@ -1539,88 +1417,59 @@ function renderTimelineCard(history, topdim, hasLaws) {
     <div class="card-body">
       <div class="timeline-grid">
         <table class="timeline-table">
-          <thead>
-            <tr>
-              <th></th>
-              ${depths.map(d=>`<th>d = ${d}</th>`).join('')}
-            </tr>
-          </thead>
-          <tbody>
-            ${rows}
-            ${hasLaws ? `<tr><td>|G_≤d|</td>${eCells}</tr>` : ''}
-          </tbody>
+          <thead><tr><th></th>${depths.map(d=>`<th>d=${d}</th>`).join('')}</tr></thead>
+          <tbody>${rows}</tbody>
         </table>
       </div>
       <div class="math-note">
         <div class="mn-title">Reading the table</div>
-        Each column is one depth level of the filtration 𝒬₁ ↪ 𝒬₂ ↪ ⋯ ↪ 𝒬_D.
-        A value that differs from the previous column marks a birth or death event (highlighted).
-        The birth depth of a class created by law l~r satisfies d ≥ max(|l|,|r|) (Remark 11.6).
-        |G_≤d| = number of group elements whose normal form has length ≤ d.
+        Highlighted cells = birth or death events. ℱ rows come from Theorem 11.3 (analytical).
+        𝒬 rows come from the bar complex at each depth. |G_≤d|² → 3-simp = 3-simplex count (reflects cost of the depth level; cache makes this cheap).
       </div>
     </div>`;
-
   return card;
 }
 
-// ── TRACE CARD ──
-function renderTraceCard(traceExamples) {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.style.animationDelay = '0.24s';
-  card.innerHTML = `
+// ── TRACE NOTE ───────────────────────────────────────────────────
+
+function renderTraceNote() {
+  const card=document.createElement('div');
+  card.className='card'; card.style.animationDelay='.21s';
+  card.innerHTML=`
     <div class="card-header">
-      <div class="card-title">Congruence Rewriting — normal form computation</div>
+      <div class="card-title">Rewriting System</div>
       <span class="card-tag info">shortlex TRS</span>
     </div>
-    <div class="card-body" id="trace-body"></div>`;
-
-  const tb = card.querySelector('#trace-body');
-  for (const ex of traceExamples) {
-    const block = document.createElement('div');
-    block.className = 'trace-block';
-    const id = 'tr'+Math.random().toString(36).slice(2);
-    const rStr = ex.result.length===0?'id':JSON.stringify(ex.result);
-    block.innerHTML = `
-      <button class="trace-toggle" onclick="toggleTrace('${id}')">
-        <span class="arrow">▶</span>
-        <span>${ex.desc}</span>
-        <span style="margin-left:auto;color:var(--accent)">${rStr}</span>
-      </button>
-      <div class="trace-content" id="${id}">
-        ${ex.log.map(step=>`
-          <div class="trace-line">
-            <span class="step-num">[${step.step}]</span>
-            <span class="law" style="color:var(--dim)">${JSON.stringify(step.law[0])}→${JSON.stringify(step.law[1])}</span>
-            <span style="margin:0 5px;color:var(--dim)">:</span>
-            <span class="from">${JSON.stringify(step.from)}</span>
-            <span style="margin:0 5px;color:var(--dim)">→</span>
-            <span class="to">${JSON.stringify(step.to)}</span>
-          </div>`).join('')}
-      </div>`;
-    tb.appendChild(block);
-  }
+    <div class="card-body">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);line-height:1.9">
+        Canonical forms are computed by the shortlex TRS: oriented rules l→r where l &gt; r.
+        The compose cache (built once per depth: |G|² calls) eliminates redundant TRS invocations
+        in the 3-simplex loop — the primary source of the prior hour-long computation.<br><br>
+        <span style="color:var(--dim)">Performance model (torus, d=5, n≈61 elements):</span><br>
+        Without cache: 61³ × ~100 ops ≈ 23M operations per depth × 5 depths = 115M ops<br>
+        With cache: 61² one-time calls + O(1) lookups ≈ 400K ops per depth × 5 depths = 2M ops<br>
+        <span style="color:var(--green)">~57× speedup from caching alone.</span>
+        Free group: analytical (Theorem 11.3) eliminates free-nerve builds entirely.
+        Parallel workers: up to D-fold speedup from multi-core execution.
+      </div>
+    </div>`;
   return card;
 }
 
 function toggleTrace(id) {
-  const c = document.getElementById(id);
-  const b = c.previousElementSibling;
-  c.classList.toggle('visible');
-  b.classList.toggle('open');
+  const c=document.getElementById(id),b=c.previousElementSibling;
+  c.classList.toggle('visible'); b.classList.toggle('open');
 }
 
-// ================================================================
-// INIT
-// ================================================================
+// ── INIT ─────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', () => {
-  const p = PRESETS['torus'];
-  document.getElementById('inp-gens').value   = p.gens;
-  document.getElementById('inp-laws').value   = p.laws;
-  document.getElementById('inp-depth').value  = p.depth;
-  document.getElementById('inp-topdim').value = p.topdim;
-  currentPreset = 'torus';
+document.addEventListener('DOMContentLoaded',()=>{
+  const p=PRESETS['torus'];
+  document.getElementById('inp-gens').value=p.gens;
+  document.getElementById('inp-laws').value=p.laws;
+  document.getElementById('inp-depth').value=p.depth;
+  document.getElementById('inp-topdim').value=p.topdim;
+  currentPreset='torus';
   document.querySelector('.preset-btn')?.classList.add('active');
 });
 </script>
