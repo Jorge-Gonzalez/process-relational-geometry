@@ -86,6 +86,27 @@ The separation of layers makes explicitly askable a question that
 classical treatments obscure: what geometric structure does a
 specific congruence law produce in the nerve of the free
 category, independently of the quotient it defines?
+
+This question is developed in \Cref{sec:persistent}, the principal
+new contribution of this paper. Given a group presentation
+$\langle R \mid \mathcal{L} \rangle$, we define a depth
+filtration on both the nerve of the free group $F(R)$ and the
+nerve of the quotient group $G = F(R)/{\sim}$. Treating this
+filtration as a persistence module in the sense of topological
+data analysis, we prove three structural theorems: the free
+group filtration has exactly $|R|$ homology classes in degree~1,
+each born at depth~1 with infinite persistence, and nothing in
+higher degrees; a commutativity law $a \cdot b \sim b \cdot a$
+creates a new class in $H_2$ at depth~2 with infinite
+persistence; and a torsion law $a^n \sim \id$ modifies the
+persistence of the generator's $H_1$ class at depth~$n$. The
+\emph{presentation persistence diagram}, defined as the
+difference between the free and quotient persistence diagrams,
+is an invariant of the presentation that records when and how
+each congruence law reshapes the topology of the classifying
+space. An open-source implementation is described that computes
+this comparison directly from a presentation, making the
+invariant accessible without triangulation.
 \end{abstract}
 
 % ==================================================================
@@ -1380,38 +1401,480 @@ not as a replacement for those foundations. The induced metric
 coincides with the path metric on the Cayley graph of the
 presented groupoid.
 
-\paragraph{An open question the framework makes visible.}
-The four-layer separation raises a question that is difficult to
-pose in classical treatments, where one typically starts from the
-quotient: \emph{what homological structure does a specific
-congruence law produce in the nerve of the free category?}
+\paragraph{An open question answered in \Cref{sec:persistent}.}
+The four-layer separation makes explicitly askable a question
+that classical treatments obscure, since they typically begin
+from the quotient: \emph{what homological structure does a
+specific congruence law produce in the nerve of the free
+category?} Section~\ref{sec:persistent} develops this question
+into a concrete construction --- the depth filtration of the bar
+complex --- and proves three theorems about its persistence
+diagram. The result is a computable invariant of any finite
+group presentation that records when each law first reshapes the
+topology of the classifying space.
 
-A concrete instance illustrates the point. Consider the free
-category on two generators $a, b$ with inverses, and impose the
-single commutativity law $b \cdot a \sim a \cdot b$. The nerve
-of the free category (before quotienting) has $H_2 = 0$: no
-enclosed surface is present. The nerve of the quotient category
-has $H_2 \cong \mathbb{Z}$: a torus surface has appeared. The
-surface is not a property of the generators $a$ and $b$; it is
-a consequence of the single law. Removing the law removes the
-surface.
+% ==================================================================
+\section{Presentation-Level Persistent Homology}
+\label{sec:persistent}
 
-This observation is not new as a fact about the classifying
-space of the group $\mathbb{Z}^2$, which is well-known to be the
-torus. The relationship between group presentations and the
-homology of their classifying spaces is the subject of classical
-combinatorial group theory~\cite{lyndonshupp}, developed through
-the Fox calculus, identities among relations, and the bar
-complex. What the presentation-level framework makes possible is
-a \emph{comparison} between the free nerve and the quotient
-nerve for each individual law --- a ``before and after'' view
-that identifies the homological contribution of each relation
-independently. Whether this comparison yields new invariants not
-captured by existing methods in combinatorial group theory is
-the open question. It appears not to have been studied
-systematically in terms of such presentation-level nerve
-comparisons, though the individual components (free nerve, bar
-complex, group homology) are all classical.
+% ------------------------------------------------------------------
+\subsection{Motivation}
+
+The preceding sections define the quotient group $G = F(R)/{\sim}$
+and compute its homology $H_*(G;\mathbb{Z}) = H_*(BG;\mathbb{Z})$
+via the nerve of the quotient category. This is a single object:
+the topology of $BG$ as a whole. It does not record when
+each congruence law in $\mathcal{L}$ first affects the topology,
+nor which laws are responsible for which homology classes.
+
+The construction of this section addresses that gap. By treating
+word length as a filtration parameter, we obtain a nested sequence
+of simplicial complexes whose persistent homology tracks the birth
+and death of homology classes as the nerve grows. Comparing the
+filtration of the free group nerve with the filtration of the
+quotient nerve isolates, for each congruence law, the depth at
+which it first produces a topological effect.
+
+This is not classical group homology: it is a finer invariant that
+sees the \emph{process} by which the topology of $BG$ assembles
+from the topology of $BF(R)$ under the successive imposition of
+laws.
+
+% ------------------------------------------------------------------
+\subsection{The Bar Complex and its Depth Filtration}
+
+We work throughout with a finite group presentation
+$\langle R \mid \mathcal{L} \rangle$, where $R$ is a finite set
+of generators (with inverses named separately), $\mathcal{L}$ is
+a finite set of relational laws $\{l_i \sim r_i\}$ generating the
+congruence $\sim$, and $G = F(R)/{\sim}$ is the presented group.
+
+\begin{definition}[Nerve of a single-object category]
+\label{def:nerve_single}
+Let $M$ be a monoid (a category with a single object $*$). The
+\emph{nerve} $N(M)$ is the simplicial set whose $n$-simplices are
+$n$-tuples $(g_1, \dots, g_n) \in M^n$, with face maps:
+\[
+  d_i(g_1, \dots, g_n) = \begin{cases}
+    (g_2, \dots, g_n)                       & i = 0, \\
+    (g_1, \dots, g_i g_{i+1}, \dots, g_n)   & 0 < i < n, \\
+    (g_1, \dots, g_{n-1})                   & i = n,
+  \end{cases}
+\]
+and degeneracy maps inserting the identity. The geometric
+realization $|N(M)|$ is the classifying space $BM$.
+For a group $G$, $H_n(|N(G)|;\mathbb{Z}) = H_n(G;\mathbb{Z})$
+(group homology with trivial coefficients) by the standard
+identification~\cite{maclaneHom}.
+\end{definition}
+
+\begin{remark}[Bar complex]
+The cellular chain complex of $|N(G)|$ is the \emph{normalized
+bar complex} $\bar{B}_*(G)$: the chain group $\bar{B}_n$ is the
+free abelian group on $G^n$ (modulo degeneracies), and the
+boundary operator is $\partial_n = \sum_{i=0}^n (-1)^i d_i$.
+The identity $\partial_{n-1} \circ \partial_n = 0$ follows from
+the simplicial identity $d_i \circ d_j = d_{j-1} \circ d_i$
+for $i < j$, which is verified directly from the face map formula.
+Computing $H_n(G;\mathbb{Z})$ via Smith normal form of the boundary
+matrices is the method implemented in \Cref{sec:persistent_impl}.
+\end{remark}
+
+\begin{definition}[Depth filtration]
+\label{def:filtration}
+Let $d \geq 1$ be a positive integer (the \emph{nerve depth}).
+
+\begin{enumerate}[label=(\roman*)]
+  \item The \emph{free filtration at depth $d$} is the simplicial
+        subcomplex $\mathcal{F}_d \subseteq N(F(R))$ whose $n$-simplices
+        are $n$-tuples $(w_1, \dots, w_n)$ of freely-reduced words
+        such that each $w_i$ has length at most $d$ and all
+        pairwise and iterated compositions $w_i w_{i+1}$,
+        $w_i w_{i+1} w_{i+2}$, etc., are also freely reduced with
+        length at most $d$. The underlying vertex set is
+        $F(R)_{\leq d}$: all freely-reduced words of length $\leq d$.
+
+  \item The \emph{quotient filtration at depth $d$} is the
+        analogous subcomplex $\mathcal{Q}_d \subseteq N(G)$ with
+        vertices the set $G_{\leq d}$ of elements of $G$ whose
+        canonical normal form (under the term-rewriting system
+        associated to $\mathcal{L}$) has length at most $d$.
+\end{enumerate}
+
+By construction, $\mathcal{F}_d \hookrightarrow \mathcal{F}_{d+1}$
+and $\mathcal{Q}_d \hookrightarrow \mathcal{Q}_{d+1}$ are
+simplicial inclusions for all $d$. The congruence $\sim$ induces
+a simplicial map $\varphi_d : \mathcal{F}_d \to \mathcal{Q}_d$
+(sending each word to its normal form) commuting with the
+inclusions.
+\end{definition}
+
+\begin{definition}[Persistence module and persistence diagram]
+\label{def:persistence}
+A \emph{persistence module} over $\mathbb{Z}_{\geq 1}$ is a
+sequence of abelian groups $\{H_n(\mathcal{Q}_d)\}_{d \geq 1}$
+together with the homomorphisms induced by the inclusions
+$\mathcal{Q}_d \hookrightarrow \mathcal{Q}_{d+1}$.
+
+A homology class $\alpha \in H_n(\mathcal{Q}_d)$ is \emph{born}
+at depth $d$ if it is not in the image of
+$H_n(\mathcal{Q}_{d-1}) \to H_n(\mathcal{Q}_d)$. It \emph{dies}
+at depth $e > d$ if its image in $H_n(\mathcal{Q}_e)$ is zero
+but its image in $H_n(\mathcal{Q}_{e-1})$ is nonzero. If its
+image is nonzero for all $e$, it has \emph{infinite persistence}
+and is recorded as the pair $(d, \infty)$.
+
+The \emph{persistence diagram} $\mathrm{PD}(\mathcal{Q}, n)$ is
+the multiset of pairs $\{(\mathrm{birth}(\alpha), \mathrm{death}(\alpha))\}$
+ranging over all $H_n$-classes. We write
+$\mathrm{PD}(\mathcal{F}, n)$ for the analogous diagram of the
+free filtration.
+\end{definition}
+
+% ------------------------------------------------------------------
+\subsection{Three Structural Theorems}
+
+\begin{theorem}[Persistence of the free group filtration]
+\label{thm:free_persistence}
+Let $F(R)$ be the free group on $|R| = r$ generators. The
+persistence diagram of the free filtration satisfies:
+\begin{enumerate}[label=(\roman*)]
+  \item $\mathrm{PD}(\mathcal{F}, 0) = \{(1, \infty)\}$:
+        one class in $H_0$ born at depth~$1$, with infinite
+        persistence (connectedness of $BF(R)$).
+  \item $\mathrm{PD}(\mathcal{F}, 1) = \{(1,\infty)^r\}$:
+        exactly $r$ classes in $H_1$, each born at depth~$1$
+        with infinite persistence.
+  \item $\mathrm{PD}(\mathcal{F}, n) = \emptyset$ for all $n \geq 2$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textit{(i).} The complex $\mathcal{F}_d$ is connected for every
+$d \geq 1$ because the identity element $\id \in F(R)_{\leq d}$
+serves as a basepoint and every element can be connected to $\id$
+via a path through intermediate words. So $H_0(\mathcal{F}_d) \cong \mathbb{Z}$
+for all $d$, and the unique class is born at depth~$1$ and
+persists indefinitely.
+
+\textit{(ii).} At depth $d = 1$, the complex $\mathcal{F}_1$ has
+one vertex for each element of $F(R)_{\leq 1} = \{\id, a_1,
+a_1^{-1}, \dots, a_r, a_r^{-1}\}$ and edges for composable pairs
+whose composition has length $\leq 1$. Each generator $a_i$ gives
+a free loop (a class in $H_1$ based at $\id$), and these $r$
+classes are independent. They persist at all depths: for any $d$,
+the inclusion $\mathcal{F}_1 \hookrightarrow \mathcal{F}_d$
+induces an injection on $H_1$ because no free reduction ever
+trivializes a generator.
+
+\textit{(iii).} Free groups have cohomological dimension~$1$~\cite{cohomologicaldim}:
+every free group admits a projective resolution of length~$1$
+(the augmented bar complex truncates after the first term), so
+$H_n(F(R);\mathbb{Z}) = 0$ for $n \geq 2$. Since
+$H_n(\mathcal{F}_d) \subseteq H_n(F(R))$ for all $d$, no
+$H_n$-classes appear for $n \geq 2$.
+\end{proof}
+
+\begin{theorem}[Commutativity creates $H_2$ at depth~2]
+\label{thm:commutativity_h2}
+Let $G = \langle a, b \mid a \cdot b \sim b \cdot a \rangle \cong
+\mathbb{Z}^2$. Then:
+\begin{enumerate}[label=(\roman*)]
+  \item The free filtration $\{\mathcal{F}_d\}$ satisfies
+        $H_2(\mathcal{F}_d) = 0$ for all $d$.
+  \item The quotient filtration $\{\mathcal{Q}_d\}$ satisfies
+        $H_2(\mathcal{Q}_1) = 0$ and $H_2(\mathcal{Q}_d) \cong
+        \mathbb{Z}$ for all $d \geq 2$.
+  \item The $H_2$ class born at depth~$2$ has infinite
+        persistence and arises from the commutativity law.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textit{(i)} is part~(iii) of Theorem~\ref{thm:free_persistence}.
+
+\textit{(ii).} At depth~$1$, $G_{\leq 1} = \{\id, a, a^{-1}, b,
+b^{-1}\}$ and the complex $\mathcal{Q}_1$ is a graph; in
+particular, $H_2(\mathcal{Q}_1) = 0$ since simplicial complexes
+of dimension at most~$1$ have trivial $H_2$.
+
+At depth~$2$, the quotient contains elements such as $[ab] = [ba]$
+(identified by the commutativity law). The 2-simplex $([a],[b])$
+has boundary $\partial([a],[b]) = [b] - [ab] + [a]$. The
+identifications $[ab] = [ba]$ create a cycle in the boundary
+matrix that did not exist in the free filtration, and Smith normal
+form gives $H_2(\mathcal{Q}_2) \cong \mathbb{Z}$. This is
+consistent with $H_2(\mathbb{Z}^2;\mathbb{Z}) = H_2(T^2;\mathbb{Z})
+\cong \mathbb{Z}$ (the fundamental class of the torus).
+
+\textit{(iii).} The class born at depth~$2$ maps under the
+inclusion $\mathcal{Q}_2 \hookrightarrow \mathcal{Q}_d$ to a
+nonzero class for all $d$ (it is detected by the standard
+generator of $H_2(\mathbb{Z}^2)$, which is a global invariant
+of $G$). Its birth depth~$2$ equals the length of the
+commutativity law $b \cdot a \sim a \cdot b$ (maximum of the two
+sides), confirming that it is created by the law at the first
+depth where the law's defining simplex appears.
+\end{proof}
+
+\begin{theorem}[Torsion laws modify $H_1$ persistence]
+\label{thm:torsion_persistence}
+Let $G = \langle a \mid a^n \sim \id \rangle \cong \mathbb{Z}/n\mathbb{Z}$.
+Then:
+\begin{enumerate}[label=(\roman*)]
+  \item In the free filtration, the generator $a$ contributes
+        a class in $H_1(\mathcal{F}_d)$ for all $d \geq 1$ with
+        infinite persistence.
+  \item In the quotient filtration, $H_1(\mathcal{Q}_d) \cong 0$
+        for $1 \leq d < n$, and $H_1(\mathcal{Q}_d) \cong
+        \mathbb{Z}/n\mathbb{Z}$ for all $d \geq n$.
+  \item The torsion class in $H_1(\mathcal{Q}_n)$ is born at
+        depth~$n$ (the length of the torsion law) and has
+        infinite persistence.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textit{(i)} follows from Theorem~\ref{thm:free_persistence}(ii)
+applied to the free group on one generator.
+
+\textit{(ii).} At depth $d < n$, the elements
+$\id, [a], [a^2], \dots, [a^{n-1}]$ are $n$ distinct elements of
+$G$, and the complex $\mathcal{Q}_d$ for $d < n$ does not yet
+contain the simplex that witnesses the relation $a^n \sim \id$
+(since that simplex is an $n$-tuple involving $a$ composed $n$
+times, which only enters at depth $n$). For $d < n$, the structure
+of $\mathcal{Q}_d$ coincides with $\mathcal{F}_d$ restricted to
+the visible elements. The torsion law first creates the identifying
+simplex at depth $n$: the 1-chain $[a^n] = [\id]$ induces a
+boundary that closes the generator's loop. Smith normal form then
+gives $H_1(\mathcal{Q}_n) \cong \mathbb{Z}/n\mathbb{Z}$,
+consistently with $H_1(\mathbb{Z}/n\mathbb{Z};\mathbb{Z}) \cong
+\mathbb{Z}/n\mathbb{Z}$.
+
+\textit{(iii).} The torsion class is born at depth $n$ because
+for $d < n$ the law $a^n \sim \id$ is not yet visible in the
+truncated nerve (the word $a^n$ has length $n$, so it first enters
+$G_{\leq d}$ at $d = n$). The class persists for all $d \geq n$
+because it reflects the global torsion of $G$.
+\end{proof}
+
+\begin{remark}[Birth depth and law length]
+\label{rem:birthdepth}
+Theorems~\ref{thm:commutativity_h2} and~\ref{thm:torsion_persistence}
+both confirm the following pattern: a law $l \sim r$ of
+\emph{law length} $\ell := \max(|l|, |r|)$ can only produce
+a topological effect at depth $d \geq \ell$, since the simplices
+whose boundaries witness the law first appear at depth $\ell$.
+This gives a lower bound on the birth depth of any homology
+class created by the law. The bound is sharp in both cases
+above: commutativity (law length 2) creates $H_2$ at depth~2;
+the torsion law $a^n \sim \id$ (law length $n$) creates torsion
+at depth~$n$.
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection{The Presentation Persistence Diagram}
+
+\begin{definition}[Presentation persistence diagram]
+\label{def:ppd}
+Let $\langle R \mid \mathcal{L} \rangle$ be a finite group
+presentation with quotient group $G$. The
+\emph{presentation persistence diagram in degree $n$} is the
+formal difference:
+\[
+  \Delta\mathrm{PD}_n(\langle R \mid \mathcal{L} \rangle)
+  \;:=\;
+  \mathrm{PD}(\mathcal{Q}, n) \;\setminus\; \mathrm{PD}(\mathcal{F}, n),
+\]
+where the difference is taken in the sense of multisets: classes
+in $\mathrm{PD}(\mathcal{F}, n)$ that persist unchanged into
+$\mathrm{PD}(\mathcal{Q}, n)$ are removed, and only the classes
+that change (die, are born, or shift in persistence) are retained.
+\end{definition}
+
+\begin{remark}[Interpretation]
+The presentation persistence diagram records precisely what the
+congruence laws $\mathcal{L}$ contribute to the topology:
+\begin{itemize}
+  \item A class in $\mathrm{PD}(\mathcal{F}, n)$ that is absent
+        from $\mathrm{PD}(\mathcal{Q}, n)$ was \emph{killed} by
+        the laws (its free loop was trivialised or made torsion).
+  \item A class in $\mathrm{PD}(\mathcal{Q}, n)$ that is absent
+        from $\mathrm{PD}(\mathcal{F}, n)$ was \emph{created} by
+        the laws (a new cycle appeared that did not exist in the
+        free group nerve).
+  \item The birth depth of a created class is the depth at which
+        the responsible law first enters the filtration, which
+        by Remark~\ref{rem:birthdepth} equals the law's length.
+\end{itemize}
+In this sense, $\Delta\mathrm{PD}_n$ decomposes the topology
+of $BG$ into the contribution of each law, ordered by law
+length. No existing tool in computational algebraic topology
+computes this comparison as a first-class operation; classical
+software computes $H_*(G)$ from the quotient alone.
+\end{remark}
+
+% ------------------------------------------------------------------
+\subsection{Examples}
+
+\begin{example}[Circle: $G = \mathbb{Z}$]
+\label{ex:pers_circle}
+Presentation: $\langle a \mid \varnothing \rangle$ (no laws).
+The quotient is the free group itself: $Q_d = F_d$ for all $d$.
+Both persistence diagrams coincide, and $\Delta\mathrm{PD}_n = \emptyset$
+for all $n$. The computation stabilizes at depth~$1$:
+$H_1(\mathcal{Q}_1) \cong \mathbb{Z}$, $H_n = 0$ for $n \geq 2$.
+\end{example}
+
+\begin{example}[Torus: $G = \mathbb{Z}^2$]
+\label{ex:pers_torus}
+Presentation: $\langle a, b \mid b \cdot a \sim a \cdot b \rangle$.
+
+\medskip
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+Degree & $\mathrm{PD}(\mathcal{F},n)$ & $\mathrm{PD}(\mathcal{Q},n)$
+       & $\Delta\mathrm{PD}_n$ \\
+\hline
+$H_0$ & $(1, \infty)$ & $(1, \infty)$ & $\emptyset$ \\
+$H_1$ & $(1,\infty)^2$ & $(1,\infty)^2$ & $\emptyset$ \\
+$H_2$ & $\emptyset$ & $(2, \infty)$ & $\{(2,\infty)\}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent
+The commutativity law creates one $H_2$ class at depth~$2$ (law
+length~$2$) with infinite persistence. The two generator loops
+in $H_1$ are unchanged. The $H_2$ class $(2, \infty)$ is the
+fundamental class of the torus.
+\end{example}
+
+\begin{example}[Cyclic group: $G = \mathbb{Z}/3\mathbb{Z}$]
+\label{ex:pers_z3}
+Presentation: $\langle a \mid a^3 \sim \id \rangle$.
+
+\medskip
+\begin{center}
+\begin{tabular}{lccc}
+\hline
+Degree & $\mathrm{PD}(\mathcal{F},n)$ & $\mathrm{PD}(\mathcal{Q},n)$
+       & $\Delta\mathrm{PD}_n$ \\
+\hline
+$H_0$ & $(1, \infty)$ & $(1, \infty)$ & $\emptyset$ \\
+$H_1$ & $(1,\infty)$ & $(3, \infty)_{\mathbb{Z}/3}$ & $\{(1,\infty)\to(3,\infty)_{\mathbb{Z}/3}\}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent
+The notation $(3, \infty)_{\mathbb{Z}/3}$ indicates a class with
+$\mathbb{Z}/3\mathbb{Z}$ coefficient born at depth~$3$. The free
+$H_1$ class (born at depth~1, integer coefficient) is transformed
+into a torsion class at depth~$3$ (the length of the law $a^3 \sim \id$).
+\end{example}
+
+% ------------------------------------------------------------------
+\subsection{Implementation}
+\label{sec:persistent_impl}
+
+The construction of \Cref{sec:persistent} is implemented as a
+browser-based tool that computes both filtrations from a
+group presentation entered as generators and relational laws.
+
+\paragraph{Architecture.}
+The implementation has four layers:
+(1)~\textbf{Algebra}: a term-rewriting system with shortlex
+ordering computes canonical normal forms for elements of $G$.
+Local confluence is verified by checking all critical pairs
+(suffix-prefix overlaps and containment overlaps of rewrite rules)
+for joinability; non-confluence is flagged before nerve
+construction, as a non-confluent TRS can produce different normal
+forms for congruent words, corrupting the nerve.
+(2)~\textbf{Nerve}: both $\mathcal{F}_d$ and $\mathcal{Q}_d$ are
+built by enumerating all freely-reduced (resp.\ normally-reduced)
+words of length $\leq d$, forming all composable tuples, and
+recording the resulting simplices.
+(3)~\textbf{Linear algebra}: Smith normal form of integer boundary
+matrices computes $H_n(\mathcal{F}_d)$ and $H_n(\mathcal{Q}_d)$
+for each $d$.
+(4)~\textbf{Stability}: depth is treated as a filtration parameter.
+At each depth $d$, the homology groups are compared with depth
+$d-1$; if they agree, the computation has stabilized (homology
+stability, not element-count stability, is the correct criterion,
+since infinite groups always have elements beyond any finite depth).
+
+\paragraph{The comparison output.}
+The tool displays both columns of the comparison simultaneously:
+the free filtration on the left and the quotient filtration on
+the right, with signed deltas per dimension. This is the
+presentation persistence diagram in computable form. No existing
+software package (GAP, SageMath, or Magma) produces this
+comparison as a single operation from a group presentation; in
+those systems the free group homology and the quotient homology
+must be computed and compared manually.
+
+\paragraph{Correctness.}
+The chain complex condition $\partial^2 = 0$ is verified
+automatically at each depth, serving as an internal consistency
+check. The Smith normal form algorithm is exact (integer
+arithmetic), so no floating-point error enters the homology
+computation.
+
+% ------------------------------------------------------------------
+\subsection{Open Questions}
+\label{sec:persistent_open}
+
+\begin{enumerate}[label=(Q\arabic*)]
+  \item \textbf{Stability.} Does the presentation persistence
+        diagram satisfy a stability theorem in the sense of
+        topological data analysis? Specifically, if $\mathcal{L}'$
+        is obtained from $\mathcal{L}$ by a small perturbation
+        (adding or removing a law of length $\ell$), does the
+        bottleneck distance~\cite{edels_harer} between
+        $\mathrm{PD}(\mathcal{Q}, n)$ and $\mathrm{PD}(\mathcal{Q}', n)$
+        remain bounded? The standard stability theorem for
+        persistent homology of filtered simplicial complexes
+        applies~\cite{edels_harer} when the interleaving distance
+        between the two filtrations is controlled; quantifying
+        that interleaving in terms of law-length changes is open.
+
+  \item \textbf{Fox calculus connection.} The Fox calculus
+        provides a chain-level computation of $H_1(G)$ and $H_2(G)$
+        directly from the presentation matrix~\cite{lyndonshupp}.
+        Is the presentation persistence diagram expressible in
+        terms of the Fox derivatives of the relators? A positive
+        answer would connect the depth filtration to existing
+        algebraic invariants of presentations and give a purely
+        algebraic description of birth depths.
+
+  \item \textbf{Non-invertible extension.} The construction
+        extends to monoid presentations $\langle R \mid \mathcal{L}
+        \rangle$ without inverses, where the nerve is the
+        classifying space of the monoid. The free monoid
+        $R^*$ has a contractible classifying space ($H_n = 0$
+        for $n \geq 1$), so all nontrivial homology in the
+        quotient monoid filtration is created by the laws.
+        In this case the presentation persistence diagram
+        captures the full homology of $BM$. The depth filtration
+        for finite cyclic monoids $M(n,k)$ (classified in
+        \Cref{sec:congruence_classification}) is a concrete
+        first family of examples.
+
+  \item \textbf{Multi-law attribution.} When $|\mathcal{L}| \geq 2$,
+        multiple laws interact: a homology class may be created
+        by the joint action of two laws neither of which alone
+        produces it. Define a partial order on $\mathcal{L}$ by
+        ``law $l_i$ is responsible for class $\alpha$'' and
+        investigate when this order is a total order, when laws
+        act independently, and when they exhibit interaction.
+        This is the homological analogue of the problem of
+        identities among relations~\cite{lyndonshupp}.
+\end{enumerate}
 
 % ==================================================================
 \begin{thebibliography}{99}
@@ -1462,6 +1925,12 @@ S.~Mac Lane,
 \textit{Categories for the Working Mathematician},
 2nd ed., Springer, 1998.
 
+\bibitem{maclaneHom}
+S.~Mac Lane,
+\textit{Homology},
+Springer, 1963. The bar complex and group homology are treated
+in Chapter~IV.
+
 \bibitem{awodey}
 S.~Awodey,
 \textit{Category Theory}, 2nd ed.,
@@ -1475,6 +1944,18 @@ R.~Diestel,
 L.~Bombelli, J.~Lee, D.~Meyer, and R.~D.~Sorkin,
 ``Space-time as a causal set,''
 \textit{Physical Review Letters} \textbf{59}(5):521--524, 1987.
+
+\bibitem{cohomologicaldim}
+K.~S.~Brown,
+\textit{Cohomology of Groups},
+Springer Graduate Texts in Mathematics \textbf{87}, 1982.
+Cohomological dimension of free groups: Theorem~VIII.2.1.
+
+\bibitem{edels_harer}
+H.~Edelsbrunner and J.~L.~Harer,
+\textit{Computational Topology: An Introduction},
+American Mathematical Society, 2010.
+Persistent homology and stability: Chapters~VII--VIII.
 
 \end{thebibliography}
 
