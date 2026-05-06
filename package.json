@@ -1,0 +1,8 @@
+{
+  "name": "process-relational-geometry",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-pdf.mjs"
+  }
+}
