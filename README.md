@@ -40,8 +40,11 @@ territory independently, then found it already mapped.
 process-relational-geometry/
 ├── README.md
 ├── paper/
-│   ├── process_relational_geometry.tex   — LaTeX source
+│   └── process_relational_geometry.tex   — LaTeX source
+├── dist/
 │   └── process_relational_geometry.pdf   — Compiled PDF
+├── logs/
+│   └── (auxiliary build files)
 └── app/
     └── pseudocode.md                     — Interactive application pseudocode
 ```

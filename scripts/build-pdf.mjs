@@ -1,5 +1,5 @@
-import { execFile } from 'child_process'
-import { mkdirSync, copyFileSync } from 'fs'
+import { execSync } from 'child_process'
+import { mkdirSync, renameSync, existsSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -11,30 +11,30 @@ const distDir = resolve(root, 'dist')
 mkdirSync(logsDir, { recursive: true })
 mkdirSync(distDir, { recursive: true })
 
-const args = [
+const pdflatexArgs = [
   '-interaction=nonstopmode',
   `-output-directory=${logsDir}`,
-  texFile,
-]
+  `"${texFile}"`,
+].join(' ')
 
 console.log('Compiling LaTeX...')
 
-execFile('pdflatex', args, (err, stdout, stderr) => {
-  if (err) {
-    console.error(stdout || stderr)
+try {
+  // Run pdflatex twice to resolve references/TOC
+  execSync(`pdflatex ${pdflatexArgs}`, { stdio: 'inherit' })
+  execSync(`pdflatex ${pdflatexArgs}`, { stdio: 'inherit' })
+
+  const src = resolve(logsDir, 'process_relational_geometry.pdf')
+  const dest = resolve(distDir, 'process_relational_geometry.pdf')
+
+  if (existsSync(src)) {
+    renameSync(src, dest)
+    console.log('\nSuccess: PDF moved to dist/process_relational_geometry.pdf')
+  } else {
+    console.error('\nError: PDF was not generated.')
     process.exit(1)
   }
-
-  // Run twice to resolve references/TOC
-  execFile('pdflatex', args, (err2, stdout2, stderr2) => {
-    if (err2) {
-      console.error(stdout2 || stderr2)
-      process.exit(1)
-    }
-
-    const src = resolve(logsDir, 'process_relational_geometry.pdf')
-    const dest = resolve(distDir, 'process_relational_geometry.pdf')
-    copyFileSync(src, dest)
-    console.log('PDF written to dist/process_relational_geometry.pdf')
-  })
-})
+} catch (err) {
+  console.error('\nError: LaTeX compilation failed.')
+  process.exit(1)
+}
