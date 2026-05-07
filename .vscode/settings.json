@@ -14,8 +14,9 @@
       "name": "node-build-script",
       "command": "node",
       "args": [
-        "%WORKSPACE_FOLDER%/scripts/build-pdf.mjs"
-      ]
+        "scripts/build-pdf.mjs"
+      ],
+      "cwd": "%WORKSPACE_FOLDER%"
     }
   ]
 }
