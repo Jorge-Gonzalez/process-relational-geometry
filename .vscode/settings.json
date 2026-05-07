@@ -1,0 +1,21 @@
+{
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/dist",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "Build with node script",
+      "tools": [
+        "node-build-script"
+      ]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "node-build-script",
+      "command": "node",
+      "args": [
+        "%WORKSPACE_FOLDER%/scripts/build-pdf.mjs"
+      ]
+    }
+  ]
+}
