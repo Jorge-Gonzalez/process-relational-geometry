@@ -1693,6 +1693,64 @@ $\mathrm{PD}(\mathcal{Q}, n)$ are removed, and only the classes
 that change (die, are born, or shift in persistence) are retained.
 \end{definition}
 
+\begin{remark}[Presentation invariant, not group invariant]
+\label{rem:presentationinvariant}
+The notation $\Delta\mathrm{PD}_n(\langle R \mid \mathcal{L} \rangle)$
+is intentional: the argument is the \emph{presentation}, not the
+group $G$. This is not a notational convenience; it is a
+mathematical necessity.
+
+The depth filtration of Definition~\ref{def:filtration} depends on
+two choices that are not intrinsic to $G$:
+\begin{enumerate}[label=(\roman*)]
+  \item The generating set $R$ and its ordering (which determines
+        the shortlex term order orienting the rewriting rules).
+        Different orderings of the same $R$ produce different
+        normal forms and hence different element depths
+        $G_{\leq d}$.
+  \item The law lengths $\max(|l|, |r|)$ for $l \sim r \in \mathcal{L}$.
+        By Remark~\ref{rem:birthdepth}, every homology class created
+        by a law $l \sim r$ has birth depth $\geq \max(|l|, |r|)$.
+        A presentation with longer laws produces larger birth
+        depths, even if it presents the same group.
+\end{enumerate}
+
+\textbf{Concrete example.} Consider two presentations of
+$\mathbb{Z}^2$:
+\begin{align*}
+  P_1 &= \langle a, b \;\mid\; ba = ab \rangle
+  && \text{(law length } 2\text{)} \\
+  P_2 &= \langle a, b \;\mid\; b^2 a^2 = a^2 b^2,\; bab^{-1} = a \rangle
+  && \text{(law lengths } 4 \text{ and } 3\text{)}
+\end{align*}
+Both present $\mathbb{Z}^2$, so $H_2(\mathbb{Z}^2;\mathbb{Z}) \cong \mathbb{Z}$
+in both cases. But Theorem~\ref{thm:commutativity_h2} applies to
+$P_1$ and gives $\mathrm{birth}_{H_2} = 2$; under $P_2$ the
+same class cannot be detected before depth~$3$ (the length of
+the shorter law). The group homology is the same; the presentation
+persistence diagrams differ.
+
+\textbf{What is a group invariant.} The \emph{stable} output of the
+filtration is a group invariant: $H_n(G; \mathbb{Z})$ is recovered
+from $H_n(\mathcal{Q}_d)$ for all sufficiently large $d$ (for
+finite groups, once $G_{{\leq}d} = G$; for infinite groups, in the
+Gromov--Hausdorff limit). The stable value does not depend on the
+presentation. What the presentation determines is the \emph{depth
+at which} each class first appears --- the birth function --- not
+whether the class exists.
+
+\textbf{Consequence for the open question (Q1) of
+\Cref{sec:persistent_open}.} Any stability theorem for
+$\Delta\mathrm{PD}_n$ (under perturbation of $\mathcal{L}$) must
+be stated in terms of a metric on \emph{presentations}, not on
+\emph{groups}. The natural metric is the law-length metric: two
+presentations $P, P'$ of $G$ are at distance
+$\delta(P, P') = \max_{l \sim r \in \mathcal{L} \triangle \mathcal{L}'}
+\max(|l|, |r|)$, and the expected stability bound is
+$d_{\mathrm{bottleneck}}(\Delta\mathrm{PD}_n(P),
+\Delta\mathrm{PD}_n(P')) \leq \delta(P, P')$.
+\end{remark}
+
 \begin{remark}[Interpretation]
 The presentation persistence diagram records precisely what the
 congruence laws $\mathcal{L}$ contribute to the topology:
@@ -1832,16 +1890,21 @@ computation.
 \begin{enumerate}[label=(Q\arabic*)]
   \item \textbf{Stability.} Does the presentation persistence
         diagram satisfy a stability theorem in the sense of
-        topological data analysis? Specifically, if $\mathcal{L}'$
-        is obtained from $\mathcal{L}$ by a small perturbation
-        (adding or removing a law of length $\ell$), does the
-        bottleneck distance~\cite{edels_harer} between
-        $\mathrm{PD}(\mathcal{Q}, n)$ and $\mathrm{PD}(\mathcal{Q}', n)$
-        remain bounded? The standard stability theorem for
-        persistent homology of filtered simplicial complexes
-        applies~\cite{edels_harer} when the interleaving distance
-        between the two filtrations is controlled; quantifying
-        that interleaving in terms of law-length changes is open.
+        topological data analysis? Since $\Delta\mathrm{PD}_n$
+        is a presentation invariant rather than a group invariant
+        (Remark~\ref{rem:presentationinvariant}), stability must
+        be stated in terms of a metric on presentations.
+        The natural candidate is the law-length metric
+        $\delta(P, P') = \max_{l \sim r \in \mathcal{L} \triangle
+        \mathcal{L}'} \max(|l|, |r|)$, and the conjectured
+        stability bound is
+        $d_{\mathrm{bottleneck}}(\Delta\mathrm{PD}_n(P),
+        \Delta\mathrm{PD}_n(P')) \leq \delta(P, P')$.
+        The standard stability theorem for persistent homology of
+        filtered simplicial complexes applies~\cite{edels_harer}
+        when the interleaving distance between the two filtrations
+        is controlled; quantifying that interleaving in terms of
+        law-length changes is open.
 
   \item \textbf{Fox calculus connection.} The Fox calculus
         provides a chain-level computation of $H_1(G)$ and $H_2(G)$

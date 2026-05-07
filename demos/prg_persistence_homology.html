@@ -151,7 +151,7 @@
   .hbadge.dim { color:var(--dim);    border-color:var(--border); }
   .hbadge.info{ color:var(--accent); border-color:var(--accent); }
 
-  .results-body { overflow-y:auto; padding:22px 26px; display:flex; flex-direction:column; gap:22px; }
+  .results-body { overflow-y:auto; overflow-x:hidden; padding:22px 26px; display:flex; flex-direction:column; gap:22px; }
 
   .card {
     border:1px solid var(--border); background:var(--surface);
@@ -223,7 +223,7 @@
     width:78px; flex-shrink:0; text-align:right; white-space:nowrap;
     overflow:hidden; text-overflow:ellipsis;
   }
-  .barcode-track { flex:1; height:12px; background:var(--bg); border:1px solid var(--border); position:relative; min-width:180px; }
+  .barcode-track { flex:1; height:12px; background:var(--bg); border:1px solid var(--border); position:relative; min-width:180px; overflow:hidden; }
   .barcode-bar {
     position:absolute; top:2px; bottom:2px; border-radius:1px; transition:opacity .15s; cursor:default;
   }
@@ -234,7 +234,7 @@
   .barcode-bar.quot-tor   { background:rgba(148,226,213,.4); border:1px dashed rgba(148,226,213,.6); }
   .barcode-bar.delta-new  { background:rgba(166,227,161,.85); box-shadow:0 0 4px rgba(166,227,161,.3); }
   .barcode-bar.delta-kill { background:rgba(243,139,168,.5); border:1px solid rgba(243,139,168,.6); }
-  .barcode-arrow { position:absolute; right:-8px; top:50%; transform:translateY(-50%); color:var(--dim); font-size:9px; }
+  .barcode-arrow { position:absolute; right:4px; top:50%; transform:translateY(-50%); color:var(--dim); font-size:9px; }
 
   /* ── ΔPD TABLE ── */
   .dpd-table { width:100%; border-collapse:collapse; font-family:'IBM Plex Mono',monospace; font-size:10px; }
@@ -1391,8 +1391,10 @@ function renderBarcodeCard(freeClasses,quotClasses,deltaPD,maxDepth,topdim,cf,re
 function drawBarcode(container,freeClasses,quotClasses,deltaPD,maxDepth,topdim,hasLaws) {
   function pct(d) { return ((d-0.5)/maxDepth*100).toFixed(2)+'%'; }
   function pctW(b,d) {
-    const e=d===Infinity?maxDepth+0.25:Math.min(d,maxDepth);
-    return ((e-b+1)/maxDepth*100).toFixed(2)+'%';
+    const e=d===Infinity?maxDepth:Math.min(d,maxDepth);
+    const leftPct = (b-0.5)/maxDepth*100;
+    const rawWidthPct = (e-b+1)/maxDepth*100;
+    return Math.min(rawWidthPct, 100 - leftPct).toFixed(2)+'%';
   }
   const isNew=c=>deltaPD.some(d=>d.type==='created'&&d.n===c.n&&d.birth===c.birth&&d.coeff===c.coeff);
 
