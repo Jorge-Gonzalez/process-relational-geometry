@@ -736,10 +736,31 @@ inclusion.
 
 \begin{proof}
 Start from the complete-graph construction of
-Theorem~\ref{thm:reconstruction}. Iteratively remove redundant
-generators; finiteness of $X$ guarantees termination. Removing a
-redundant generator preserves the induced metric. No remaining
-generator can be removed without increasing some distance.
+Theorem~\ref{thm:reconstruction}, which presents $(X,d)$ with one
+generator $e_{xy}$ for each ordered pair $x \neq y$ and
+$w(e_{xy}) = d(x,y)$.
+
+\textbf{Preservation under redundant removal.}
+We claim that removing a redundant generator $e_{xy}$ leaves the
+induced metric unchanged on all pairs. Since $e_{xy}$ is redundant,
+there exists a configuration $\gamma^*$ from $x$ to $y$ not using
+$e_{xy}$ with $w(\gamma^*) = d(x,y) = w(e_{xy})$. Let $P$ be any
+configuration from $u$ to $v$. If $P$ does not use $e_{xy}$, its
+weight is unchanged. If $P$ uses $e_{xy}$, substitute each
+occurrence of $e_{xy}$ with $\gamma^*$; the resulting path $P'$
+satisfies $w(P') = w(P)$ because $w(\gamma^*) = w(e_{xy})$.
+Hence every path has an equally-weighted replacement avoiding
+$e_{xy}$, so $d_{\mathrm{ind}}(u,v)$ is unchanged for all pairs.
+
+\textbf{Termination.}
+Each removal strictly decreases $|R|$, which is finite.
+
+\textbf{Minimality.}
+After termination, every remaining generator $e_{xy}$ is
+non-redundant: every path from $x$ to $y$ avoiding $e_{xy}$ has
+weight strictly greater than $d(x,y)$. Removing $e_{xy}$ would
+increase $d_{\mathrm{ind}}(x,y)$, so no further removal is possible
+without corrupting the metric.
 \end{proof}
 
 \begin{remark}[Non-uniqueness of minimal presentations]
@@ -1231,8 +1252,12 @@ equivalent objects identified. Then:
 \textbf{Essential surjectivity.} By Theorem~\ref{thm:reconstruction},
 every finite metric space arises as $\mathcal{M}(V, R, s, t, w)$.
 
-\textbf{Full faithfulness.} \textit{Injectivity.} If two morphisms
-$F_1, F_2$ induce the same map on states, they agree. 
+\textbf{Full faithfulness.} \textit{Injectivity.} Working in
+canonical complete presentations, $R$ contains exactly one generator
+$e_{xy}$ for each ordered pair $(x,y) \in V \times V$, and any
+morphism $F$ must satisfy $F_R(e_{xy}) = e'_{F_V(x)F_V(y)}$.
+Therefore $F_R$ is uniquely determined by $F_V$: two morphisms
+agreeing on states must agree on generators.
 \textit{Surjectivity.} Given 1-Lipschitz
 $f : (V, d) \to (V', d')$, work in the canonical complete
 presentations: set $F_V = f$ and $F_R(e_{xy}) = e'_{f(x)f(y)}$.
@@ -1713,6 +1738,17 @@ two choices that are not intrinsic to $G$:
         by a law $l \sim r$ has birth depth $\geq \max(|l|, |r|)$.
         A presentation with longer laws produces larger birth
         depths, even if it presents the same group.
+  \item The rewriting system used to compute canonical normal forms.
+        Different confluent rewriting systems for the same presentation
+        can assign different normal forms to the same group element,
+        shifting element depths $G_{\leq d}$ and hence birth depths.
+        To make $\Delta\mathrm{PD}_n$ a well-defined invariant of the
+        pair $(\langle R \mid \mathcal{L} \rangle, \leq_{\mathrm{lex}})$,
+        the rewriting system is fixed canonically as the Knuth--Bendix
+        completion of $\mathcal{L}$ with respect to the shortlex
+        ordering induced by the generator ordering on $R$.
+        Under this canonical choice, normal forms are unique and
+        the depth filtration is unambiguous.
 \end{enumerate}
 
 \textbf{Concrete example.} Consider two presentations of
